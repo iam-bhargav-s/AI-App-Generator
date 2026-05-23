@@ -7,7 +7,7 @@ An advanced, metadata-driven application runtime engine that dynamically convert
 
 ---
 
-## 🚀 Key Architectural Highlights
+##  Key Architectural Highlights
 
 * **100% Schema Resilience (PostgreSQL JSONB):** To avoid blocking and destructive runtime migrations (`prisma db push`) whenever a user instantiates or modifies an app, the live preview sandbox abstracts data storage into a highly optimized, single-table PostgreSQL JSONB document engine.
 * **Asynchronous LLM Scaffolding Pipeline:** Orchestrates Google Gemini (`gemini-1.5-flash`) and OpenAI (`gpt-4o-mini`) using strict structured JSON schemas to enforce schema boundaries and prevent UI crashes on imperfect inputs.
@@ -17,7 +17,7 @@ An advanced, metadata-driven application runtime engine that dynamically convert
 
 ---
 
-## 🛠️ The Full-Stack Technical Footprint
+##  The Full-Stack Technical Footprint
 
 The platform enforces a strict, modern full-stack development ecosystem:
 
@@ -29,18 +29,18 @@ The platform enforces a strict, modern full-stack development ecosystem:
 
 ---
 
-## ✨ Production Feature Capabilities (Overdelivered)
+##  Production Feature Capabilities (Overdelivered)
 
 The platform successfully satisfies and exceeds requirements by implementing **four** complete, end-to-end optional systems rather than the requested three:
 
-1. **📊 Live CSV Import System:** Integrated directly into the dynamic data grids using `PapaParse`. Allows creators to upload physical spreadsheets, dynamically map rows to the virtual schema, and save batches cleanly into the database.
-2. **⚙️ Workflow Automation Engine:** A native event listener (`workflowEngine.ts`) that actively intercepts data actions (such as `RECORD_CREATED`), executes user-defined webhooks, and writes real-time logs to the database audit trail.
-3. **📦 Standalone GitHub Exporter:** Packages the dynamic JSON configuration metadata into a traditional, cleanly typed, human-like Next.js repository tree containing explicit Prisma relational models, pushing it instantly to a target GitHub repo via Octokit.
-4. **📱 Mobile-Ready Progressive Web App (PWA):** Engineered native web manifests (`manifest.json`) and mobile standalone meta blocks straight into the Next.js root layout for immediate desktop and mobile installation.
+1. ** Live CSV Import System:** Integrated directly into the dynamic data grids using `PapaParse`. Allows creators to upload physical spreadsheets, dynamically map rows to the virtual schema, and save batches cleanly into the database.
+2. ** Workflow Automation Engine:** A native event listener (`workflowEngine.ts`) that actively intercepts data actions (such as `RECORD_CREATED`), executes user-defined webhooks, and writes real-time logs to the database audit trail.
+3. ** Standalone GitHub Exporter:** Packages the dynamic JSON configuration metadata into a traditional, cleanly typed, human-like Next.js repository tree containing explicit Prisma relational models, pushing it instantly to a target GitHub repo via Octokit.
+4. ** Mobile-Ready Progressive Web App (PWA):** Engineered native web manifests (`manifest.json`) and mobile standalone meta blocks straight into the Next.js root layout for immediate desktop and mobile installation.
 
 ---
 
-## 🎨 Premium UI/UX Design Token System
+##  Premium UI/UX Design Token System
 
 The design system moves entirely away from standard boilerplate templates into a highly intentional, dark minimalist workspace:
 * **Background Base:** Deep, cohesive `zinc-950` (#09090b)
@@ -50,7 +50,7 @@ The design system moves entirely away from standard boilerplate templates into a
 
 ---
 
-## ⚙️ How to Setup and Run the Project
+##  How to Setup and Run the Project
 
 Follow these definitive step-by-step instructions to configure, initialize, and spin up the environment locally.
 
