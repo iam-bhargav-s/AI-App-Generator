@@ -1,0 +1,1262 @@
+{
+  "users": [
+    {
+      "id": "fn7iqnjbx",
+      "email": "test-jmngjs@test.com",
+      "password": "$2b$10$Eo1AFSHyoHMMRfVnAvdl1O4317EwXSn1nZb3GWKw14BeoFI2JIbm6",
+      "name": "Tester Admin",
+      "createdAt": "2026-05-22T16:57:03.030Z",
+      "updatedAt": "2026-05-22T16:57:03.031Z"
+    },
+    {
+      "id": "y1ivdoknk",
+      "email": "bha@gmail.com",
+      "password": "$2b$10$ur8aNoVagF9fV4F4A7ugyO0O49PcYPzyETD8clUPYH4TKkT6C5Mt.",
+      "name": "bh",
+      "createdAt": "2026-05-22T17:30:39.376Z",
+      "updatedAt": "2026-05-22T17:30:39.376Z"
+    },
+    {
+      "id": "xbzxl8ql4",
+      "email": "test-9mbg89@test.com",
+      "password": "$2b$10$RRoQCz50kO343DWV/EhcD.E0l25yU8drjTXDVqW7WUl97OrgHtn2y",
+      "name": "Tester Admin",
+      "createdAt": "2026-05-22T18:28:24.233Z",
+      "updatedAt": "2026-05-22T18:28:24.234Z"
+    },
+    {
+      "id": "ojcd6ch5i",
+      "email": "test-xetyv@test.com",
+      "password": "$2b$10$Pip4tjUy.zBP4/16epod9eWoEOLnEU8fyxVkLQmhLSN05MaoGUw1y",
+      "name": "Tester Admin",
+      "createdAt": "2026-05-23T14:07:42.391Z",
+      "updatedAt": "2026-05-23T14:07:42.392Z"
+    },
+    {
+      "id": "ei4rqxvp2",
+      "email": "test-rxs3ig@test.com",
+      "password": "$2b$10$DGz7xcTuct3XKn9qix11a.Axqy44caZv.JY5PExjGgGIuKgiTIIlm",
+      "name": "Tester Admin",
+      "createdAt": "2026-05-23T14:44:32.652Z",
+      "updatedAt": "2026-05-23T14:44:32.653Z"
+    },
+    {
+      "id": "elw0owv1e",
+      "email": "bhargav.srinath007@gmail.com",
+      "password": "$2b$10$H.36.9e.tIjM746r6U5Emub/ImQQKpRLuGNrPqGXqTShCygtFIbz.",
+      "name": "bhargav",
+      "createdAt": "2026-05-23T16:21:08.811Z",
+      "updatedAt": "2026-05-23T16:21:08.811Z"
+    }
+  ],
+  "apps": [
+    {
+      "id": "bgtu24gfs",
+      "name": "CRM Sandbox",
+      "description": "Dynamic sandbox CRM build",
+      "config": {
+        "name": "CRM Sandbox",
+        "description": "Dynamic sandbox CRM build",
+        "auth": {
+          "enabled": true
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Lead",
+              "fields": [
+                {
+                  "name": "fullName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "type": "String",
+                  "required": false,
+                  "unique": true
+                },
+                {
+                  "name": "score",
+                  "type": "Int",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "leads",
+              "title": "Leads Manager",
+              "components": [
+                {
+                  "id": "leads-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Lead",
+                    "columns": [
+                      "fullName",
+                      "email",
+                      "score"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-webhook-1",
+            "name": "Trigger Webhook on Lead",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Lead"
+            },
+            "actions": [
+              {
+                "type": "SEND_WEBHOOK",
+                "config": {
+                  "url": "https://webhook.site/dummy-placeholder-url-for-verification",
+                  "payload": {
+                    "id": "{{id}}",
+                    "name": "{{fullName}}",
+                    "status": "new"
+                  }
+                }
+              },
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "Processed lead record with ID: {{id}}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "fn7iqnjbx",
+      "createdAt": "2026-05-22T16:57:15.648Z",
+      "updatedAt": "2026-05-22T16:57:15.648Z"
+    },
+    {
+      "id": "jgq3jzzzt",
+      "name": "CRM Sandbox",
+      "description": "Dynamic sandbox CRM build",
+      "config": {
+        "name": "CRM Sandbox",
+        "description": "Dynamic sandbox CRM build",
+        "auth": {
+          "enabled": true
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Lead",
+              "fields": [
+                {
+                  "name": "fullName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "type": "String",
+                  "required": false,
+                  "unique": true
+                },
+                {
+                  "name": "score",
+                  "type": "Int",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "leads",
+              "title": "Leads Manager",
+              "components": [
+                {
+                  "id": "leads-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Lead",
+                    "columns": [
+                      "fullName",
+                      "email",
+                      "score"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-webhook-1",
+            "name": "Trigger Webhook on Lead",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Lead"
+            },
+            "actions": [
+              {
+                "type": "SEND_WEBHOOK",
+                "config": {
+                  "url": "https://webhook.site/dummy-placeholder-url-for-verification",
+                  "payload": {
+                    "id": "{{id}}",
+                    "name": "{{fullName}}",
+                    "status": "new"
+                  }
+                }
+              },
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "Processed lead record with ID: {{id}}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "xbzxl8ql4",
+      "createdAt": "2026-05-22T18:28:36.761Z",
+      "updatedAt": "2026-05-22T18:28:36.762Z"
+    },
+    {
+      "id": "mr8igsx0w",
+      "name": "CRM Sandbox",
+      "description": "Dynamic sandbox CRM build",
+      "config": {
+        "name": "CRM Sandbox",
+        "description": "Dynamic sandbox CRM build",
+        "auth": {
+          "enabled": true
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Lead",
+              "fields": [
+                {
+                  "name": "fullName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "type": "String",
+                  "required": false,
+                  "unique": true
+                },
+                {
+                  "name": "score",
+                  "type": "Int",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "leads",
+              "title": "Leads Manager",
+              "components": [
+                {
+                  "id": "leads-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Lead",
+                    "columns": [
+                      "fullName",
+                      "email",
+                      "score"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-webhook-1",
+            "name": "Trigger Webhook on Lead",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Lead"
+            },
+            "actions": [
+              {
+                "type": "SEND_WEBHOOK",
+                "config": {
+                  "url": "https://webhook.site/dummy-placeholder-url-for-verification",
+                  "payload": {
+                    "id": "{{id}}",
+                    "name": "{{fullName}}",
+                    "status": "new"
+                  }
+                }
+              },
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "Processed lead record with ID: {{id}}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "ojcd6ch5i",
+      "createdAt": "2026-05-23T14:07:42.703Z",
+      "updatedAt": "2026-05-23T14:07:42.703Z"
+    },
+    {
+      "id": "zcliax5b1",
+      "name": "CRM Sandbox",
+      "description": "Dynamic sandbox CRM build",
+      "config": {
+        "name": "CRM Sandbox",
+        "description": "Dynamic sandbox CRM build",
+        "auth": {
+          "enabled": true
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Lead",
+              "fields": [
+                {
+                  "name": "fullName",
+                  "type": "String",
+                  "required": true
+                },
+                {
+                  "name": "email",
+                  "type": "String",
+                  "required": false,
+                  "unique": true
+                },
+                {
+                  "name": "score",
+                  "type": "Int",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "leads",
+              "title": "Leads Manager",
+              "components": [
+                {
+                  "id": "leads-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Lead",
+                    "columns": [
+                      "fullName",
+                      "email",
+                      "score"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-webhook-1",
+            "name": "Trigger Webhook on Lead",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Lead"
+            },
+            "actions": [
+              {
+                "type": "SEND_WEBHOOK",
+                "config": {
+                  "url": "https://webhook.site/dummy-placeholder-url-for-verification",
+                  "payload": {
+                    "id": "{{id}}",
+                    "name": "{{fullName}}",
+                    "status": "new"
+                  }
+                }
+              },
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "Processed lead record with ID: {{id}}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "ei4rqxvp2",
+      "createdAt": "2026-05-23T14:44:33.835Z",
+      "updatedAt": "2026-05-23T14:44:33.835Z"
+    },
+    {
+      "id": "al3wqfj8k",
+      "name": "FleetOps Logistics",
+      "description": "Generate exactly two pages: a Dashboard and a Data Table. Model Name: \"DeliveryDispatch\". Fields required: \"TrackingNumber\" (String), \"DriverName\" (String), \"FuelExpense\" (Float), \"PackageCount\" (Int), \"DispatchDate\" (Date). The Dashboard must dynamically showcase two summary metrics: \"Total Dispatch Invoices\" and \"Aggregated Fuel Spend\". The Data Table must support live CSV ingestion for bulk route scheduling.",
+      "config": {
+        "name": "FleetOps Logistics",
+        "description": "Generate exactly two pages: a Dashboard and a Data Table. Model Name: \"DeliveryDispatch\". Fields required: \"TrackingNumber\" (String), \"DriverName\" (String), \"FuelExpense\" (Float), \"PackageCount\" (Int), \"DispatchDate\" (Date). The Dashboard must dynamically showcase two summary metrics: \"Total Dispatch Invoices\" and \"Aggregated Fuel Spend\". The Data Table must support live CSV ingestion for bulk route scheduling.",
+        "auth": {
+          "enabled": true,
+          "userModel": "User",
+          "roles": [
+            "Admin",
+            "Member"
+          ]
+        },
+        "database": {
+          "models": [
+            {
+              "name": "FleetOp",
+              "fields": [
+                {
+                  "name": "driverName",
+                  "type": "String",
+                  "required": true,
+                  "unique": false
+                },
+                {
+                  "name": "fuelExpense",
+                  "type": "Float",
+                  "required": false,
+                  "unique": false
+                },
+                {
+                  "name": "packageCount",
+                  "type": "Int",
+                  "required": false,
+                  "unique": false
+                },
+                {
+                  "name": "dispatchDate",
+                  "type": "String",
+                  "required": false,
+                  "unique": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "fleetop-form-page",
+              "title": "FleetOp Form",
+              "route": "/fleetop-form",
+              "components": [
+                {
+                  "id": "fleetop-form",
+                  "type": "Form",
+                  "props": {
+                    "model": "FleetOp",
+                    "fields": [
+                      {
+                        "name": "driverName",
+                        "label": "Driver Name",
+                        "type": "text"
+                      },
+                      {
+                        "name": "fuelExpense",
+                        "label": "Fuel Expense",
+                        "type": "number"
+                      },
+                      {
+                        "name": "packageCount",
+                        "label": "Package Count",
+                        "type": "number"
+                      },
+                      {
+                        "name": "dispatchDate",
+                        "label": "Dispatch Date",
+                        "type": "text"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "fleetops-list-page",
+              "title": "FleetOp List",
+              "route": "/fleetops-list",
+              "components": [
+                {
+                  "id": "fleetops-stats",
+                  "type": "StatsGrid",
+                  "props": {
+                    "items": [
+                      {
+                        "label": "Total FleetOps",
+                        "value": "0",
+                        "change": "Live records"
+                      },
+                      {
+                        "label": "Total Package Count",
+                        "value": "0",
+                        "change": "Live count"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "fleetops-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "FleetOp",
+                    "columns": [
+                      "driverName",
+                      "fuelExpense",
+                      "packageCount",
+                      "dispatchDate"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete",
+                      "csv-import"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-fleetop-sync",
+            "name": "FleetOp Sync Logger",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "FleetOp"
+            },
+            "actions": [
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "New FleetOp record was created."
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "y1ivdoknk",
+      "createdAt": "2026-05-23T16:07:10.606Z",
+      "updatedAt": "2026-05-23T16:07:10.606Z"
+    },
+    {
+      "id": "ldm85cd65",
+      "name": "Asset Tracker",
+      "description": "IT Asset manager to register equipment, serialNumber, price:Float, and stockCount:Int.",
+      "config": {
+        "name": "Asset Tracker",
+        "description": "IT Asset manager to register equipment, serialNumber, price:Float, and stockCount:Int.",
+        "auth": {
+          "enabled": true,
+          "userModel": "User",
+          "roles": [
+            "Admin",
+            "Member"
+          ]
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Equipment",
+              "fields": [
+                {
+                  "name": "serialNumber",
+                  "type": "Int",
+                  "required": true,
+                  "unique": false
+                },
+                {
+                  "name": "price",
+                  "type": "Float",
+                  "required": false,
+                  "unique": false
+                },
+                {
+                  "name": "stockCount",
+                  "type": "Int",
+                  "required": false,
+                  "unique": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "equipment-form-page",
+              "title": "Equipment Form",
+              "route": "/equipment-form",
+              "components": [
+                {
+                  "id": "equipment-form",
+                  "type": "Form",
+                  "props": {
+                    "model": "Equipment",
+                    "fields": [
+                      {
+                        "name": "serialNumber",
+                        "label": "Serial Number",
+                        "type": "number"
+                      },
+                      {
+                        "name": "price",
+                        "label": "Price",
+                        "type": "number"
+                      },
+                      {
+                        "name": "stockCount",
+                        "label": "Stock Count",
+                        "type": "number"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "equipments-list-page",
+              "title": "Equipment List",
+              "route": "/equipments-list",
+              "components": [
+                {
+                  "id": "equipments-stats",
+                  "type": "StatsGrid",
+                  "props": {
+                    "items": [
+                      {
+                        "label": "Total Equipments",
+                        "value": "0",
+                        "change": "Live records"
+                      },
+                      {
+                        "label": "Total Serial Number",
+                        "value": "0",
+                        "change": "Live count"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "equipments-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Equipment",
+                    "columns": [
+                      "serialNumber",
+                      "price",
+                      "stockCount"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete",
+                      "csv-import"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-equipment-sync",
+            "name": "Equipment Sync Logger",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Equipment"
+            },
+            "actions": [
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "New Equipment record was created."
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "elw0owv1e",
+      "createdAt": "2026-05-23T16:21:31.728Z",
+      "updatedAt": "2026-05-23T16:21:31.728Z"
+    },
+    {
+      "id": "gyfw226eu",
+      "name": "Patient Clinic App",
+      "description": "Clinic scheduler to log doctor appointments, date, email, and symptom checklists.",
+      "config": {
+        "name": "Patient Clinic App",
+        "description": "Clinic scheduler to log doctor appointments, date, email, and symptom checklists.",
+        "auth": {
+          "enabled": true,
+          "userModel": "User",
+          "roles": [
+            "Admin",
+            "Member"
+          ]
+        },
+        "database": {
+          "models": [
+            {
+              "name": "Doctor",
+              "fields": [
+                {
+                  "name": "title",
+                  "type": "String",
+                  "required": true,
+                  "unique": false
+                },
+                {
+                  "name": "description",
+                  "type": "String",
+                  "required": false,
+                  "unique": false
+                }
+              ]
+            }
+          ]
+        },
+        "ui": {
+          "layout": "Sidebar",
+          "pages": [
+            {
+              "id": "doctors-list-page",
+              "title": "Doctor List",
+              "route": "/doctors-list",
+              "components": [
+                {
+                  "id": "doctors-stats",
+                  "type": "StatsGrid",
+                  "props": {
+                    "items": [
+                      {
+                        "label": "Total Doctors",
+                        "value": "0",
+                        "change": "Live records"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "doctors-table",
+                  "type": "DataTable",
+                  "props": {
+                    "model": "Doctor",
+                    "columns": [
+                      "title",
+                      "description"
+                    ],
+                    "actions": [
+                      "create",
+                      "edit",
+                      "delete",
+                      "csv-import"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "doctors-calendar-page",
+              "title": "Doctor Calendar",
+              "route": "/doctors-calendar",
+              "components": [
+                {
+                  "id": "doctors-calendar",
+                  "type": "Calendar",
+                  "props": {
+                    "model": "Doctor",
+                    "columns": [
+                      "title",
+                      "description"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "id": "doctors-checklist-page",
+              "title": "Doctor Checklist",
+              "route": "/doctors-checklist",
+              "components": [
+                {
+                  "id": "doctors-checklist",
+                  "type": "Checklist",
+                  "props": {
+                    "model": "Doctor",
+                    "columns": [
+                      "title",
+                      "description"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "apis": [],
+        "workflows": [
+          {
+            "id": "wf-doctor-sync",
+            "name": "Doctor Sync Logger",
+            "trigger": {
+              "event": "RECORD_CREATED",
+              "model": "Doctor"
+            },
+            "actions": [
+              {
+                "type": "LOG_EVENT",
+                "config": {
+                  "message": "New Doctor record was created."
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "userId": "elw0owv1e",
+      "createdAt": "2026-05-23T16:22:26.292Z",
+      "updatedAt": "2026-05-23T16:22:26.292Z"
+    }
+  ],
+  "records": [
+    {
+      "id": "plemq9dqj",
+      "appId": "bgtu24gfs",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Jane Doe",
+        "email": "jane@doe.com",
+        "score": 85
+      },
+      "userId": "fn7iqnjbx",
+      "createdAt": "2026-05-22T16:57:29.580Z",
+      "updatedAt": "2026-05-22T16:57:29.580Z"
+    },
+    {
+      "id": "uipc7idi9",
+      "appId": "bgtu24gfs",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "John Smith",
+        "email": "john@smith.com",
+        "score": 95
+      },
+      "userId": "fn7iqnjbx",
+      "createdAt": "2026-05-22T16:57:51.176Z",
+      "updatedAt": "2026-05-22T16:57:51.176Z"
+    },
+    {
+      "id": "lvtfl0he5",
+      "appId": "bgtu24gfs",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Alice Wonderland",
+        "email": "alice@wonder.com",
+        "score": 78
+      },
+      "userId": "fn7iqnjbx",
+      "createdAt": "2026-05-22T16:57:59.320Z",
+      "updatedAt": "2026-05-22T16:57:59.320Z"
+    },
+    {
+      "id": "znq00s98h",
+      "appId": "jgq3jzzzt",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Jane Doe",
+        "email": "jane@doe.com",
+        "score": 85
+      },
+      "userId": "xbzxl8ql4",
+      "createdAt": "2026-05-22T18:28:50.017Z",
+      "updatedAt": "2026-05-22T18:28:50.017Z"
+    },
+    {
+      "id": "8y41lw4h6",
+      "appId": "jgq3jzzzt",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "John Smith",
+        "email": "john@smith.com",
+        "score": 95
+      },
+      "userId": "xbzxl8ql4",
+      "createdAt": "2026-05-22T18:29:11.504Z",
+      "updatedAt": "2026-05-22T18:29:11.504Z"
+    },
+    {
+      "id": "mlkcbl2fi",
+      "appId": "jgq3jzzzt",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Alice Wonderland",
+        "email": "alice@wonder.com",
+        "score": 78
+      },
+      "userId": "xbzxl8ql4",
+      "createdAt": "2026-05-22T18:29:19.704Z",
+      "updatedAt": "2026-05-22T18:29:19.704Z"
+    },
+    {
+      "id": "gbjitvagj",
+      "appId": "mr8igsx0w",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Jane Doe",
+        "email": "jane@doe.com",
+        "score": 85
+      },
+      "userId": "ojcd6ch5i",
+      "createdAt": "2026-05-23T14:07:43.525Z",
+      "updatedAt": "2026-05-23T14:07:43.525Z"
+    },
+    {
+      "id": "04wzbcxfb",
+      "appId": "mr8igsx0w",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "John Smith",
+        "email": "john@smith.com",
+        "score": 95
+      },
+      "userId": "ojcd6ch5i",
+      "createdAt": "2026-05-23T14:07:44.337Z",
+      "updatedAt": "2026-05-23T14:07:44.337Z"
+    },
+    {
+      "id": "7nlxdcqge",
+      "appId": "mr8igsx0w",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Alice Wonderland",
+        "email": "alice@wonder.com",
+        "score": 78
+      },
+      "userId": "ojcd6ch5i",
+      "createdAt": "2026-05-23T14:07:44.339Z",
+      "updatedAt": "2026-05-23T14:07:44.339Z"
+    },
+    {
+      "id": "rbaam9yhl",
+      "appId": "zcliax5b1",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Jane Doe",
+        "email": "jane@doe.com",
+        "score": 85
+      },
+      "userId": "ei4rqxvp2",
+      "createdAt": "2026-05-23T14:44:34.584Z",
+      "updatedAt": "2026-05-23T14:44:34.584Z"
+    },
+    {
+      "id": "j0fla8j8f",
+      "appId": "zcliax5b1",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "John Smith",
+        "email": "john@smith.com",
+        "score": 95
+      },
+      "userId": "ei4rqxvp2",
+      "createdAt": "2026-05-23T14:44:35.311Z",
+      "updatedAt": "2026-05-23T14:44:35.311Z"
+    },
+    {
+      "id": "y08hpus09",
+      "appId": "zcliax5b1",
+      "modelName": "Lead",
+      "data": {
+        "fullName": "Alice Wonderland",
+        "email": "alice@wonder.com",
+        "score": 78
+      },
+      "userId": "ei4rqxvp2",
+      "createdAt": "2026-05-23T14:44:35.315Z",
+      "updatedAt": "2026-05-23T14:44:35.315Z"
+    },
+    {
+      "id": "ubfbofqpf",
+      "appId": "al3wqfj8k",
+      "modelName": "FleetOp",
+      "data": {
+        "driverName": "gfhtfh",
+        "fuelExpense": 4356346,
+        "packageCount": 64,
+        "dispatchDate": "4354"
+      },
+      "userId": "y1ivdoknk",
+      "createdAt": "2026-05-23T16:07:25.795Z",
+      "updatedAt": "2026-05-23T16:07:25.795Z"
+    },
+    {
+      "id": "kb51xcjl5",
+      "appId": "al3wqfj8k",
+      "modelName": "FleetOp",
+      "data": {
+        "driverName": "gfhtfh",
+        "fuelExpense": 4356346,
+        "packageCount": 64,
+        "dispatchDate": "4354"
+      },
+      "userId": "y1ivdoknk",
+      "createdAt": "2026-05-23T16:07:28.086Z",
+      "updatedAt": "2026-05-23T16:07:28.086Z"
+    },
+    {
+      "id": "n3ao01gtd",
+      "appId": "ldm85cd65",
+      "modelName": "Equipment",
+      "data": {
+        "serialNumber": 123456,
+        "price": 1000,
+        "stockCount": 200
+      },
+      "userId": "elw0owv1e",
+      "createdAt": "2026-05-23T16:21:49.717Z",
+      "updatedAt": "2026-05-23T16:22:07.796Z"
+    },
+    {
+      "id": "4d0kp1lw1",
+      "appId": "gyfw226eu",
+      "modelName": "Doctor",
+      "data": {
+        "title": "bhargav",
+        "description": null,
+        "status": "To Do",
+        "priority": "Medium",
+        "completed": false
+      },
+      "userId": "elw0owv1e",
+      "createdAt": "2026-05-23T16:22:45.430Z",
+      "updatedAt": "2026-05-23T16:22:45.430Z"
+    }
+  ],
+  "workflowLogs": [
+    {
+      "id": "xdlkz9fmh",
+      "appId": "bgtu24gfs",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T16:57:29.581Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T16:57:29.581Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T16:57:29.581Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"plemq9dqj\",\"name\":\"Jane Doe\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T16:57:35.977Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: plemq9dqj\n[2026-05-22T16:57:35.977Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T16:57:37.802Z"
+    },
+    {
+      "id": "a5582o5ex",
+      "appId": "bgtu24gfs",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T16:57:51.177Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T16:57:51.177Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T16:57:51.177Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"uipc7idi9\",\"name\":\"John Smith\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T16:57:52.126Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: uipc7idi9\n[2026-05-22T16:57:52.126Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T16:57:55.249Z"
+    },
+    {
+      "id": "irdcy3145",
+      "appId": "bgtu24gfs",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T16:57:59.321Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T16:57:59.321Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T16:57:59.321Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"lvtfl0he5\",\"name\":\"Alice Wonderland\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T16:57:59.911Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: lvtfl0he5\n[2026-05-22T16:57:59.911Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T16:58:03.997Z"
+    },
+    {
+      "id": "2y18un1b8",
+      "appId": "jgq3jzzzt",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T18:28:50.018Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T18:28:50.019Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T18:28:50.019Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"znq00s98h\",\"name\":\"Jane Doe\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T18:28:52.204Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: znq00s98h\n[2026-05-22T18:28:52.204Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T18:28:54.237Z"
+    },
+    {
+      "id": "2mmg2rg40",
+      "appId": "jgq3jzzzt",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T18:29:11.505Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T18:29:11.505Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T18:29:11.505Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"8y41lw4h6\",\"name\":\"John Smith\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T18:29:12.319Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: 8y41lw4h6\n[2026-05-22T18:29:12.319Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T18:29:15.622Z"
+    },
+    {
+      "id": "2qiizlfgg",
+      "appId": "jgq3jzzzt",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-22T18:29:19.705Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-22T18:29:19.705Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-22T18:29:19.705Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"mlkcbl2fi\",\"name\":\"Alice Wonderland\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-22T18:29:20.284Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: mlkcbl2fi\n[2026-05-22T18:29:20.284Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-22T18:29:24.353Z"
+    },
+    {
+      "id": "osdszhl1z",
+      "appId": "mr8igsx0w",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:07:43.526Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:07:43.526Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:07:43.526Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"gbjitvagj\",\"name\":\"Jane Doe\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:07:44.153Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: gbjitvagj\n[2026-05-23T14:07:44.153Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:07:44.153Z"
+    },
+    {
+      "id": "kd1wure4w",
+      "appId": "mr8igsx0w",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:07:44.337Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:07:44.337Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:07:44.337Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"04wzbcxfb\",\"name\":\"John Smith\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:07:44.528Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: 04wzbcxfb\n[2026-05-23T14:07:44.528Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:07:44.529Z"
+    },
+    {
+      "id": "y4vsrbzi8",
+      "appId": "mr8igsx0w",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:07:44.340Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:07:44.340Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:07:44.340Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"7nlxdcqge\",\"name\":\"Alice Wonderland\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:07:45.506Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: 7nlxdcqge\n[2026-05-23T14:07:45.506Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:07:45.507Z"
+    },
+    {
+      "id": "xr15jvpav",
+      "appId": "zcliax5b1",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:44:34.585Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:44:34.585Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:44:34.585Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"rbaam9yhl\",\"name\":\"Jane Doe\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:44:35.322Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: rbaam9yhl\n[2026-05-23T14:44:35.322Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:44:35.323Z"
+    },
+    {
+      "id": "dc8z9nza6",
+      "appId": "zcliax5b1",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:44:35.312Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:44:35.312Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:44:35.312Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"j0fla8j8f\",\"name\":\"John Smith\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:44:36.040Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: j0fla8j8f\n[2026-05-23T14:44:36.040Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:44:36.041Z"
+    },
+    {
+      "id": "gcb9iw0iu",
+      "appId": "zcliax5b1",
+      "workflowId": "wf-webhook-1",
+      "name": "Trigger Webhook on Lead",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T14:44:35.315Z] Starting workflow \"Trigger Webhook on Lead\"\n[2026-05-23T14:44:35.315Z] Triggered by RECORD_CREATED on model \"Lead\"\n[2026-05-23T14:44:35.315Z] [Action 1/2] Executing action SEND_WEBHOOK...\n[Webhook] Sending POST request to https://webhook.site/dummy-placeholder-url-for-verification\n[Webhook] Payload: {\"id\":\"y08hpus09\",\"name\":\"Alice Wonderland\",\"status\":\"new\"}\n[Webhook] Response status: 404\n[Warning] Webhook returned error status: Not Found\n[2026-05-23T14:44:36.158Z] [Action 2/2] Executing action LOG_EVENT...\n[Logger Action] Processed lead record with ID: y08hpus09\n[2026-05-23T14:44:36.158Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T14:44:36.159Z"
+    },
+    {
+      "id": "qai65uu1o",
+      "appId": "al3wqfj8k",
+      "workflowId": "wf-fleetop-sync",
+      "name": "FleetOp Sync Logger",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T16:07:25.797Z] Starting workflow \"FleetOp Sync Logger\"\n[2026-05-23T16:07:25.797Z] Triggered by RECORD_CREATED on model \"FleetOp\"\n[2026-05-23T16:07:25.797Z] [Action 1/1] Executing action LOG_EVENT...\n[Logger Action] New FleetOp record was created.\n[2026-05-23T16:07:25.797Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T16:07:25.798Z"
+    },
+    {
+      "id": "sekqb0cci",
+      "appId": "al3wqfj8k",
+      "workflowId": "wf-fleetop-sync",
+      "name": "FleetOp Sync Logger",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T16:07:28.088Z] Starting workflow \"FleetOp Sync Logger\"\n[2026-05-23T16:07:28.088Z] Triggered by RECORD_CREATED on model \"FleetOp\"\n[2026-05-23T16:07:28.088Z] [Action 1/1] Executing action LOG_EVENT...\n[Logger Action] New FleetOp record was created.\n[2026-05-23T16:07:28.088Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T16:07:28.089Z"
+    },
+    {
+      "id": "6yee0ynp7",
+      "appId": "ldm85cd65",
+      "workflowId": "wf-equipment-sync",
+      "name": "Equipment Sync Logger",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T16:21:49.719Z] Starting workflow \"Equipment Sync Logger\"\n[2026-05-23T16:21:49.719Z] Triggered by RECORD_CREATED on model \"Equipment\"\n[2026-05-23T16:21:49.719Z] [Action 1/1] Executing action LOG_EVENT...\n[Logger Action] New Equipment record was created.\n[2026-05-23T16:21:49.719Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T16:21:49.721Z"
+    },
+    {
+      "id": "arexj1bu0",
+      "appId": "gyfw226eu",
+      "workflowId": "wf-doctor-sync",
+      "name": "Doctor Sync Logger",
+      "event": "RECORD_CREATED",
+      "status": "SUCCESS",
+      "logs": "[2026-05-23T16:22:45.432Z] Starting workflow \"Doctor Sync Logger\"\n[2026-05-23T16:22:45.432Z] Triggered by RECORD_CREATED on model \"Doctor\"\n[2026-05-23T16:22:45.432Z] [Action 1/1] Executing action LOG_EVENT...\n[Logger Action] New Doctor record was created.\n[2026-05-23T16:22:45.432Z] Workflow finished with status: SUCCESS",
+      "createdAt": "2026-05-23T16:22:45.434Z"
+    }
+  ]
+}

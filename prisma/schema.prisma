@@ -1,0 +1,58 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  apps      App[]
+  records   Record[]
+}
+
+model App {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  config      Json          // Contains database models, forms, pages, APIs, and workflows
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  records     Record[]
+  workflowLogs WorkflowLog[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Record {
+  id        String   @id @default(uuid())
+  appId     String
+  app       App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  modelName String   // e.g. "Customer", "Product", "Order"
+  data      Json     // Dynamic record fields stored as JSONB
+  userId    String?  // Scoped to a specific user (if authentication in the generated app is enabled)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([appId, modelName])
+}
+
+model WorkflowLog {
+  id          String   @id @default(uuid())
+  appId       String
+  app         App      @relation(fields: [appId], references: [id], onDelete: Cascade)
+  workflowId  String
+  name        String
+  event       String   // e.g. "RECORD_CREATED", "RECORD_UPDATED"
+  status      String   // "SUCCESS" or "FAILED"
+  logs        String?  // Step-by-step logs of executed actions
+  createdAt   DateTime @default(now())
+}
