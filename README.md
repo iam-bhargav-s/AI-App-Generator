@@ -58,3 +58,22 @@ Follow these definitive step-by-step instructions to configure, initialize, and 
 Install the required system node packages inside your project directory:
 ```bash
 npm install
+```
+
+## 2. Initialize Database Client and Sync Models
+
+Run the Prisma ORM compilation commands to generate code hooks and map required schemas to your live serverless PostgreSQL instance:
+
+```bash
+npx prisma generate
+
+npx prisma db push
+```
+
+## 3. Launch the Local Development Server
+
+Boot up the local Node.js process using the development command script:
+
+```bash
+npm run dev
+```
