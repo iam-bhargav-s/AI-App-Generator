@@ -87,36 +87,7 @@ export async function POST(req: NextRequest) {
       userId: user.id,
     });
 
-    // Auto-generate seed data if models exist
-    if (appConfig.database?.models?.length > 0) {
-      try {
-        const seedData = await generateSeedData(appConfig.database.models, name, description || config?.description || '');
-        if (seedData) {
-          console.log(`[Scaffolder] Generated seed data for ${Object.keys(seedData).length} models.`);
-          for (const model of appConfig.database.models) {
-            if (model.name === 'User' || model.name.includes('Activity') || model.name.includes('Log')) continue;
-            
-            let records = seedData[model.name];
-            if (!records) {
-              const key = Object.keys(seedData).find(k => k.toLowerCase() === model.name.toLowerCase());
-              if (key) records = seedData[key];
-            }
-            if (!records) {
-              const key = Object.keys(seedData).find(k => k.toLowerCase().includes(model.name.toLowerCase().replace(/s$/, '')) || model.name.toLowerCase().includes(k.toLowerCase().replace(/s$/, '')));
-              if (key) records = seedData[key];
-            }
-
-            if (Array.isArray(records)) {
-              for (const recordData of records) {
-                await dbWrapper.createRecord(app.id, model.name, recordData);
-              }
-            }
-          }
-        }
-      } catch (seedError) {
-        console.error('[Scaffolder] Non-fatal error saving seed data:', seedError);
-      }
-    }
+    // Auto-generate seed data happens client-side now to prevent Vercel 10s timeouts
 
     return NextResponse.json({ app, success: true });
   } catch (error: any) {

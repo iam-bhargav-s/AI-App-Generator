@@ -113,23 +113,35 @@ export default function DashboardPage() {
 
     setCreating(true);
     setError('');
-
+    
     try {
+      const payload: any = { name: newAppName };
+      if (newAppDesc) payload.description = newAppDesc;
+
       const res = await fetch('/api/apps', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: newAppName,
-          description: newAppDesc,
-        }),
+        body: JSON.stringify(payload),
       });
-
+      
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to create application');
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to create application');
+      }
 
+      // Generate seed data in a separate API call to prevent 10s Vercel timeouts
+      try {
+        await fetch(`/api/apps/${data.app.id}/seed`, { method: 'POST' });
+      } catch (seedErr) {
+        console.error('Non-fatal error seeding data:', seedErr);
+      }
+
+      setCreating(false);
+      setNewAppName('');
+      setNewAppDesc('');
       router.push(`/app/${data.app.id}`);
     } catch (err: any) {
-      setError(err.message || 'Failed to create app');
+      setError(err.message || 'Failed to generate app');
       setCreating(false);
     }
   };
