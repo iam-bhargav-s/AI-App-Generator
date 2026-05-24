@@ -1640,7 +1640,7 @@ function GalleryGridWidget({ records }: any) {
             </div>
             <div className="mt-4 pt-4 border-t border-zinc-800/60 flex justify-between items-center">
               <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">View Details</span>
-              <span className="text-[10px] text-zinc-600">{new Date(r.createdAt || Date.now()).toLocaleDateString()}</span>
+              <span className="text-[10px] text-zinc-600">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ''}</span>
             </div>
           </div>
         </div>
@@ -1666,7 +1666,7 @@ function FeedWidget({ records }: any) {
                   <h4 className="font-bold text-zinc-100">{author}</h4>
                   <span className="text-[10px] text-zinc-500 font-medium">@{author.toLowerCase().replace(/\s/g, '')}</span>
                 </div>
-                <span className="text-[10px] text-zinc-500 bg-zinc-950 px-2 py-1 rounded-full">{new Date(r.createdAt || Date.now()).toLocaleTimeString()}</span>
+                <span className="text-[10px] text-zinc-500 bg-zinc-950 px-2 py-1 rounded-full">{r.createdAt ? new Date(r.createdAt).toLocaleTimeString() : ''}</span>
               </div>
               <div className="text-sm text-zinc-300 leading-relaxed bg-zinc-950/40 p-4 rounded-xl border border-zinc-800/40">
                 {r.content || r.message || r.post || r.description || JSON.stringify(r)}
