@@ -73,6 +73,7 @@ export async function generateConfigWithLLM(name: string, description: string): 
   const geminiKey = process.env.GEMINI_API_KEY;
   const openaiKey = process.env.OPENAI_API_KEY;
   const hfKey = process.env.HF_API_KEY;
+  const groqKey = process.env.GROQ_API_KEY;
 
   if (geminiKey) {
     try {
@@ -376,6 +377,62 @@ CRITICAL INSTRUCTIONS:
       return config;
     } catch (e) {
       console.error('[Scaffolder] Hugging Face API invocation crashed:', e);
+      return null;
+    }
+  }
+
+  if (groqKey) {
+    try {
+      console.log('[Scaffolder] Calling Groq API for strict schema generation...');
+      
+      const systemPrompt = `You are a software generator. You must generate a clean application configuration in JSON format based on the user's request.
+CRITICAL INSTRUCTIONS:
+1. Strict Schema Generation: Parse and use the exact nouns, column names, and entities from the user's prompt. If they ask for 'Severity Levels' and 'Downtime Logs', name your database models and fields EXACTLY like that (e.g. model 'Incident' or 'DowntimeLog', fields 'severityLevel', 'downtimeDuration'). Do not map to generic fields like 'Priority' or 'Task'.
+2. Separate Names from Types: Do not append type strings (like 'String' or 'Int') to field names. If a user asks for 'SerialNumber (String)' or 'SerialNumber:String', the field name must be 'serialNumber' (camelCase) and the database field type must be 'String'.
+3. Minimalist UI Sidebar & Negation Handling: Only generate pages/views requested by the user. If they ask for 'an Incident Form and a List View', your ui.pages must only contain these two pages (a Form component page and a DataTable component page). If the user explicitly negates a view (e.g. 'do NOT generate a Kanban board' or 'no calendar'), you must absolutely omit it. If no specific views are mentioned, default to exactly two pages: a List View (DataTable) and a Submit Form (Form).
+4. Dynamic Stats Summary Metrics: Summary cards in the StatsGrid component must dynamically reflect model fields and prompt context. For example, if there is a warranty expiration field, generate a summary card for 'Active Warranties' or 'Expired Warranties'. If there is a price field, generate 'Total Value' or 'Average Cost'. If there is a downtime field, generate 'System Downtime'. Do not hardcode 'System Status' unless there are no relevant fields.
+5. Preserve Mandatory Features:
+   - Any DataTable component MUST include 'csv-import' in its actions array props (e.g. actions: ['create', 'edit', 'delete', 'csv-import']).
+   - You MUST generate a default workflow in the workflows array that triggers LOG_EVENT when a record is created or updated, to ensure E2E validation passes.
+6. Clean Output: Do not include any AI markers, system prompts, or references to the generator itself (like "LLM-generated" or "Antigravity").
+7. Return strictly valid JSON conforming exactly to the requested structure.`;
+
+      const userMessage = `App Name: "${name}"\nPrompt: "${description}"\n\nGenerate the JSON.`;
+
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${groqKey}`
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage }
+          ],
+          response_format: { type: 'json_object' }
+        })
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('[Scaffolder] Groq API error response:', errorText);
+        return null;
+      }
+
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content;
+      if (!text) {
+        console.error('[Scaffolder] Groq returned empty message content');
+        return null;
+      }
+
+      const config = JSON.parse(text) as AppConfig;
+      console.log('[Scaffolder] Groq API config successfully generated!');
+      return config;
+    } catch (e) {
+      console.error('[Scaffolder] Groq API invocation crashed:', e);
       return null;
     }
   }
