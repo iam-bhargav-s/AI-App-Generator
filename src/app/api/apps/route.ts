@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { dbWrapper } from '@/lib/dbWrapper';
 import { getCurrentUser } from '@/lib/auth';
-import { scaffoldApp } from '@/lib/appScaffolder';
+import { scaffoldApp, generateSeedData } from '@/lib/appScaffolder';
 
 const DEFAULT_APP_CONFIG = {
   name: 'New Application',
@@ -86,6 +86,29 @@ export async function POST(req: NextRequest) {
       config: appConfig,
       userId: user.id,
     });
+
+    // Auto-generate seed data if models exist
+    if (appConfig.database?.models?.length > 0) {
+      try {
+        const seedData = await generateSeedData(appConfig.database.models, name, description || config?.description || '');
+        if (seedData) {
+          console.log(`[Scaffolder] Generated seed data for ${Object.keys(seedData).length} models.`);
+          for (const [modelName, records] of Object.entries(seedData)) {
+            if (Array.isArray(records)) {
+              for (const recordData of records) {
+                await dbWrapper.createRecord({
+                  appId: app.id,
+                  modelName: modelName,
+                  data: recordData
+                });
+              }
+            }
+          }
+        }
+      } catch (seedError) {
+        console.error('[Scaffolder] Non-fatal error saving seed data:', seedError);
+      }
+    }
 
     return NextResponse.json({ app, success: true });
   } catch (error: any) {

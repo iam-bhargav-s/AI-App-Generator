@@ -1041,3 +1041,93 @@ export async function scaffoldApp(name: string, description: string): Promise<Ap
   const fallbackConfig = scaffoldAppFallback(name, description);
   return postProcessConfig(fallbackConfig, description);
 }
+
+export async function generateSeedData(models: DatabaseModel[], appName: string, description: string): Promise<Record<string, any[]> | null> {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (!geminiKey || models.length === 0) return null;
+
+  try {
+    console.log('[Scaffolder] Generating seed data with Gemini API...');
+    
+    // Create a dynamic schema based on the provided models
+    const properties: any = {};
+    const requiredModels: string[] = [];
+    
+    for (const model of models) {
+      if (model.name === 'User' || model.name.includes('Activity') || model.name.includes('Log')) continue; // Skip auth and logs
+      properties[model.name] = {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {},
+          required: []
+        }
+      };
+      requiredModels.push(model.name);
+      
+      for (const field of model.fields) {
+        if (field.name === 'id' || field.name === 'createdAt' || field.name === 'updatedAt') continue;
+        properties[model.name].items.properties[field.name] = {
+          type: field.type === 'Int' || field.type === 'Float' ? 'number' : field.type === 'Boolean' ? 'boolean' : 'string'
+        };
+        if (field.required) {
+          properties[model.name].items.required.push(field.name);
+        }
+      }
+      
+      if (properties[model.name].items.required.length === 0) {
+        delete properties[model.name].items.required;
+      }
+    }
+
+    if (Object.keys(properties).length === 0) return null;
+
+    const responseSchema = {
+      type: "object",
+      properties,
+      required: requiredModels
+    };
+
+    const systemPrompt = `You are a mock data generator for a new application.
+Application Name: ${appName}
+Description: ${description}
+
+CRITICAL INSTRUCTIONS:
+1. Generate realistic, high-quality seed data for the provided database models.
+2. Generate exactly 3 to 5 records per model.
+3. Use realistic names, titles, descriptions, and values that match the context of the application.
+4. For text fields, use coherent sentences, not gibberish.
+5. Do not include markdown formatting or markdown code blocks in the response. Return pure JSON.`;
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            { parts: [{ text: systemPrompt }, { text: "Generate seed data in JSON format." }] }
+          ],
+          generationConfig: {
+            responseMimeType: 'application/json',
+            responseSchema: responseSchema
+          }
+        })
+      }
+    );
+
+    if (!res.ok) {
+      console.error('[Scaffolder] Gemini API error during seed data generation:', res.statusText);
+      return null;
+    }
+
+    const data = await res.json();
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!text) return null;
+
+    return JSON.parse(text);
+  } catch (error) {
+    console.error('[Scaffolder] Error generating seed data:', error);
+    return null;
+  }
+}

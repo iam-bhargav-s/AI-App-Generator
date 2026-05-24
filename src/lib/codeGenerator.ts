@@ -644,7 +644,7 @@ function formatHeader(col: string) {
               <h3 className="text-sm font-black text-white uppercase tracking-wider">${model} Records</h3>
               <p className="text-xs text-zinc-555 mt-0.5">Manage and browse your ${nameLower} database.</p>
             </div>
-            ${actions.includes('create') ? `
+            ${(!actions.length || actions.includes('create')) ? `
             <button
               onClick={() => setShowCreateModal(true)}
               className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition duration-150 shadow shadow-emerald-950/25"
@@ -829,21 +829,21 @@ function formatHeader(col: string) {
         componentsJsx += `
         {/* Gallery Grid Widget */}
         <div className="mb-8">
-          <GalleryGridWidget records={records} />
+          <GalleryGridWidget records={records} onCreateClick={() => { setFormErrors([]); setShowCreateModal(true); }} />
         </div>
         `;
       } else if (comp.type === 'Feed') {
         componentsJsx += `
         {/* Feed Widget */}
         <div className="mb-8">
-          <FeedWidget records={records} />
+          <FeedWidget records={records} onCreateClick={() => { setFormErrors([]); setShowCreateModal(true); }} />
         </div>
         `;
       } else if (comp.type === 'DetailView') {
         componentsJsx += `
         {/* Detail View Widget */}
         <div className="mb-8">
-          <DetailViewWidget records={records} />
+          <DetailViewWidget records={records} onCreateClick={() => { setFormErrors([]); setShowCreateModal(true); }} />
         </div>
         `;
       }
@@ -1707,12 +1707,23 @@ function WizardFormWidget({ records }: any) {
 \` : ''}
 
 \${hasGalleryGrid ? \`
-function GalleryGridWidget({ records }: any) {
-  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">No items in the gallery.</div>;
+function GalleryGridWidget({ records, onCreateClick }: any) {
+  if (!records || records.length === 0) return (
+    <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl flex flex-col items-center gap-4">
+      <p>No items in the gallery.</p>
+      {onCreateClick && <button onClick={onCreateClick} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl">+ Add Record</button>}
+    </div>
+  );
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {records.map((r: any, i: number) => (
-        <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl hover:border-zinc-700 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+    <div className="relative">
+      {onCreateClick && (
+        <div className="flex justify-end mb-4">
+          <button onClick={onCreateClick} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/50">+ Add Record</button>
+        </div>
+      )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {records.map((r: any, i: number) => (
+          <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl hover:border-zinc-700 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
           <div className="h-48 bg-gradient-to-br from-zinc-800 to-zinc-950 flex items-center justify-center relative overflow-hidden">
             <div className="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors"></div>
             <span className="text-5xl drop-shadow-lg opacity-50 group-hover:scale-110 group-hover:opacity-100 transition-all">📸</span>
@@ -1738,10 +1749,20 @@ function GalleryGridWidget({ records }: any) {
 \` : ''}
 
 \${hasFeed ? \`
-function FeedWidget({ records }: any) {
-  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">Your feed is empty.</div>;
+function FeedWidget({ records, onCreateClick }: any) {
+  if (!records || records.length === 0) return (
+    <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl flex flex-col items-center gap-4">
+      <p>Your feed is empty.</p>
+      {onCreateClick && <button onClick={onCreateClick} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl">+ Add Post</button>}
+    </div>
+  );
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      {onCreateClick && (
+        <div className="flex justify-end">
+          <button onClick={onCreateClick} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/50">+ New Post</button>
+        </div>
+      )}
       {records.map((r: any, i: number) => {
         const author = String(r.name || r.author || r.user || r.username || 'Anonymous User');
         return (
@@ -1778,8 +1799,13 @@ function FeedWidget({ records }: any) {
 \` : ''}
 
 \${hasDetailView ? \`
-function DetailViewWidget({ records }: any) {
-  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">No record selected for detail view.</div>;
+function DetailViewWidget({ records, onCreateClick }: any) {
+  if (!records || records.length === 0) return (
+    <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl flex flex-col items-center gap-4">
+      <p>No record selected for detail view.</p>
+      {onCreateClick && <button onClick={onCreateClick} className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl">+ Add Record</button>}
+    </div>
+  );
   const r = records[0];
   return (
     <div className="max-w-4xl mx-auto bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
