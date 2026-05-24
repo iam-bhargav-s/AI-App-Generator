@@ -2,7 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { db } from './db';
 
-const FALLBACK_FILE = path.join(process.cwd(), 'src', 'data', 'db_fallback.json');
+const FALLBACK_FILE = process.env.NODE_ENV === 'production' 
+  ? '/tmp/db_fallback.json' 
+  : path.join(process.cwd(), 'src', 'data', 'db_fallback.json');
 
 // Ensure fallback file directory exists
 function ensureFallbackFile() {

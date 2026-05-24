@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "App Builder Platform",
   description: "Dynamic web application generator",
   manifest: "/manifest.json",
+};
+
+export const viewport = {
   themeColor: "#10b981",
 };
 
