@@ -96,11 +96,7 @@ export async function POST(req: NextRequest) {
           for (const [modelName, records] of Object.entries(seedData)) {
             if (Array.isArray(records)) {
               for (const recordData of records) {
-                await dbWrapper.createRecord({
-                  appId: app.id,
-                  modelName: modelName,
-                  data: recordData
-                });
+                await dbWrapper.createRecord(app.id, modelName, recordData);
               }
             }
           }
