@@ -18,7 +18,7 @@ export interface StatsItem {
 
 export interface UIComponent {
   id: string;
-  type: 'StatsGrid' | 'DataTable' | 'Form' | 'Calculator' | 'Kanban' | 'Calendar' | 'Chart' | 'Checklist' | 'Notes';
+  type: 'StatsGrid' | 'DataTable' | 'Form' | 'Calculator' | 'Kanban' | 'Calendar' | 'Chart' | 'Checklist' | 'Notes' | 'WizardForm' | 'GalleryGrid' | 'Feed' | 'DetailView';
   props: {
     items?: StatsItem[];
     model?: string;
@@ -140,7 +140,7 @@ export async function generateConfigWithLLM(name: string, description: string): 
                         type: "object",
                         properties: {
                           id: { type: "string" },
-                          type: { type: "string", enum: ["StatsGrid", "DataTable", "Form", "Calculator", "Kanban", "Calendar", "Chart", "Checklist", "Notes"] },
+                          type: { type: "string", enum: ["StatsGrid", "DataTable", "Form", "Calculator", "Kanban", "Calendar", "Chart", "Checklist", "Notes", "WizardForm", "GalleryGrid", "Feed", "DetailView"] },
                           props: {
                             type: "object",
                             properties: {
@@ -211,7 +211,12 @@ export async function generateConfigWithLLM(name: string, description: string): 
 CRITICAL INSTRUCTIONS:
 1. Strict Schema Generation: Parse and use the exact nouns, column names, and entities from the user's prompt. If they ask for 'Severity Levels' and 'Downtime Logs', name your database models and fields EXACTLY like that (e.g. model 'Incident' or 'DowntimeLog', fields 'severityLevel', 'downtimeDuration'). Do not map to generic fields like 'Priority' or 'Task'.
 2. Separate Names from Types: Do not append type strings (like 'String' or 'Int') to field names. If a user asks for 'SerialNumber (String)' or 'SerialNumber:String', the field name must be 'serialNumber' (camelCase) and the database field type must be 'String'.
-3. Minimalist UI Sidebar & Negation Handling: Only generate pages/views requested by the user. If they ask for 'an Incident Form and a List View', your ui.pages must only contain these two pages (a Form component page and a DataTable component page). If the user explicitly negates a view (e.g. 'do NOT generate a Kanban board' or 'no calendar'), you must absolutely omit it. If no specific views are mentioned, default to exactly two pages: a List View (DataTable) and a Submit Form (Form).
+3. Generalized UI Selection: Select the most appropriate UI widget for the idea requested:
+   - Use 'WizardForm' for Quizzes, Multi-step Surveys, and Onboarding.
+   - Use 'GalleryGrid' for E-commerce products, Media Portfolios, and Menus.
+   - Use 'Feed' for Social media timelines, Activity logs, Comment threads.
+   - Use 'DetailView' for reading Blog posts, viewing User Profiles, or single product pages.
+   - Use 'Kanban', 'Calendar', 'DataTable', 'Form' for standard CRM, ticketing, and scheduling tools.
 4. Dynamic Stats Summary Metrics: Summary cards in the StatsGrid component must dynamically reflect model fields and prompt context. For example, if there is a warranty expiration field, generate a summary card for 'Active Warranties' or 'Expired Warranties'. If there is a price field, generate 'Total Value' or 'Average Cost'. If there is a downtime field, generate 'System Downtime'. Do not hardcode 'System Status' unless there are no relevant fields.
 5. Preserve Mandatory Features:
    - Any DataTable component MUST include 'csv-import' in its actions array props (e.g. actions: ['create', 'edit', 'delete', 'csv-import']).

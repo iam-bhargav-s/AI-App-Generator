@@ -637,6 +637,22 @@ export default function SimulatorPage({ params }: { params: Promise<{ appId: str
                   );
                 }
 
+                if (comp.type === 'WizardForm') {
+                  return <WizardFormWidget key={comp.id} appId={appId} modelName={comp.props.model || activePageModelName} records={pageRecords} onRefresh={fetchRecords} />;
+                }
+
+                if (comp.type === 'GalleryGrid') {
+                  return <GalleryGridWidget key={comp.id} records={pageRecords} />;
+                }
+
+                if (comp.type === 'Feed') {
+                  return <FeedWidget key={comp.id} records={pageRecords} />;
+                }
+
+                if (comp.type === 'DetailView') {
+                  return <DetailViewWidget key={comp.id} records={pageRecords} />;
+                }
+
                 return (
                   <div key={comp.id} className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-xl text-xs">
                     Graceful Fallback: Unknown component type "{comp.type}" was bypassed.
@@ -1556,6 +1572,145 @@ function NotesWidget({ appId }: { appId: string }) {
             No notes here. Click "+ Add Note" to create one.
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function WizardFormWidget({ records }: any) {
+  const [step, setStep] = useState(0);
+  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">No steps or questions found in the database. Add records first!</div>;
+  const current = records[step];
+  
+  return (
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-8 max-w-2xl mx-auto shadow-2xl">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <span className="text-[10px] font-black uppercase text-emerald-500 tracking-widest bg-emerald-500/10 px-2 py-1 rounded">Interactive Wizard</span>
+          <h3 className="text-xl font-black text-white mt-2">Step {step + 1} of {records.length}</h3>
+        </div>
+        <div className="relative w-16 h-16 flex items-center justify-center">
+          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+            <path className="text-zinc-800" strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path className="text-emerald-500 transition-all duration-500" strokeDasharray={`${((step + 1) / records.length) * 100}, 100`} strokeWidth="3" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <span className="absolute text-[10px] font-bold text-white">{Math.round(((step + 1) / records.length) * 100)}%</span>
+        </div>
+      </div>
+      <div className="mb-8 space-y-4">
+        {Object.entries(current).map(([k, v]) => {
+          if (k === 'id' || k === 'createdAt' || k === 'updatedAt' || k === 'userId') return null;
+          return (
+            <div key={k} className="bg-zinc-950/50 p-4 rounded-xl border border-zinc-800/50">
+              <span className="block text-[10px] text-zinc-500 uppercase font-bold tracking-wider mb-1">{k}</span>
+              <span className="text-sm font-medium text-zinc-200">{String(v)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex justify-between items-center pt-4 border-t border-zinc-800">
+        <button disabled={step === 0} onClick={() => setStep(step - 1)} className="px-5 py-2.5 border border-zinc-700 hover:bg-zinc-800 rounded-xl text-xs font-bold text-zinc-300 disabled:opacity-30 transition-colors">
+          Previous Step
+        </button>
+        <button onClick={() => { if (step < records.length - 1) setStep(step + 1); else alert('Wizard Completed! In a real app, this would submit the final payload.'); }} className="px-8 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-black tracking-wide shadow-lg shadow-emerald-900/50 transition-all">
+          {step < records.length - 1 ? 'Next Step' : 'Complete & Submit'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function GalleryGridWidget({ records }: any) {
+  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">No items in the gallery.</div>;
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {records.map((r: any, i: number) => (
+        <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl hover:border-zinc-700 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+          <div className="h-48 bg-gradient-to-br from-zinc-800 to-zinc-950 flex items-center justify-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors"></div>
+            <span className="text-5xl drop-shadow-lg opacity-50 group-hover:scale-110 group-hover:opacity-100 transition-all">📸</span>
+          </div>
+          <div className="p-5">
+            <h4 className="font-bold text-white mb-2 truncate text-lg">{r.name || r.title || r.productName || 'Item ' + (i+1)}</h4>
+            <div className="space-y-1">
+              {Object.entries(r).slice(0, 3).map(([k, v]) => {
+                if (k === 'id' || k === 'createdAt' || k === 'updatedAt') return null;
+                return <p key={k} className="text-xs text-zinc-400 line-clamp-1"><span className="font-semibold text-zinc-500">{k}:</span> {String(v)}</p>;
+              })}
+            </div>
+            <div className="mt-4 pt-4 border-t border-zinc-800/60 flex justify-between items-center">
+              <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded">View Details</span>
+              <span className="text-[10px] text-zinc-600">{new Date(r.createdAt || Date.now()).toLocaleDateString()}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function FeedWidget({ records }: any) {
+  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">Your feed is empty.</div>;
+  return (
+    <div className="max-w-2xl mx-auto space-y-6">
+      {records.map((r: any, i: number) => {
+        const author = String(r.name || r.author || r.user || r.username || 'Anonymous User');
+        return (
+          <div key={i} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 shadow-md flex gap-5 hover:bg-zinc-800/30 transition-colors">
+            <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-full flex items-center justify-center font-black text-xl shrink-0 shadow-inner">
+              {author.charAt(0).toUpperCase()}
+            </div>
+            <div className="flex-1">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="font-bold text-zinc-100">{author}</h4>
+                  <span className="text-[10px] text-zinc-500 font-medium">@{author.toLowerCase().replace(/\s/g, '')}</span>
+                </div>
+                <span className="text-[10px] text-zinc-500 bg-zinc-950 px-2 py-1 rounded-full">{new Date(r.createdAt || Date.now()).toLocaleTimeString()}</span>
+              </div>
+              <div className="text-sm text-zinc-300 leading-relaxed bg-zinc-950/40 p-4 rounded-xl border border-zinc-800/40">
+                {r.content || r.message || r.post || r.description || JSON.stringify(r)}
+              </div>
+              <div className="flex gap-4 mt-4">
+                <button className="text-[11px] font-semibold text-zinc-500 hover:text-emerald-400 transition-colors flex items-center gap-1">
+                  <span>❤️</span> Like
+                </button>
+                <button className="text-[11px] font-semibold text-zinc-500 hover:text-emerald-400 transition-colors flex items-center gap-1">
+                  <span>💬</span> Comment
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function DetailViewWidget({ records }: any) {
+  if (!records || records.length === 0) return <div className="p-8 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-2xl">No record selected for detail view.</div>;
+  const r = records[0];
+  return (
+    <div className="max-w-4xl mx-auto bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="h-64 bg-gradient-to-br from-zinc-800 to-emerald-950 flex items-end p-8 border-b border-zinc-800 relative">
+        <div className="absolute top-6 right-6 flex gap-2">
+           <button className="bg-zinc-950/50 hover:bg-zinc-900 border border-zinc-700 text-xs font-bold text-white px-4 py-2 rounded-xl backdrop-blur-md transition-colors">Edit</button>
+           <button className="bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white px-4 py-2 rounded-xl transition-colors shadow-lg">Share</button>
+        </div>
+        <h1 className="text-4xl font-black text-white tracking-tight drop-shadow-md">{r.title || r.name || r.id || 'Detail View'}</h1>
+      </div>
+      <div className="p-8 bg-zinc-900">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+          {Object.entries(r).map(([k, v]) => {
+            if (k === 'id') return null;
+            return (
+              <div key={k} className="border-b border-zinc-800/50 pb-4">
+                <h3 className="text-[10px] font-bold text-emerald-500/80 uppercase tracking-widest mb-1.5">{k}</h3>
+                <p className="text-sm font-medium text-zinc-200">{String(v)}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
