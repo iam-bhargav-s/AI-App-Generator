@@ -1122,8 +1122,12 @@ CRITICAL INSTRUCTIONS:
     }
 
     const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!text) return null;
+
+    // Strip markdown code blocks if the LLM includes them
+    text = text.replace(/^```json/mi, '').replace(/```$/m, '').trim();
+    if (text.startsWith('```')) text = text.replace(/^```[\s\S]*?\n/, '').replace(/```$/, '').trim();
 
     return JSON.parse(text);
   } catch (error) {

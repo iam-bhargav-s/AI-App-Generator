@@ -208,7 +208,13 @@ export const dbWrapper = {
       if (filters.userId !== undefined) {
         query.userId = filters.userId;
       }
-      return db.record.findMany({ where: query, orderBy: { createdAt: 'desc' } });
+      return db.record.findMany({ 
+        where: {
+          ...query,
+          modelName: { equals: modelName, mode: 'insensitive' }
+        }, 
+        orderBy: { createdAt: 'desc' } 
+      });
     }
 
     const store = readFallback();

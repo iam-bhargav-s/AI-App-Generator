@@ -93,10 +93,22 @@ export async function POST(req: NextRequest) {
         const seedData = await generateSeedData(appConfig.database.models, name, description || config?.description || '');
         if (seedData) {
           console.log(`[Scaffolder] Generated seed data for ${Object.keys(seedData).length} models.`);
-          for (const [modelName, records] of Object.entries(seedData)) {
+          for (const model of appConfig.database.models) {
+            if (model.name === 'User' || model.name.includes('Activity') || model.name.includes('Log')) continue;
+            
+            let records = seedData[model.name];
+            if (!records) {
+              const key = Object.keys(seedData).find(k => k.toLowerCase() === model.name.toLowerCase());
+              if (key) records = seedData[key];
+            }
+            if (!records) {
+              const key = Object.keys(seedData).find(k => k.toLowerCase().includes(model.name.toLowerCase().replace(/s$/, '')) || model.name.toLowerCase().includes(k.toLowerCase().replace(/s$/, '')));
+              if (key) records = seedData[key];
+            }
+
             if (Array.isArray(records)) {
               for (const recordData of records) {
-                await dbWrapper.createRecord(app.id, modelName, recordData);
+                await dbWrapper.createRecord(app.id, model.name, recordData);
               }
             }
           }
