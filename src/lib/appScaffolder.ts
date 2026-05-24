@@ -227,7 +227,7 @@ CRITICAL INSTRUCTIONS:
       const userMessage = `App Name: "${name}"\nPrompt: "${description}"`;
 
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
         {
           method: 'POST',
           headers: {
@@ -1084,8 +1084,7 @@ export async function generateSeedData(models: DatabaseModel[], appName: string,
 
     const responseSchema = {
       type: "object",
-      properties,
-      required: requiredModels
+      properties
     };
 
     const systemPrompt = `You are a mock data generator for a new application.
@@ -1094,13 +1093,13 @@ Description: ${description}
 
 CRITICAL INSTRUCTIONS:
 1. Generate realistic, high-quality seed data for the provided database models.
-2. Generate exactly 3 to 5 records per model.
+2. Generate exactly 2 records per model. Do not generate more than 2, keep the response small!
 3. Use realistic names, titles, descriptions, and values that match the context of the application.
-4. For text fields, use coherent sentences, not gibberish.
+4. For text fields, use short, coherent sentences.
 5. Do not include markdown formatting or markdown code blocks in the response. Return pure JSON.`;
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
