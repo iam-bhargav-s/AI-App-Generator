@@ -32,7 +32,16 @@ export default function LoginPage() {
         throw new Error(data.error || 'Authentication failed');
       }
 
-      router.push('/dashboard');
+      // Check search parameters to carry over prompt and name
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const promptParam = params.get('prompt');
+      
+      const dashboardUrl = new URL('/dashboard', window.location.origin);
+      if (nameParam) dashboardUrl.searchParams.set('name', nameParam);
+      if (promptParam) dashboardUrl.searchParams.set('prompt', promptParam);
+
+      router.push(dashboardUrl.pathname + dashboardUrl.search);
       router.refresh();
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
@@ -44,14 +53,14 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen bg-zinc-950 items-center justify-center p-4">
       {/* Background radial glow */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-accent-pink/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="relative w-full max-w-md bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl rounded-2xl shadow-2xl p-8 overflow-hidden">
         {/* Top Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300 tracking-tight uppercase">
-            App Builder Console
+          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent-pink tracking-tight uppercase">
+            OneAtlas Console
           </h1>
           <p className="text-sm text-zinc-400 mt-2">
             {isRegister ? 'Create your platform account' : 'Sign in to access your dashboard'}
@@ -76,7 +85,7 @@ export default function LoginPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter name"
                 required
-                className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+                className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
               />
             </div>
           )}
@@ -91,7 +100,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="name@example.com"
               required
-              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
             />
           </div>
 
@@ -105,14 +114,14 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-emerald-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition duration-200 text-sm uppercase tracking-wider shadow-lg shadow-emerald-950/40 mt-2"
+            className="w-full brand-gradient-bg hover:opacity-95 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition duration-200 text-sm uppercase tracking-wider shadow-lg shadow-brand-primary/20 mt-2"
           >
             {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Access Console'}
           </button>
@@ -126,7 +135,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setIsRegister(false)}
-                className="text-emerald-400 hover:text-emerald-300 font-semibold"
+                className="text-brand-primary hover:text-brand-primary-light font-semibold"
               >
                 Sign In
               </button>
@@ -137,7 +146,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setIsRegister(true)}
-                className="text-emerald-400 hover:text-emerald-300 font-semibold"
+                className="text-brand-primary hover:text-brand-primary-light font-semibold"
               >
                 Sign Up
               </button>

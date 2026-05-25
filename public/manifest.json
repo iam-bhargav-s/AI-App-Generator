@@ -1,11 +1,11 @@
 {
-  "name": "App Builder Platform",
-  "short_name": "AppBuilder",
-  "description": "Dynamic web application generated platform",
+  "name": "OneAtlas Platform",
+  "short_name": "OneAtlas",
+  "description": "AI-Native Internal Tools Platform",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#10b981",
+  "background_color": "#FAFBFF",
+  "theme_color": "#635BFF",
   "icons": [
     {
       "src": "/globe.svg",

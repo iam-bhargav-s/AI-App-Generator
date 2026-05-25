@@ -71,6 +71,16 @@ export default function DashboardPage() {
   const [creating, setCreating] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const nameParam = params.get('name');
+      const promptParam = params.get('prompt');
+      if (nameParam) setNewAppName(nameParam);
+      if (promptParam) setNewAppDesc(promptParam);
+    }
+  }, []);
+
+  useEffect(() => {
     async function checkAuth() {
       try {
         const res = await fetch('/api/auth/me');
@@ -185,15 +195,15 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 relative font-sans selection:bg-emerald-500/30">
+    <div className="min-h-screen bg-black text-zinc-100 relative font-sans selection:bg-brand-primary/30">
       {/* Navbar */}
       <nav className="sticky top-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <span className="font-bold text-black text-sm">A</span>
+            <div className="w-8 h-8 rounded bg-brand-primary flex items-center justify-center shadow-lg shadow-brand-primary/20">
+              <span className="font-bold text-white text-sm">O</span>
             </div>
-            <span className="font-semibold tracking-tight text-white text-sm">AppEngine</span>
+            <span className="font-semibold tracking-tight text-white text-sm">OneAtlas</span>
           </div>
           <div className="flex items-center gap-6">
             <span className="text-sm text-zinc-400">Welcome, <span className="text-white">{user?.name || user?.email}</span></span>
@@ -208,13 +218,13 @@ export default function DashboardPage() {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <h1 className="text-5xl font-bold tracking-tight text-white leading-tight">
             Build your next app<br />
-            <span className="text-emerald-400">at the speed of thought.</span>
+            <span className="brand-gradient-text">at the speed of thought.</span>
           </h1>
           <p className="text-lg text-zinc-400">
             Describe what you want to build. Our AI engine generates the database, API, and UI components instantly.
           </p>
 
-          <div className="bg-[#111] border border-white/10 p-2 rounded-2xl flex flex-col md:flex-row shadow-2xl focus-within:border-emerald-500/50 transition-all gap-2 relative">
+          <div className="bg-[#111] border border-white/10 p-2 rounded-2xl flex flex-col md:flex-row shadow-2xl focus-within:border-brand-primary/50 transition-all gap-2 relative">
             <input 
               type="text"
               value={newAppName}
@@ -233,7 +243,7 @@ export default function DashboardPage() {
             <button 
               onClick={handleCreateApp}
               disabled={creating || !newAppName.trim()}
-              className="bg-white text-black hover:bg-zinc-200 disabled:opacity-50 px-6 py-3 rounded-xl font-medium text-sm transition whitespace-nowrap"
+              className="brand-gradient-bg text-white hover:opacity-90 disabled:opacity-50 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition whitespace-nowrap cursor-pointer"
             >
               {creating ? 'Generating...' : 'Generate App'}
             </button>

@@ -1,5 +1,40 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-primary: #635BFF;
+  --color-brand-primary-light: #7A73FF;
+  --color-brand-primary-dark: #0A2540;
+  --color-brand-primary-navy: #1A1F36;
+
+  --color-brand-accent-pink: #FF5996;
+  --color-brand-accent-orange: #FFB17A;
+  --color-brand-accent-teal: #00D4B1;
+  --color-brand-accent-cyan: #00D4FF;
+  --color-brand-accent-yellow: #F8BC42;
+  --color-brand-accent-purple: #E8E7FF;
+  --color-brand-accent-green: #00A37A;
+  --color-brand-accent-blue: #00B8E6;
+
+  --color-brand-text-heading: #0A2540;
+  --color-brand-text-body: #425466;
+  --color-brand-text-muted: #697386;
+
+  --color-brand-bg-light: #FAFBFF;
+  --color-brand-bg-slate: #F6F9FC;
+  --color-brand-bg-blue: #EFF3F8;
+  --color-brand-bg-white: #FFFFFF;
+
+  --color-brand-border-gray: #E3E8EE;
+  --color-brand-border-light: #EDF1F6;
+  
+  --animate-marquee: marquee 25s linear infinite;
+  
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+}
+
 :root {
   --background: #020617;
   --foreground: #f8fafc;
@@ -10,3 +45,38 @@ body {
   color: var(--foreground);
   min-height: 100vh;
 }
+
+/* Custom styles for landing page */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, #635BFF 0%, #9B6CFB 35%, #FF5996 70%, #FF9173 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(135deg, #635BFF 0%, #9B6CFB 35%, #FF5996 70%, #FF9173 100%);
+}
+
+.gradient-border-btn {
+  position: relative;
+  background: #ffffff;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.gradient-border-btn::before {
+  content: '';
+  position: absolute;
+  top: -1.5px; left: -1.5px; right: -1.5px; bottom: -1.5px;
+  background: linear-gradient(135deg, #635BFF, #FF5996);
+  border-radius: 13px;
+  z-index: -1;
+  transition: opacity 0.2s ease;
+}
+

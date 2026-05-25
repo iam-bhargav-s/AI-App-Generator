@@ -13,13 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "App Builder Platform",
-  description: "Dynamic web application generator",
+  title: "OneAtlas — AI-Native Internal Tools Platform",
+  description: "Generate and deploy business applications instantly. Zero migrations, serverless-first, enterprise-ready.",
   manifest: "/manifest.json",
 };
 
 export const viewport = {
-  themeColor: "#10b981",
+  themeColor: "#635BFF",
 };
 
 export default function RootLayout({
