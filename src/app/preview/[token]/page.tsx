@@ -127,20 +127,67 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
             {/* Mock Graph Section */}
             <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft mb-12">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-[16px] font-semibold text-[var(--text-primary)]">Activity Overview</h3>
+                <h3 className="text-[16px] font-semibold text-[var(--text-primary)] capitalize">{activeModel?.ui?.chartType || 'bar'} Chart: Activity Overview</h3>
                 <div className="flex gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#FF6600] mt-1.5 animate-pulse"></span>
                   <span className="text-[13px] text-[var(--text-muted)]">Live Data</span>
                 </div>
               </div>
-              <div className="flex items-end gap-2 h-[120px] pt-4 border-t border-[var(--border-color)]">
-                {Array.from({length: 12}).map((_, i) => Math.max(20, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 120))).map((val, i) => (
-                  <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                      {val}
+              <div className="flex items-end justify-center gap-2 h-[160px] pt-4 border-t border-[var(--border-color)] w-full">
+                {(() => {
+                  const cType = activeModel?.ui?.chartType || 'bar';
+                  const chartData = Array.from({length: 12}).map((_, i) => Math.max(20, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 120)));
+                  
+                  if (cType === 'pie') {
+                    return (
+                      <div className="w-[140px] h-[140px] rounded-full relative shadow-soft transition-transform hover:scale-105" style={{
+                        background: `conic-gradient(#FF6600 0% 30%, #FF9933 30% 70%, #FFE0B2 70% 100%)`,
+                        boxShadow: 'inset 0 0 0 20px var(--bg-secondary)'
+                      }}>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-[14px] font-bold text-[var(--text-primary)]">{chartData[0]}</span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  
+                  if (cType === 'line') {
+                    return (
+                      <svg className="w-full h-full drop-shadow-md" viewBox="0 0 400 120" preserveAspectRatio="none">
+                        <defs>
+                          <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style={{stopColor: '#FF6600', stopOpacity: 0.2}} />
+                            <stop offset="100%" style={{stopColor: '#FF6600', stopOpacity: 0}} />
+                          </linearGradient>
+                        </defs>
+                        <polyline
+                          fill="none"
+                          stroke="#FF6600"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          points={chartData.map((val, i) => `${(i / 11) * 400},${120 - val}`).join(' ')}
+                        />
+                        <polygon
+                          fill="url(#grad1)"
+                          points={`0,120 ${chartData.map((val, i) => `${(i / 11) * 400},${120 - val}`).join(' ')} 400,120`}
+                        />
+                        {chartData.map((val, i) => (
+                          <circle key={i} cx={(i / 11) * 400} cy={120 - val} r="4" fill="#FF6600" className="hover:r-6 transition-all" />
+                        ))}
+                      </svg>
+                    );
+                  }
+
+                  // Default: bar
+                  return chartData.map((val, i) => (
+                    <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        {val}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
             </div>
 

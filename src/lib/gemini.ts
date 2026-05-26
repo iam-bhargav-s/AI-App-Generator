@@ -10,6 +10,7 @@ RULES:
 - Return ONLY valid JSON. Do not include markdown formatting or backticks.
 - Models must have a 'name' (string) and 'fields' (array of objects).
 - Fields must have 'name' (string) and 'type' (string, e.g. 'String', 'Int', 'Boolean', 'DateTime').
+- Each model can optionally have a 'ui' object specifying its preferred 'chartType' (must be one of: 'bar', 'pie', 'line'). If not specified, default is 'bar'.
 - Generate at least 3-5 comprehensive models for the application.
 
 EXAMPLE INPUT:
@@ -21,6 +22,7 @@ EXAMPLE OUTPUT:
     "models": [
       {
         "name": "Product",
+        "ui": { "chartType": "pie" },
         "fields": [
           { "name": "name", "type": "String" },
           { "name": "sku", "type": "String" },
@@ -31,6 +33,7 @@ EXAMPLE OUTPUT:
       },
       {
         "name": "Order",
+        "ui": { "chartType": "line" },
         "fields": [
           { "name": "orderNumber", "type": "String" },
           { "name": "totalAmount", "type": "Int" },
@@ -39,6 +42,7 @@ EXAMPLE OUTPUT:
       },
       {
         "name": "Customer",
+        "ui": { "chartType": "bar" },
         "fields": [
           { "name": "email", "type": "String" },
           { "name": "fullName", "type": "String" },
@@ -56,9 +60,9 @@ export async function generateAppSchema(prompt: string) {
     return {
       database: {
         models: [
-          { name: 'Employee', fields: [{ name: 'firstName', type: 'String' }, { name: 'lastName', type: 'String' }, { name: 'department', type: 'String' }, { name: 'joinDate', type: 'DateTime' }] },
-          { name: 'TimeOff', fields: [{ name: 'employeeId', type: 'String' }, { name: 'startDate', type: 'DateTime' }, { name: 'endDate', type: 'DateTime' }, { name: 'status', type: 'String' }] },
-          { name: 'Payroll', fields: [{ name: 'employeeId', type: 'String' }, { name: 'amount', type: 'Int' }, { name: 'period', type: 'String' }] }
+          { name: 'Employee', ui: { chartType: 'pie' }, fields: [{ name: 'firstName', type: 'String' }, { name: 'lastName', type: 'String' }, { name: 'department', type: 'String' }, { name: 'joinDate', type: 'DateTime' }] },
+          { name: 'TimeOff', ui: { chartType: 'bar' }, fields: [{ name: 'employeeId', type: 'String' }, { name: 'startDate', type: 'DateTime' }, { name: 'endDate', type: 'DateTime' }, { name: 'status', type: 'String' }] },
+          { name: 'Payroll', ui: { chartType: 'line' }, fields: [{ name: 'employeeId', type: 'String' }, { name: 'amount', type: 'Int' }, { name: 'period', type: 'String' }] }
         ]
       }
     };
@@ -67,9 +71,9 @@ export async function generateAppSchema(prompt: string) {
     return {
       database: {
         models: [
-          { name: 'User', fields: [{ name: 'email', type: 'String' }, { name: 'role', type: 'String' }, { name: 'status', type: 'String' }] },
-          { name: 'Role', fields: [{ name: 'name', type: 'String' }, { name: 'permissions', type: 'String' }] },
-          { name: 'AuditLog', fields: [{ name: 'userId', type: 'String' }, { name: 'action', type: 'String' }, { name: 'timestamp', type: 'DateTime' }] }
+          { name: 'User', ui: { chartType: 'pie' }, fields: [{ name: 'email', type: 'String' }, { name: 'role', type: 'String' }, { name: 'status', type: 'String' }] },
+          { name: 'Role', ui: { chartType: 'bar' }, fields: [{ name: 'name', type: 'String' }, { name: 'permissions', type: 'String' }] },
+          { name: 'AuditLog', ui: { chartType: 'line' }, fields: [{ name: 'userId', type: 'String' }, { name: 'action', type: 'String' }, { name: 'timestamp', type: 'DateTime' }] }
         ]
       }
     };
@@ -78,10 +82,10 @@ export async function generateAppSchema(prompt: string) {
     return {
       database: {
         models: [
-          { name: 'Product', fields: [{ name: 'sku', type: 'String' }, { name: 'name', type: 'String' }, { name: 'price', type: 'Int' }, { name: 'stock', type: 'Int' }] },
-          { name: 'Supplier', fields: [{ name: 'name', type: 'String' }, { name: 'contactEmail', type: 'String' }] },
-          { name: 'Warehouse', fields: [{ name: 'location', type: 'String' }, { name: 'capacity', type: 'Int' }] },
-          { name: 'StockTransaction', fields: [{ name: 'productId', type: 'String' }, { name: 'quantity', type: 'Int' }, { name: 'type', type: 'String' }, { name: 'date', type: 'DateTime' }] }
+          { name: 'Product', ui: { chartType: 'pie' }, fields: [{ name: 'sku', type: 'String' }, { name: 'name', type: 'String' }, { name: 'price', type: 'Int' }, { name: 'stock', type: 'Int' }] },
+          { name: 'Supplier', ui: { chartType: 'bar' }, fields: [{ name: 'name', type: 'String' }, { name: 'contactEmail', type: 'String' }] },
+          { name: 'Warehouse', ui: { chartType: 'pie' }, fields: [{ name: 'location', type: 'String' }, { name: 'capacity', type: 'Int' }] },
+          { name: 'StockTransaction', ui: { chartType: 'line' }, fields: [{ name: 'productId', type: 'String' }, { name: 'quantity', type: 'Int' }, { name: 'type', type: 'String' }, { name: 'date', type: 'DateTime' }] }
         ]
       }
     };
@@ -90,9 +94,9 @@ export async function generateAppSchema(prompt: string) {
     return {
       database: {
         models: [
-          { name: 'Metric', fields: [{ name: 'name', type: 'String' }, { name: 'value', type: 'Int' }, { name: 'date', type: 'DateTime' }] },
-          { name: 'Report', fields: [{ name: 'title', type: 'String' }, { name: 'author', type: 'String' }, { name: 'status', type: 'String' }] },
-          { name: 'DashboardConfig', fields: [{ name: 'layout', type: 'String' }, { name: 'theme', type: 'String' }] }
+          { name: 'Metric', ui: { chartType: 'line' }, fields: [{ name: 'name', type: 'String' }, { name: 'value', type: 'Int' }, { name: 'date', type: 'DateTime' }] },
+          { name: 'Report', ui: { chartType: 'pie' }, fields: [{ name: 'title', type: 'String' }, { name: 'author', type: 'String' }, { name: 'status', type: 'String' }] },
+          { name: 'DashboardConfig', ui: { chartType: 'bar' }, fields: [{ name: 'layout', type: 'String' }, { name: 'theme', type: 'String' }] }
         ]
       }
     };
@@ -127,7 +131,7 @@ export async function editAppSchema(currentConfig: any, instruction: string) {
       contents: [
         { role: 'user', parts: [{ text: `
 You are an expert full-stack developer. You are given a JSON schema representing a database.
-The user wants to edit this schema.
+The user wants to edit this schema or its UI properties.
 
 CURRENT SCHEMA:
 ${JSON.stringify(currentConfig.database)}
@@ -139,6 +143,7 @@ RULES:
 - Return the ENTIRE updated 'database' object as valid JSON.
 - DO NOT return markdown or backticks.
 - Modify, add, or remove models/fields exactly as instructed.
+- If the user asks to change the UI, graph, or chart for a model (e.g. "change to pie chart", "use a line chart"), update the model's 'ui' object. Set 'ui.chartType' to 'pie', 'line', or 'bar'.
 ` }] }
       ],
       config: {
