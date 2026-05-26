@@ -50,22 +50,46 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
     e.preventDefault();
     if (!editPrompt.trim() || !app) return;
 
-    const newEdit = { id: Date.now(), text: editPrompt, status: 'processing', timestamp: new Date().toISOString() };
-    setEditHistory([...editHistory, newEdit]);
+    const currentPrompt = editPrompt;
     setEditPrompt('');
     setIsEditing(true);
 
-    // Mock API call for edit mutation to satisfy UI requirement
-    setTimeout(() => {
-      setEditHistory(prev => prev.map(h => h.id === newEdit.id ? { ...h, status: 'success' } : h));
+    try {
+      const res = await fetch(`/api/apps/${appId}/edit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ instruction: currentPrompt })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || 'Failed to edit');
+      
+      setApp(data.app);
+      if (data.app.config.editHistory) {
+        setEditHistory(data.app.config.editHistory);
+      }
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
       setIsEditing(false);
-    }, 1500);
+    }
   };
 
-  const handleUndo = () => {
-    if (editHistory.length === 0) return;
+  const handleUndo = async () => {
     if (!confirm('Revert to previous schema version?')) return;
-    setEditHistory(prev => prev.slice(0, -1));
+    
+    try {
+      const res = await fetch(`/api/apps/${appId}/undo`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to undo');
+      
+      setApp(data.app);
+      if (data.app.config.editHistory) {
+        setEditHistory(data.app.config.editHistory);
+      }
+    } catch (err: any) {
+      alert(err.message);
+    }
   };
 
   if (loading) {
@@ -79,6 +103,12 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
   const models = app?.config?.database?.models || [];
   const activeModel = models.find((m: any) => m.name === activeModelId);
 
+  const handleSharePreview = () => {
+    const url = `${window.location.origin}/preview/${appId}?v=${app?.config?.version || 1}`;
+    navigator.clipboard.writeText(url);
+    alert(`Preview URL copied to clipboard!\n${url}`);
+  };
+
   return (
     <div className="min-h-screen bg-[#FAFBFF] text-[#425466] flex flex-col font-sans selection:bg-[#635BFF]/20 overflow-hidden">
       
@@ -91,7 +121,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
           <div className="h-4 w-px bg-[#E3E8EE]"></div>
           <div className="flex items-center gap-2">
             <h1 className="text-sm font-bold text-[#0A2540]">{app?.name || 'Untitled App'}</h1>
-            <span className="px-2 py-0.5 bg-[#EFF3F8] text-[#697386] rounded text-[10px] font-semibold uppercase tracking-wider">v{app?.version || 1}</span>
+            <span className="px-2 py-0.5 bg-[#EFF3F8] text-[#697386] rounded text-[10px] font-semibold uppercase tracking-wider">v{app?.config?.version || 1}</span>
           </div>
         </div>
 
@@ -101,7 +131,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
             Undo
           </button>
           <div className="h-4 w-px bg-[#E3E8EE]"></div>
-          <button className="text-xs font-medium bg-[#FAFBFF] border border-[#E3E8EE] hover:bg-[#EFF3F8] text-[#0A2540] px-3 py-1.5 rounded-md transition shadow-sm">
+          <button onClick={handleSharePreview} className="text-xs font-medium bg-[#FAFBFF] border border-[#E3E8EE] hover:bg-[#EFF3F8] text-[#0A2540] px-3 py-1.5 rounded-md transition shadow-sm">
             Share Preview
           </button>
           <button className="text-xs font-medium bg-[#635BFF] hover:bg-[#5249E5] text-white px-3 py-1.5 rounded-md transition shadow-sm">

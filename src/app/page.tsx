@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ChevronDown, Check, Menu, X, Code2, Database, Rocket, Play, Shield, Globe } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronDown, Check, Menu, X, Code2, Database, Rocket, Play, Shield, Globe } from 'lucide-react';
 
 const PRESET_TEMPLATES = [
   {
