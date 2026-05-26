@@ -13,6 +13,96 @@ interface AppDetails {
   updatedAt: string;
 }
 
+const MOCK_RECORDS_FALLBACK: Record<string, any[]> = {
+  Employee: [
+    { firstName: "Sarah", lastName: "Connor", department: "Engineering", role: "Senior Developer", joinDate: "2023-01-15T00:00:00Z" },
+    { firstName: "John", lastName: "Smith", department: "Sales", role: "Account Executive", joinDate: "2023-03-22T00:00:00Z" },
+    { firstName: "Emily", lastName: "Chen", department: "Marketing", role: "Director", joinDate: "2022-11-10T00:00:00Z" },
+    { firstName: "Michael", lastName: "Johnson", department: "Engineering", role: "DevOps Engineer", joinDate: "2023-06-05T00:00:00Z" },
+    { firstName: "Jessica", lastName: "Davis", department: "HR", role: "HR Manager", joinDate: "2021-08-19T00:00:00Z" }
+  ],
+  TimeOff: [
+    { employeeId: "EMP-001", type: "Vacation", startDate: "2024-07-10T00:00:00Z", endDate: "2024-07-20T00:00:00Z", status: "Approved" },
+    { employeeId: "EMP-003", type: "Sick Leave", startDate: "2024-05-12T00:00:00Z", endDate: "2024-05-14T00:00:00Z", status: "Approved" },
+    { employeeId: "EMP-002", type: "Personal", startDate: "2024-08-01T00:00:00Z", endDate: "2024-08-02T00:00:00Z", status: "Pending" },
+    { employeeId: "EMP-004", type: "Vacation", startDate: "2024-09-15T00:00:00Z", endDate: "2024-09-22T00:00:00Z", status: "Approved" },
+    { employeeId: "EMP-005", type: "Bereavement", startDate: "2024-03-01T00:00:00Z", endDate: "2024-03-03T00:00:00Z", status: "Approved" }
+  ],
+  Payroll: [
+    { employeeId: "EMP-001", baseSalary: 120000, bonus: 15000, period: "2024-Q1" },
+    { employeeId: "EMP-002", baseSalary: 85000, bonus: 8000, period: "2024-Q1" },
+    { employeeId: "EMP-003", baseSalary: 140000, bonus: 20000, period: "2024-Q1" },
+    { employeeId: "EMP-004", baseSalary: 110000, bonus: 10000, period: "2024-Q1" },
+    { employeeId: "EMP-005", baseSalary: 95000, bonus: 5000, period: "2024-Q1" }
+  ],
+  Contact: [
+    { firstName: "Alice", lastName: "Cooper", email: "alice@acmecorp.com", phone: "555-0101", company: "Acme Corp" },
+    { firstName: "Bob", lastName: "Builder", email: "bob@buildit.com", phone: "555-0102", company: "BuildIt LLC" },
+    { firstName: "Charlie", lastName: "Chaplin", email: "charlie@silentfilms.com", phone: "555-0103", company: "Silent Films" },
+    { firstName: "Diana", lastName: "Prince", email: "diana@themyscira.com", phone: "555-0104", company: "Themyscira Inc" },
+    { firstName: "Evan", lastName: "Wright", email: "evan@wrightbros.com", phone: "555-0105", company: "Wright Aviation" }
+  ],
+  Company: [
+    { name: "Acme Corp", industry: "Manufacturing", website: "www.acmecorp.com", employeeCount: 150 },
+    { name: "BuildIt LLC", industry: "Construction", website: "www.buildit.com", employeeCount: 45 },
+    { name: "Silent Films", industry: "Entertainment", website: "www.silentfilms.com", employeeCount: 12 },
+    { name: "Themyscira Inc", industry: "Defense", website: "www.themyscira.com", employeeCount: 5000 },
+    { name: "Wright Aviation", industry: "Aerospace", website: "www.wrightbros.com", employeeCount: 250 }
+  ],
+  Deal: [
+    { title: "Acme Q4 Enterprise License", amount: 120000, stage: "Closed Won", closeDate: "2024-10-15T00:00:00Z", companyId: "COM-001" },
+    { title: "BuildIt Equipment Upgrade", amount: 45000, stage: "Negotiation", closeDate: "2024-11-30T00:00:00Z", companyId: "COM-002" },
+    { title: "Silent Films Distribution", amount: 80000, stage: "Proposal", closeDate: "2024-12-15T00:00:00Z", companyId: "COM-003" },
+    { title: "Themyscira Defense Contract", amount: 2500000, stage: "Discovery", closeDate: "2025-03-01T00:00:00Z", companyId: "COM-004" },
+    { title: "Wright Fleet Expansion", amount: 500000, stage: "Closed Lost", closeDate: "2024-09-01T00:00:00Z", companyId: "COM-005" }
+  ],
+  Activity: [
+    { type: "Call", description: "Initial discovery call with Alice", date: "2024-10-01T10:00:00Z", contactId: "CON-001" },
+    { type: "Email", description: "Sent proposal to Bob", date: "2024-10-10T14:30:00Z", contactId: "CON-002" },
+    { type: "Meeting", description: "On-site demo with Diana", date: "2024-10-20T09:00:00Z", contactId: "CON-004" },
+    { type: "Call", description: "Follow up on fleet expansion", date: "2024-08-15T11:00:00Z", contactId: "CON-005" },
+    { type: "Email", description: "Check in with Charlie", date: "2024-10-25T16:00:00Z", contactId: "CON-003" }
+  ],
+  Product: [
+    { sku: "PRD-001", name: "Wireless Mouse", price: 25, stock: 150 },
+    { sku: "PRD-002", name: "Mechanical Keyboard", price: 85, stock: 45 },
+    { sku: "PRD-003", name: "USB-C Hub", price: 45, stock: 200 }
+  ],
+  Supplier: [
+    { name: "Logitech", contactEmail: "support@logitech.com" },
+    { name: "Keychron", contactEmail: "sales@keychron.com" }
+  ],
+  Warehouse: [
+    { location: "New York", capacity: 5000 },
+    { location: "San Francisco", capacity: 7500 }
+  ],
+  StockTransaction: [
+    { productId: "PRD-001", quantity: 100, type: "RESTOCK", date: "2024-10-01T10:00:00Z" },
+    { productId: "PRD-002", quantity: 10, type: "SALE", date: "2024-10-05T14:00:00Z" }
+  ],
+  Metric: [
+    { name: "Daily Active Users", category: "Engagement", value: 45200, date: "2024-10-25T00:00:00Z" },
+    { name: "Monthly Recurring Revenue", category: "Finance", value: 1250000, date: "2024-10-01T00:00:00Z" }
+  ],
+  Report: [
+    { title: "Q3 Financial Summary", author: "Finance Team", status: "Published" }
+  ],
+  DataSource: [
+    { provider: "Stripe", connectionStatus: "Healthy", lastSync: "2024-10-25T14:30:00Z" }
+  ],
+  User: [
+    { email: "admin@oneatlas.com", role: "Admin", status: "Active" },
+    { email: "member@oneatlas.com", role: "Member", status: "Active" }
+  ],
+  Role: [
+    { name: "Admin", permissions: "All" },
+    { name: "Member", permissions: "Read/Write" }
+  ],
+  AuditLog: [
+    { userId: "USR-001", action: "LOGIN", timestamp: "2024-10-25T10:00:00Z" }
+  ]
+};
+
 export default function BuilderShell({ params }: { params: Promise<{ appId: string }> }) {
   const router = useRouter();
   const { appId } = use(params);
@@ -633,14 +723,25 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                         </tr>
                       </thead>
                       <tbody>
-                        {records.length === 0 ? (
-                          <tr>
-                            <td colSpan={activeModel?.fields?.length ? activeModel.fields.slice(0,5).length : 1} className="px-6 py-16 text-center text-[var(--text-muted)] text-[15px]">
-                              No {activeModelId} records found. Add one above!
-                            </td>
-                          </tr>
-                        ) : (
-                          records.map((rec) => (
+                        {(() => {
+                          const displayedRecords = records.length > 0 
+                            ? records 
+                            : (MOCK_RECORDS_FALLBACK[activeModelId] || []).map((data: any, idx: number) => ({
+                                id: `mock-${idx}`,
+                                data
+                              }));
+
+                          if (displayedRecords.length === 0) {
+                            return (
+                              <tr>
+                                <td colSpan={activeModel?.fields?.length ? activeModel.fields.slice(0,5).length : 1} className="px-6 py-16 text-center text-[var(--text-muted)] text-[15px]">
+                                  No {activeModelId} records found. Add one above!
+                                </td>
+                              </tr>
+                            );
+                          }
+
+                          return displayedRecords.map((rec) => (
                             <tr key={rec.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-primary)]">
                               {activeModel?.fields?.slice(0, 5).map((f: any) => (
                                 <td key={f.name} className="px-6 py-4 text-[var(--text-primary)] max-w-[200px] truncate">
@@ -648,8 +749,8 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                                 </td>
                               ))}
                             </tr>
-                          ))
-                        )}
+                          ));
+                        })()}
                       </tbody>
                     </table>
                   </div>
