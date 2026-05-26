@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-import { matchTemplate } from '@/lib/templateMatcher';
+import { generateAppSchema } from '@/lib/gemini';
 
 export async function POST(req: NextRequest) {
   try {
@@ -79,17 +79,18 @@ export async function POST(req: NextRequest) {
         description: description || config?.description || ''
       };
     } else {
-      // Use template matcher instead of raw AI generation
-      const matchResult = matchTemplate(description || name);
-      if (!matchResult) {
+      // Use Real Gemini AI Generation
+      const aiSchema = await generateAppSchema(description || name);
+      
+      if (!aiSchema) {
         return NextResponse.json({ 
-          error: 'No template matched your prompt. Did you mean something like "Sales CRM" or "HR Dashboard"?',
-          suggestedReformulation: ['AI CRM Starter', 'HR Dashboard', 'Inventory System']
-        }, { status: 400 });
+          error: 'Failed to generate application schema with AI. Please try again.',
+        }, { status: 500 });
       }
       
       appConfig = {
-        ...matchResult.template.schema,
+        ...DEFAULT_APP_CONFIG,
+        ...aiSchema,
         name: name,
         description: description || ''
       };

@@ -27,6 +27,13 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
   const [isEditing, setIsEditing] = useState(false);
   const [editHistory, setEditHistory] = useState<any[]>([]);
 
+  // CRUD State
+  const [records, setRecords] = useState<any[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [formData, setFormData] = useState<any>({});
+  const [savingRecord, setSavingRecord] = useState(false);
+  const [isDeploying, setIsDeploying] = useState(false);
+
   useEffect(() => {
     async function loadApp() {
       try {
@@ -48,6 +55,22 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
     }
     loadApp();
   }, [appId]);
+
+  useEffect(() => {
+    async function fetchRecords() {
+      if (!activeModelId) return;
+      try {
+        const res = await fetch(`/api/apps/${appId}/records?modelName=${activeModelId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setRecords(data.records);
+        }
+      } catch (e) {
+        console.error('Failed to fetch records');
+      }
+    }
+    fetchRecords();
+  }, [activeModelId, appId]);
 
   const handleConversationalEdit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +124,36 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
     alert(`Preview URL copied to clipboard!\n${url}`);
   };
 
+  const handleSaveRecord = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingRecord(true);
+    try {
+      const res = await fetch(`/api/apps/${appId}/records`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ modelName: activeModelId, data: formData })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      
+      setRecords([data.record, ...records]);
+      setShowAddModal(false);
+      setFormData({});
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setSavingRecord(false);
+    }
+  };
+
+  const handleDeploy = () => {
+    setIsDeploying(true);
+    setTimeout(() => {
+      setIsDeploying(false);
+      alert('Simulated deployment successful!\nIn a production environment, this would trigger a Vercel build.');
+    }, 2000);
+  };
+
   if (loading) {
     return (
       <div className="flex min-h-screen bg-[var(--bg-primary)] items-center justify-center">
@@ -137,8 +190,8 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
           <button onClick={handleSharePreview} className="text-[14px] font-medium text-[var(--text-primary)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-primary)] px-4 h-[36px] rounded-[8px] transition-colors">
             Share Preview
           </button>
-          <button className="text-[14px] font-semibold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white px-4 h-[36px] rounded-[8px] transition-transform hover:-translate-y-px">
-            Deploy
+          <button onClick={handleDeploy} disabled={isDeploying} className="text-[14px] font-semibold bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white px-4 h-[36px] rounded-[8px] transition-transform hover:-translate-y-px disabled:opacity-50 disabled:transform-none">
+            {isDeploying ? 'Deploying...' : 'Deploy'}
           </button>
         </div>
       </header>
@@ -155,7 +208,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
             {models.map((model: any) => (
               <div key={model.name}>
                 <button 
-                  onClick={() => setActiveModelId(model.name)}
+                  onClick={() => { setActiveModelId(model.name); setRecords([]); }}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-[8px] text-[14px] font-medium transition-colors ${activeModelId === model.name ? 'bg-[var(--bg-primary)] text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-primary)]'}`}
                 >
                   <div className="flex items-center gap-2">
@@ -182,9 +235,9 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
         {/* Center Panel: Live Preview Canvas */}
         <main className="flex-1 bg-[var(--bg-primary)] flex flex-col overflow-hidden relative">
           <div className="flex-1 p-8 overflow-y-auto flex justify-center items-start">
-            <div className="w-full max-w-[960px] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] shadow-soft overflow-hidden min-h-[600px] flex flex-col">
+            <div className="w-full max-w-[1024px] bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] shadow-soft overflow-hidden min-h-[600px] flex flex-col">
               {/* Fake Browser Chrome */}
-              <div className="h-12 border-b border-[var(--border-color)] flex items-center px-4 gap-4 bg-[var(--bg-secondary)]">
+              <div className="h-[48px] border-b border-[var(--border-color)] flex items-center px-4 gap-4 bg-[var(--bg-secondary)]">
                 <div className="flex gap-2">
                   <div className="w-3 h-3 rounded-full bg-[var(--border-color)]"></div>
                   <div className="w-3 h-3 rounded-full bg-[var(--border-color)]"></div>
@@ -196,49 +249,62 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                 </div>
               </div>
 
-              {/* Render generated layout placeholder based on schema */}
+              {/* Dynamic Live Rendering Canvas */}
               <div className="p-[48px] flex-1 bg-[var(--bg-primary)]">
                 <h2 className="text-[32px] font-semibold text-[var(--text-primary)] mb-8 tracking-[-0.03em]">{activeModelId || 'Dashboard'} Management</h2>
                 
-                {/* Stats row mockup */}
+                {/* Stats row */}
                 <div className="grid grid-cols-3 gap-6 mb-12">
                   <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft">
                     <p className="text-[12px] text-[var(--text-secondary)] font-semibold uppercase tracking-[0.08em] mb-2">Total {activeModelId}s</p>
-                    <p className="text-[32px] font-semibold text-[var(--text-primary)]">0</p>
-                  </div>
-                  <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft">
-                    <p className="text-[12px] text-[var(--text-secondary)] font-semibold uppercase tracking-[0.08em] mb-2">Active</p>
-                    <p className="text-[32px] font-semibold text-[var(--text-primary)]">0</p>
+                    <p className="text-[32px] font-semibold text-[var(--text-primary)]">{records.length}</p>
                   </div>
                   <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft">
                     <p className="text-[12px] text-[var(--text-secondary)] font-semibold uppercase tracking-[0.08em] mb-2">Recently Added</p>
-                    <p className="text-[32px] font-semibold text-[var(--text-primary)]">-</p>
+                    <p className="text-[32px] font-semibold text-[var(--text-primary)]">
+                      {records.length > 0 ? 'Today' : '-'}
+                    </p>
                   </div>
                 </div>
 
-                {/* Table mockup */}
+                {/* Table Dynamic Rendering */}
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[18px] overflow-hidden shadow-soft">
                   <div className="border-b border-[var(--border-color)] px-6 py-5 flex justify-between items-center">
                     <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{activeModelId} Records</h3>
-                    <button className="bg-[var(--text-primary)] text-white px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">Add Record</button>
+                    <button onClick={() => setShowAddModal(true)} className="bg-[var(--text-primary)] hover:bg-[#000000] text-white px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
+                      Add Record
+                    </button>
                   </div>
-                  <table className="w-full text-left text-[15px]">
-                    <thead>
-                      <tr className="border-b border-[var(--border-color)] text-[var(--text-secondary)] text-[12px] uppercase tracking-[0.08em] font-semibold bg-[var(--bg-secondary)]">
-                        {activeModel?.fields?.slice(0, 4).map((f: any) => (
-                          <th key={f.name} className="px-6 py-4">{f.name}</th>
-                        ))}
-                        <th className="px-6 py-4 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td colSpan={5} className="px-6 py-16 text-center text-[var(--text-muted)] text-[15px]">
-                          No {activeModelId} records found.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-[15px]">
+                      <thead>
+                        <tr className="border-b border-[var(--border-color)] text-[var(--text-secondary)] text-[12px] uppercase tracking-[0.08em] font-semibold bg-[var(--bg-secondary)]">
+                          {activeModel?.fields?.slice(0, 5).map((f: any) => (
+                            <th key={f.name} className="px-6 py-4">{f.name}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {records.length === 0 ? (
+                          <tr>
+                            <td colSpan={activeModel?.fields?.length ? activeModel.fields.slice(0,5).length : 1} className="px-6 py-16 text-center text-[var(--text-muted)] text-[15px]">
+                              No {activeModelId} records found. Add one above!
+                            </td>
+                          </tr>
+                        ) : (
+                          records.map((rec) => (
+                            <tr key={rec.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-primary)]">
+                              {activeModel?.fields?.slice(0, 5).map((f: any) => (
+                                <td key={f.name} className="px-6 py-4 text-[var(--text-primary)] max-w-[200px] truncate">
+                                  {typeof rec.data[f.name] === 'object' ? JSON.stringify(rec.data[f.name]) : String(rec.data[f.name] || '-')}
+                                </td>
+                              ))}
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
 
               </div>
@@ -247,19 +313,19 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
 
           {/* Conversational Edit Strip */}
           <div className="h-[96px] bg-[var(--bg-secondary)] border-t border-[var(--border-color)] px-8 flex items-center justify-center shrink-0">
-            <form onSubmit={handleConversationalEdit} className="w-full max-w-3xl relative flex items-center">
+            <form onSubmit={handleConversationalEdit} className="w-full max-w-3xl relative flex items-center shadow-soft rounded-[24px]">
               <input 
                 type="text"
                 value={editPrompt}
                 onChange={e => setEditPrompt(e.target.value)}
                 placeholder="Ask AI to edit the schema (e.g. 'Add a status field to the tasks table')"
-                className="w-full bg-[var(--bg-primary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[24px] px-6 py-4 pr-16 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
+                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[24px] px-6 py-4 pr-16 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
                 disabled={isEditing}
               />
               <button 
                 type="submit"
                 disabled={!editPrompt.trim() || isEditing}
-                className="absolute right-3 w-10 h-10 flex items-center justify-center bg-[var(--accent-primary)] text-white rounded-[16px] hover:bg-[var(--accent-hover)] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
+                className="absolute right-3 w-10 h-10 flex items-center justify-center bg-[var(--text-primary)] text-white rounded-[16px] hover:bg-[#000000] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
               >
                 {isEditing ? (
                   <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -287,7 +353,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-medium text-[var(--text-primary)] line-clamp-2">{edit.text}</span>
                     {edit.status === 'processing' ? (
-                      <span className="w-2 h-2 mt-1.5 rounded-full bg-[#F8BC42] animate-spin"></span>
+                      <span className="w-2 h-2 mt-1.5 rounded-full bg-[var(--accent-primary)] animate-spin"></span>
                     ) : (
                       <span className="w-2 h-2 mt-1.5 rounded-full bg-[var(--text-primary)]"></span>
                     )}
@@ -302,6 +368,55 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
         </aside>
 
       </div>
+
+      {/* Dynamic Data Entry Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#111111]/40 backdrop-blur-sm">
+          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] w-full max-w-lg shadow-soft overflow-hidden">
+            <div className="px-6 py-4 border-b border-[var(--border-color)] flex justify-between items-center">
+              <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">Add {activeModelId}</h3>
+              <button onClick={() => setShowAddModal(false)} className="text-[var(--text-muted)] hover:text-[var(--text-primary)]">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            
+            <form onSubmit={handleSaveRecord} className="p-6 space-y-5">
+              <div className="max-h-[50vh] overflow-y-auto space-y-5 pr-2">
+                {activeModel?.fields?.map((f: any) => (
+                  <div key={f.name}>
+                    <label className="block text-[12px] font-semibold text-[var(--text-primary)] mb-1.5 uppercase tracking-[0.08em]">{f.name}</label>
+                    <input 
+                      type={f.type === 'Int' ? 'number' : f.type === 'Boolean' ? 'checkbox' : 'text'}
+                      value={formData[f.name] || ''}
+                      onChange={(e) => setFormData({ ...formData, [f.name]: f.type === 'Boolean' ? e.target.checked : e.target.value })}
+                      placeholder={`Enter ${f.name}...`}
+                      className="w-full bg-[var(--bg-primary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[12px] px-4 py-3 text-[15px] text-[var(--text-primary)] outline-none"
+                    />
+                  </div>
+                ))}
+              </div>
+              
+              <div className="pt-4 border-t border-[var(--border-color)] flex justify-end gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setShowAddModal(false)}
+                  className="h-[40px] px-4 text-[14px] font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={savingRecord}
+                  className="h-[40px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] disabled:opacity-50 text-white rounded-[8px] text-[14px] font-semibold flex items-center gap-2 transition-transform hover:-translate-y-px"
+                >
+                  {savingRecord ? 'Saving...' : 'Save Record'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
