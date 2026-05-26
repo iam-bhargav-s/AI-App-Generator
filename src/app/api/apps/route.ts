@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-import { generateAppSchema } from '@/lib/gemini';
+import { generateAppSchema, expandUserPrompt } from '@/lib/gemini';
 
 import fs from 'fs';
 import path from 'path';
@@ -114,8 +114,11 @@ export async function POST(req: NextRequest) {
         description: description || config?.description || ''
       };
     } else {
-      // Use Real Gemini AI Generation
-      const aiSchema = await generateAppSchema(description || name);
+      // Use AI to expand the brief prompt into a detailed PM specification
+      const expandedPrompt = await expandUserPrompt(name, description || name);
+      
+      // Use Real Gemini AI Generation with the expanded prompt
+      const aiSchema = await generateAppSchema(expandedPrompt);
       
       if (!aiSchema) {
         return NextResponse.json({ 
@@ -127,19 +130,19 @@ export async function POST(req: NextRequest) {
         ...DEFAULT_APP_CONFIG,
         ...aiSchema,
         name: name,
-        description: description || ''
+        description: expandedPrompt
       };
     }
 
     const app = await dbWrapper.createApp({
       name: isTemplate ? appConfig.name : name,
-      description: isTemplate ? appConfig.description : (description || ''),
+      description: isTemplate ? appConfig.description : (appConfig.description || description || ''),
       config: appConfig,
       userId: user.id,
     });
 
-    // Auto-generate seed data immediately if it's a template to prevent Vercel 10s timeouts
-    if (isTemplate && appConfig.prebuiltSeedData) {
+    // Auto-generate seed data immediately if prebuiltSeedData is provided to prevent Vercel 10s timeouts
+    if (appConfig.prebuiltSeedData) {
       try {
         const recordsToInsert: { modelName: string; data: any; userId?: string | null }[] = [];
         for (const model of appConfig.database.models) {
@@ -170,7 +173,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ app, success: true, seeded: isTemplate });
+    return NextResponse.json({ app, success: true, seeded: !!appConfig.prebuiltSeedData });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }

@@ -4,17 +4,21 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const SCHEMA_PROMPT = `
 You are an expert full-stack developer architecting a database schema for an application.
-Based on the user's prompt, generate a robust, detailed JSON schema containing the models and fields required.
+Based on the user's prompt, generate a robust, detailed JSON schema containing the models and fields required, and generate mock data for them.
 
 RULES:
 - Return ONLY valid JSON. Do not include markdown formatting or backticks.
+- The root object must contain two keys: "database" (object) and "prebuiltSeedData" (object).
+- "database" must contain "models" (array of objects).
 - Models must have a 'name' (string) and 'fields' (array of objects).
 - Fields must have 'name' (string) and 'type' (string, e.g. 'String', 'Int', 'Boolean', 'DateTime').
 - Each model can optionally have a 'ui' object specifying its preferred 'chartType' (must be one of: 'bar', 'pie', 'line'). If not specified, default is 'bar'.
 - Generate at least 3-5 comprehensive models for the application.
+- "prebuiltSeedData" must contain mock data mapped to each model's name. You MUST generate 8-10 mock data records for each model.
+- Make sure each record includes all fields defined in the model, with mock values matching the field's data type (e.g. realistic strings for 'String', integers/floats for 'Int', boolean true/false for 'Boolean', and ISO date strings for 'DateTime').
 
 EXAMPLE INPUT:
-"a simple ecommerce for digit items"
+"a simple ecommerce for digital items"
 
 EXAMPLE OUTPUT:
 {
@@ -49,6 +53,29 @@ EXAMPLE OUTPUT:
           { "name": "phone", "type": "String" }
         ]
       }
+    ]
+  },
+  "prebuiltSeedData": {
+    "Product": [
+      { "name": "E-Book: Guide to Next.js", "sku": "DIG-PROD-001", "price": 29, "stock": 100, "category": "Books" },
+      { "name": "React Dashboard Template", "sku": "DIG-PROD-002", "price": 49, "stock": 50, "category": "Templates" },
+      { "name": "SVG Icon Pack", "sku": "DIG-PROD-003", "price": 12, "stock": 250, "category": "Icons" },
+      { "name": "UI Kit Figma Library", "sku": "DIG-PROD-004", "price": 79, "stock": 80, "category": "Design" },
+      { "name": "SaaS Boilerplate", "sku": "DIG-PROD-005", "price": 149, "stock": 30, "category": "Boilerplates" }
+    ],
+    "Order": [
+      { "orderNumber": "ORD-001", "totalAmount": 29, "status": "Completed" },
+      { "orderNumber": "ORD-002", "totalAmount": 128, "status": "Completed" },
+      { "orderNumber": "ORD-003", "totalAmount": 12, "status": "Pending" },
+      { "orderNumber": "ORD-004", "totalAmount": 79, "status": "Completed" },
+      { "orderNumber": "ORD-005", "totalAmount": 149, "status": "Failed" }
+    ],
+    "Customer": [
+      { "email": "john@example.com", "fullName": "John Doe", "phone": "555-0199" },
+      { "email": "jane@example.com", "fullName": "Jane Smith", "phone": "555-0188" },
+      { "email": "alice@example.com", "fullName": "Alice Johnson", "phone": "555-0177" },
+      { "email": "bob@example.com", "fullName": "Bob Miller", "phone": "555-0166" },
+      { "email": "charlie@example.com", "fullName": "Charlie Brown", "phone": "555-0155" }
     ]
   }
 }
@@ -161,5 +188,37 @@ RULES:
   } catch (error: any) {
     console.error('Gemini Edit Error:', error);
     return { success: false, error: error.message || 'Unknown parsing error' };
+  }
+}
+
+export async function expandUserPrompt(name: string, description: string): Promise<string> {
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        {
+          role: 'user',
+          parts: [{
+            text: `You are an expert product manager and software architect.
+A user wants to generate an application.
+App Name: "${name}"
+Brief Description: "${description}"
+
+Based on this brief name and description, expand it into a detailed, comprehensive software specification.
+Specify:
+1. The overall purpose of the application.
+2. 3 to 5 key database models that this application will require, detailing the exact fields, data types (String, Int, Float, Boolean, DateTime), and relationships.
+3. The preferred chart/visualization for each model (e.g. bar chart, line chart, pie chart) to represent the metrics of these models.
+4. Specific mock data scenarios that would make this app look fully functional and realistic.
+
+Make the description highly detailed, precise, and structured so a code generator can build a complete, production-ready schema and seed data from it. Keep the response text concise but comprehensive.`
+          }]
+        }
+      ]
+    });
+    return response.text || description || name;
+  } catch (error) {
+    console.error('Failed to expand prompt:', error);
+    return description || name;
   }
 }
