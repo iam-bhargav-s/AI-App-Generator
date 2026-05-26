@@ -3,6 +3,7 @@
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import CSVImportModal from '@/components/runtime/CSVImportModal';
 
 interface AppDetails {
   id: string;
@@ -127,6 +128,8 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
   // CRUD State
   const [records, setRecords] = useState<any[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showCsvModal, setShowCsvModal] = useState(false);
+  const [importSummary, setImportSummary] = useState<{ importedCount: number; failedCount: number; errors: any[] } | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [savingRecord, setSavingRecord] = useState(false);
   const [isDeploying, setIsDeploying] = useState(false);
@@ -153,8 +156,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
     loadApp();
   }, [appId]);
 
-  useEffect(() => {
-    async function fetchRecords() {
+  const fetchRecords = async () => {
       if (!activeModelId) return;
 
       // Instantly load seed data from template config first
@@ -183,9 +185,16 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
       } catch (e) {
         console.error('Failed to fetch records');
       }
-    }
+  };
+
+  useEffect(() => {
     fetchRecords();
   }, [activeModelId, appId, app]);
+
+  const handleCsvImportComplete = async (result: { importedCount: number; failedCount: number; errors: any[] }) => {
+    setImportSummary(result);
+    await fetchRecords();
+  };
 
   const handleConversationalEdit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -732,11 +741,18 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
 
                 {/* Table Dynamic Rendering */}
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[18px] overflow-hidden shadow-soft">
-                  <div className="border-b border-[var(--border-color)] px-6 py-5 flex justify-between items-center">
-                    <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{activeModelId} Records</h3>
-                    <button onClick={() => setShowAddModal(true)} className="bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90 px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
-                      Add Record
-                    </button>
+                  <div className="border-b border-[var(--border-color)] px-6 py-5 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{activeModelId} Records</h3>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <button onClick={() => setShowCsvModal(true)} className="bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90 px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
+                        Add CSV
+                      </button>
+                      <button onClick={() => setShowAddModal(true)} className="bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90 px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
+                        Add Record
+                      </button>
+                    </div>
                   </div>
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-[15px]">
@@ -783,6 +799,17 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                     </table>
                   </div>
                 </div>
+
+                {importSummary && (
+                  <div className="mt-4 rounded-[18px] border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4 text-[14px] text-[var(--text-primary)]">
+                    <p className="font-semibold mb-1">CSV Import Summary</p>
+                    <p>Imported rows: <span className="font-medium">{importSummary.importedCount}</span></p>
+                    <p>Failed rows: <span className="font-medium">{importSummary.failedCount}</span></p>
+                    {importSummary.failedCount > 0 && (
+                      <p className="mt-2 text-[13px] text-[#f97316]">Check the import log for errors in the failed rows.</p>
+                    )}
+                  </div>
+                )}
 
               </div>
             </div>
@@ -845,6 +872,18 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
         </aside>
 
       </div>
+
+      {/* CSV Import Modal */}
+      {showCsvModal && activeModel && (
+        <CSVImportModal
+          isOpen={showCsvModal}
+          onClose={() => setShowCsvModal(false)}
+          modelName={activeModel.name}
+          fields={activeModel.fields || []}
+          appId={appId}
+          onImportComplete={handleCsvImportComplete}
+        />
+      )}
 
       {/* Dynamic Data Entry Modal */}
       {showAddModal && (
