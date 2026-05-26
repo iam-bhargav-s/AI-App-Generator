@@ -157,9 +157,9 @@ RULES:
     
     const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
     const parsedDatabase = JSON.parse(cleanedText);
-    return parsedDatabase;
-  } catch (error) {
+    return { success: true, data: parsedDatabase };
+  } catch (error: any) {
     console.error('Gemini Edit Error:', error);
-    return null;
+    return { success: false, error: error.message || 'Unknown parsing error' };
   }
 }

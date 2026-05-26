@@ -30,14 +30,21 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ app
     // Use Gemini to Edit Schema
     const updatedDatabase = await editAppSchema(config, instruction);
     
-    if (!updatedDatabase) {
+    if (updatedDatabase?.error) {
+      return NextResponse.json({ 
+        error: `AI Error: ${updatedDatabase.error}` 
+      }, { status: 500 });
+    }
+
+    if (!updatedDatabase || !updatedDatabase.success) {
       return NextResponse.json({ 
         error: 'Failed to process edit instruction with AI.' 
       }, { status: 500 });
     }
 
-    // Apply Mutation
-    config.database = updatedDatabase;
+    // Apply Mutation (handle if the AI nested it in a database key)
+    const finalDb = updatedDatabase.data.database ? updatedDatabase.data.database : updatedDatabase.data;
+    config.database = finalDb;
 
     // Bump Version and Log
     config.version = (config.version || 1) + 1;
