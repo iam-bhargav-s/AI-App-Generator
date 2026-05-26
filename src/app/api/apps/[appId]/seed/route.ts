@@ -16,10 +16,18 @@ export async function POST(
       return NextResponse.json({ success: true, message: 'No models to seed' });
     }
 
-    const seedData = await generateSeedData(appConfig.database.models, app.name, app.description || '');
+    let seedData = appConfig.prebuiltSeedData;
+
+    if (!seedData) {
+      // Fallback to AI generation if not a prebuilt template
+      seedData = await generateSeedData(appConfig.database.models, app.name, app.description || '');
+    }
+
     if (seedData) {
       for (const model of appConfig.database.models) {
-        if (model.name === 'User' || model.name.includes('Activity') || model.name.includes('Log')) continue;
+        if (model.name === 'User' || model.name.includes('Activity') || model.name.includes('Log')) {
+          if (!appConfig.prebuiltSeedData) continue; // Only skip if not a prebuilt template (which might want to seed users/logs)
+        }
         
         let records = seedData[model.name];
         if (!records) {

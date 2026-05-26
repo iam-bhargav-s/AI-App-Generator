@@ -1,0 +1,57 @@
+{
+  "name": "Analytics Workspace",
+  "description": "KPI tracking and data visualization.",
+  "database": {
+    "models": [
+      {
+        "name": "Metric",
+        "ui": { "chartType": "line" },
+        "fields": [
+          { "name": "name", "type": "String" },
+          { "name": "category", "type": "String" },
+          { "name": "value", "type": "Int" },
+          { "name": "date", "type": "DateTime" }
+        ]
+      },
+      {
+        "name": "Report",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "title", "type": "String" },
+          { "name": "author", "type": "String" },
+          { "name": "status", "type": "String" },
+          { "name": "createdDate", "type": "DateTime" }
+        ]
+      },
+      {
+        "name": "DataSource",
+        "ui": { "chartType": "bar" },
+        "fields": [
+          { "name": "provider", "type": "String" },
+          { "name": "connectionStatus", "type": "String" },
+          { "name": "lastSync", "type": "DateTime" }
+        ]
+      }
+    ]
+  },
+  "prebuiltSeedData": {
+    "Metric": [
+      { "name": "Daily Active Users", "category": "Engagement", "value": 45200, "date": "2024-10-25T00:00:00Z" },
+      { "name": "Monthly Recurring Revenue", "category": "Finance", "value": 1250000, "date": "2024-10-01T00:00:00Z" },
+      { "name": "Customer Acquisition Cost", "category": "Marketing", "value": 45, "date": "2024-10-25T00:00:00Z" },
+      { "name": "Churn Rate", "category": "Retention", "value": 2, "date": "2024-10-01T00:00:00Z" },
+      { "name": "Net Promoter Score", "category": "Satisfaction", "value": 72, "date": "2024-10-20T00:00:00Z" }
+    ],
+    "Report": [
+      { "title": "Q3 Financial Summary", "author": "Finance Team", "status": "Published", "createdDate": "2024-10-05T00:00:00Z" },
+      { "title": "Marketing Campaign ROI", "author": "Growth Team", "status": "Draft", "createdDate": "2024-10-22T00:00:00Z" },
+      { "title": "Product Usage Metrics", "author": "Product Ops", "status": "Published", "createdDate": "2024-10-15T00:00:00Z" }
+    ],
+    "DataSource": [
+      { "provider": "Stripe", "connectionStatus": "Healthy", "lastSync": "2024-10-25T14:30:00Z" },
+      { "provider": "Google Analytics", "connectionStatus": "Healthy", "lastSync": "2024-10-25T14:00:00Z" },
+      { "provider": "Salesforce", "connectionStatus": "Syncing", "lastSync": "2024-10-25T14:45:00Z" },
+      { "provider": "Zendesk", "connectionStatus": "Error", "lastSync": "2024-10-24T09:15:00Z" }
+    ]
+  }
+}

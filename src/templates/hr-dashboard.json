@@ -1,0 +1,63 @@
+{
+  "name": "HR Dashboard",
+  "description": "Employee directory and time-off tracking.",
+  "database": {
+    "models": [
+      {
+        "name": "Employee",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "firstName", "type": "String" },
+          { "name": "lastName", "type": "String" },
+          { "name": "department", "type": "String" },
+          { "name": "role", "type": "String" },
+          { "name": "joinDate", "type": "DateTime" }
+        ]
+      },
+      {
+        "name": "TimeOff",
+        "ui": { "chartType": "bar" },
+        "fields": [
+          { "name": "employeeId", "type": "String" },
+          { "name": "type", "type": "String" },
+          { "name": "startDate", "type": "DateTime" },
+          { "name": "endDate", "type": "DateTime" },
+          { "name": "status", "type": "String" }
+        ]
+      },
+      {
+        "name": "Payroll",
+        "ui": { "chartType": "line" },
+        "fields": [
+          { "name": "employeeId", "type": "String" },
+          { "name": "baseSalary", "type": "Int" },
+          { "name": "bonus", "type": "Int" },
+          { "name": "period", "type": "String" }
+        ]
+      }
+    ]
+  },
+  "prebuiltSeedData": {
+    "Employee": [
+      { "firstName": "Sarah", "lastName": "Connor", "department": "Engineering", "role": "Senior Developer", "joinDate": "2023-01-15T00:00:00Z" },
+      { "firstName": "John", "lastName": "Smith", "department": "Sales", "role": "Account Executive", "joinDate": "2023-03-22T00:00:00Z" },
+      { "firstName": "Emily", "lastName": "Chen", "department": "Marketing", "role": "Director", "joinDate": "2022-11-10T00:00:00Z" },
+      { "firstName": "Michael", "lastName": "Johnson", "department": "Engineering", "role": "DevOps Engineer", "joinDate": "2023-06-05T00:00:00Z" },
+      { "firstName": "Jessica", "lastName": "Davis", "department": "HR", "role": "HR Manager", "joinDate": "2021-08-19T00:00:00Z" }
+    ],
+    "TimeOff": [
+      { "employeeId": "EMP-001", "type": "Vacation", "startDate": "2024-07-10T00:00:00Z", "endDate": "2024-07-20T00:00:00Z", "status": "Approved" },
+      { "employeeId": "EMP-003", "type": "Sick Leave", "startDate": "2024-05-12T00:00:00Z", "endDate": "2024-05-14T00:00:00Z", "status": "Approved" },
+      { "employeeId": "EMP-002", "type": "Personal", "startDate": "2024-08-01T00:00:00Z", "endDate": "2024-08-02T00:00:00Z", "status": "Pending" },
+      { "employeeId": "EMP-004", "type": "Vacation", "startDate": "2024-09-15T00:00:00Z", "endDate": "2024-09-22T00:00:00Z", "status": "Approved" },
+      { "employeeId": "EMP-005", "type": "Bereavement", "startDate": "2024-03-01T00:00:00Z", "endDate": "2024-03-03T00:00:00Z", "status": "Approved" }
+    ],
+    "Payroll": [
+      { "employeeId": "EMP-001", "baseSalary": 120000, "bonus": 15000, "period": "2024-Q1" },
+      { "employeeId": "EMP-002", "baseSalary": 85000, "bonus": 8000, "period": "2024-Q1" },
+      { "employeeId": "EMP-003", "baseSalary": 140000, "bonus": 20000, "period": "2024-Q1" },
+      { "employeeId": "EMP-004", "baseSalary": 110000, "bonus": 10000, "period": "2024-Q1" },
+      { "employeeId": "EMP-005", "baseSalary": 95000, "bonus": 5000, "period": "2024-Q1" }
+    ]
+  }
+}

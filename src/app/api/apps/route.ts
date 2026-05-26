@@ -56,6 +56,9 @@ export async function GET(req: NextRequest) {
 
 import { generateAppSchema } from '@/lib/gemini';
 
+import fs from 'fs';
+import path from 'path';
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
@@ -71,7 +74,23 @@ export async function POST(req: NextRequest) {
     }
 
     let appConfig;
-    if (config && Object.keys(config).length > 0) {
+    
+    // Check if it matches a predefined template
+    const templateName = name.toLowerCase().replace(/\s+/g, '-');
+    const templatePath = path.join(process.cwd(), 'src', 'templates', `${templateName}.json`);
+    let isTemplate = false;
+
+    if (fs.existsSync(templatePath)) {
+      const templateData = fs.readFileSync(templatePath, 'utf8');
+      const parsedTemplate = JSON.parse(templateData);
+      appConfig = {
+        ...DEFAULT_APP_CONFIG,
+        ...parsedTemplate,
+        name: parsedTemplate.name,
+        description: parsedTemplate.description
+      };
+      isTemplate = true;
+    } else if (config && Object.keys(config).length > 0) {
       appConfig = {
         ...DEFAULT_APP_CONFIG,
         ...config,
@@ -97,8 +116,8 @@ export async function POST(req: NextRequest) {
     }
 
     const app = await dbWrapper.createApp({
-      name,
-      description: description || '',
+      name: isTemplate ? appConfig.name : name,
+      description: isTemplate ? appConfig.description : (description || ''),
       config: appConfig,
       userId: user.id,
     });

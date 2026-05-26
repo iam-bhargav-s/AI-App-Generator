@@ -1,0 +1,59 @@
+{
+  "name": "Admin Panel",
+  "description": "User and role management system.",
+  "database": {
+    "models": [
+      {
+        "name": "User",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "email", "type": "String" },
+          { "name": "fullName", "type": "String" },
+          { "name": "role", "type": "String" },
+          { "name": "status", "type": "String" },
+          { "name": "lastLogin", "type": "DateTime" }
+        ]
+      },
+      {
+        "name": "Role",
+        "ui": { "chartType": "bar" },
+        "fields": [
+          { "name": "name", "type": "String" },
+          { "name": "description", "type": "String" },
+          { "name": "permissions", "type": "String" }
+        ]
+      },
+      {
+        "name": "AuditLog",
+        "ui": { "chartType": "line" },
+        "fields": [
+          { "name": "userId", "type": "String" },
+          { "name": "action", "type": "String" },
+          { "name": "resource", "type": "String" },
+          { "name": "timestamp", "type": "DateTime" }
+        ]
+      }
+    ]
+  },
+  "prebuiltSeedData": {
+    "User": [
+      { "email": "admin@company.com", "fullName": "Super Admin", "role": "Administrator", "status": "Active", "lastLogin": "2024-10-25T08:30:00Z" },
+      { "email": "j.doe@company.com", "fullName": "John Doe", "role": "Editor", "status": "Active", "lastLogin": "2024-10-24T14:15:00Z" },
+      { "email": "s.smith@company.com", "fullName": "Sarah Smith", "role": "Viewer", "status": "Inactive", "lastLogin": "2024-09-12T09:00:00Z" },
+      { "email": "m.jones@company.com", "fullName": "Mike Jones", "role": "Editor", "status": "Active", "lastLogin": "2024-10-25T10:45:00Z" },
+      { "email": "e.davis@company.com", "fullName": "Emily Davis", "role": "Viewer", "status": "Active", "lastLogin": "2024-10-20T11:20:00Z" }
+    ],
+    "Role": [
+      { "name": "Administrator", "description": "Full access to all system features", "permissions": "read,write,delete,manage_users" },
+      { "name": "Editor", "description": "Can create and edit content", "permissions": "read,write" },
+      { "name": "Viewer", "description": "Read-only access to content", "permissions": "read" }
+    ],
+    "AuditLog": [
+      { "userId": "USR-001", "action": "UPDATE_SETTINGS", "resource": "SystemConfig", "timestamp": "2024-10-25T08:35:00Z" },
+      { "userId": "USR-002", "action": "CREATE_POST", "resource": "BlogPosts", "timestamp": "2024-10-24T14:20:00Z" },
+      { "userId": "USR-004", "action": "UPDATE_POST", "resource": "BlogPosts", "timestamp": "2024-10-25T10:50:00Z" },
+      { "userId": "USR-001", "action": "DELETE_USER", "resource": "Users", "timestamp": "2024-10-22T09:15:00Z" },
+      { "userId": "USR-005", "action": "VIEW_REPORT", "resource": "Analytics", "timestamp": "2024-10-20T11:25:00Z" }
+    ]
+  }
+}

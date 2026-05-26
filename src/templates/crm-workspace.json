@@ -1,0 +1,80 @@
+{
+  "name": "CRM Workspace",
+  "description": "Pipeline management with customer tracking.",
+  "database": {
+    "models": [
+      {
+        "name": "Contact",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "firstName", "type": "String" },
+          { "name": "lastName", "type": "String" },
+          { "name": "email", "type": "String" },
+          { "name": "phone", "type": "String" },
+          { "name": "company", "type": "String" }
+        ]
+      },
+      {
+        "name": "Company",
+        "ui": { "chartType": "bar" },
+        "fields": [
+          { "name": "name", "type": "String" },
+          { "name": "industry", "type": "String" },
+          { "name": "website", "type": "String" },
+          { "name": "employeeCount", "type": "Int" }
+        ]
+      },
+      {
+        "name": "Deal",
+        "ui": { "chartType": "line" },
+        "fields": [
+          { "name": "title", "type": "String" },
+          { "name": "amount", "type": "Int" },
+          { "name": "stage", "type": "String" },
+          { "name": "closeDate", "type": "DateTime" },
+          { "name": "companyId", "type": "String" }
+        ]
+      },
+      {
+        "name": "Activity",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "type", "type": "String" },
+          { "name": "description", "type": "String" },
+          { "name": "date", "type": "DateTime" },
+          { "name": "contactId", "type": "String" }
+        ]
+      }
+    ]
+  },
+  "prebuiltSeedData": {
+    "Contact": [
+      { "firstName": "Alice", "lastName": "Cooper", "email": "alice@acmecorp.com", "phone": "555-0101", "company": "Acme Corp" },
+      { "firstName": "Bob", "lastName": "Builder", "email": "bob@buildit.com", "phone": "555-0102", "company": "BuildIt LLC" },
+      { "firstName": "Charlie", "lastName": "Chaplin", "email": "charlie@silentfilms.com", "phone": "555-0103", "company": "Silent Films" },
+      { "firstName": "Diana", "lastName": "Prince", "email": "diana@themyscira.com", "phone": "555-0104", "company": "Themyscira Inc" },
+      { "firstName": "Evan", "lastName": "Wright", "email": "evan@wrightbros.com", "phone": "555-0105", "company": "Wright Aviation" }
+    ],
+    "Company": [
+      { "name": "Acme Corp", "industry": "Manufacturing", "website": "www.acmecorp.com", "employeeCount": 150 },
+      { "name": "BuildIt LLC", "industry": "Construction", "website": "www.buildit.com", "employeeCount": 45 },
+      { "name": "Silent Films", "industry": "Entertainment", "website": "www.silentfilms.com", "employeeCount": 12 },
+      { "name": "Themyscira Inc", "industry": "Defense", "website": "www.themyscira.com", "employeeCount": 5000 },
+      { "name": "Wright Aviation", "industry": "Aerospace", "website": "www.wrightbros.com", "employeeCount": 250 }
+    ],
+    "Deal": [
+      { "title": "Acme Q4 Enterprise License", "amount": 120000, "stage": "Closed Won", "closeDate": "2024-10-15T00:00:00Z", "companyId": "COM-001" },
+      { "title": "BuildIt Equipment Upgrade", "amount": 45000, "stage": "Negotiation", "closeDate": "2024-11-30T00:00:00Z", "companyId": "COM-002" },
+      { "title": "Silent Films Distribution", "amount": 80000, "stage": "Proposal", "closeDate": "2024-12-15T00:00:00Z", "companyId": "COM-003" },
+      { "title": "Themyscira Defense Contract", "amount": 2500000, "stage": "Discovery", "closeDate": "2025-03-01T00:00:00Z", "companyId": "COM-004" },
+      { "title": "Wright Fleet Expansion", "amount": 500000, "stage": "Closed Lost", "closeDate": "2024-09-01T00:00:00Z", "companyId": "COM-005" }
+    ],
+    "Activity": [
+      { "type": "Call", "description": "Initial discovery call with Alice", "date": "2024-10-01T10:00:00Z", "contactId": "CON-001" },
+      { "type": "Email", "description": "Sent proposal to Bob", "date": "2024-10-10T14:30:00Z", "contactId": "CON-002" },
+      { "type": "Meeting", "description": "On-site demo with Diana", "date": "2024-10-20T09:00:00Z", "contactId": "CON-004" },
+      { "type": "Call", "description": "Follow up on fleet expansion", "date": "2024-08-15T11:00:00Z", "contactId": "CON-005" },
+      { "type": "Email", "description": "Check in with Charlie", "date": "2024-10-25T16:00:00Z", "contactId": "CON-003" }
+    ]
+  }
+}

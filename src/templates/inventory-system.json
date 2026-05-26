@@ -1,0 +1,75 @@
+{
+  "name": "Inventory System",
+  "description": "Stock levels and supplier tracking.",
+  "database": {
+    "models": [
+      {
+        "name": "Product",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "sku", "type": "String" },
+          { "name": "name", "type": "String" },
+          { "name": "category", "type": "String" },
+          { "name": "price", "type": "Int" },
+          { "name": "stock", "type": "Int" }
+        ]
+      },
+      {
+        "name": "Supplier",
+        "ui": { "chartType": "bar" },
+        "fields": [
+          { "name": "name", "type": "String" },
+          { "name": "contactName", "type": "String" },
+          { "name": "contactEmail", "type": "String" },
+          { "name": "rating", "type": "Int" }
+        ]
+      },
+      {
+        "name": "Warehouse",
+        "ui": { "chartType": "pie" },
+        "fields": [
+          { "name": "name", "type": "String" },
+          { "name": "location", "type": "String" },
+          { "name": "capacity", "type": "Int" },
+          { "name": "manager", "type": "String" }
+        ]
+      },
+      {
+        "name": "StockTransaction",
+        "ui": { "chartType": "line" },
+        "fields": [
+          { "name": "productId", "type": "String" },
+          { "name": "quantity", "type": "Int" },
+          { "name": "type", "type": "String" },
+          { "name": "date", "type": "DateTime" }
+        ]
+      }
+    ]
+  },
+  "prebuiltSeedData": {
+    "Product": [
+      { "sku": "LAP-001", "name": "MacBook Pro 16", "category": "Electronics", "price": 2499, "stock": 45 },
+      { "sku": "MON-002", "name": "Dell UltraSharp 32", "category": "Electronics", "price": 899, "stock": 120 },
+      { "sku": "DESK-003", "name": "Standing Desk Pro", "category": "Furniture", "price": 599, "stock": 15 },
+      { "sku": "CHR-004", "name": "ErgoChair V2", "category": "Furniture", "price": 349, "stock": 80 },
+      { "sku": "KEY-005", "name": "Mechanical Keyboard", "category": "Accessories", "price": 129, "stock": 200 }
+    ],
+    "Supplier": [
+      { "name": "TechGlobal Inc", "contactName": "Alice Wong", "contactEmail": "alice@techglobal.com", "rating": 5 },
+      { "name": "OfficeSpaces Co", "contactName": "Bob Miller", "contactEmail": "bob@officespaces.com", "rating": 4 },
+      { "name": "Peripheral Source", "contactName": "Charlie Day", "contactEmail": "charlie@periphsource.com", "rating": 4 }
+    ],
+    "Warehouse": [
+      { "name": "West Coast Hub", "location": "San Francisco, CA", "capacity": 50000, "manager": "David Lee" },
+      { "name": "East Coast Hub", "location": "New York, NY", "capacity": 65000, "manager": "Emma Green" },
+      { "name": "Central Depot", "location": "Chicago, IL", "capacity": 30000, "manager": "Frank Ocean" }
+    ],
+    "StockTransaction": [
+      { "productId": "LAP-001", "quantity": 50, "type": "IN", "date": "2024-10-01T10:00:00Z" },
+      { "productId": "LAP-001", "quantity": 5, "type": "OUT", "date": "2024-10-05T14:30:00Z" },
+      { "productId": "MON-002", "quantity": 120, "type": "IN", "date": "2024-09-15T09:00:00Z" },
+      { "productId": "DESK-003", "quantity": 20, "type": "IN", "date": "2024-08-20T11:00:00Z" },
+      { "productId": "DESK-003", "quantity": 5, "type": "OUT", "date": "2024-10-10T16:45:00Z" }
+    ]
+  }
+}
