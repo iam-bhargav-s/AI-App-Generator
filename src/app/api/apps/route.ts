@@ -54,6 +54,8 @@ export async function GET(req: NextRequest) {
   }
 }
 
+import { matchTemplate } from '@/lib/templateMatcher';
+
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUser(req);
@@ -77,7 +79,20 @@ export async function POST(req: NextRequest) {
         description: description || config?.description || ''
       };
     } else {
-      appConfig = await scaffoldApp(name, description || '');
+      // Use template matcher instead of raw AI generation
+      const matchResult = matchTemplate(description || name);
+      if (!matchResult) {
+        return NextResponse.json({ 
+          error: 'No template matched your prompt. Did you mean something like "Sales CRM" or "HR Dashboard"?',
+          suggestedReformulation: ['AI CRM Starter', 'HR Dashboard', 'Inventory System']
+        }, { status: 400 });
+      }
+      
+      appConfig = {
+        ...matchResult.template.schema,
+        name: name,
+        description: description || ''
+      };
     }
 
     const app = await dbWrapper.createApp({

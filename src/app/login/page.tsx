@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -51,61 +52,71 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-zinc-950 items-center justify-center p-4">
-      {/* Background radial glow */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-accent-pink/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="flex min-h-screen bg-[#FAFBFF] items-center justify-center p-4">
+      {/* Background elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-gradient-to-bl from-[#635BFF]/10 to-transparent rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-gradient-to-tr from-[#FF5996]/10 to-transparent rounded-full blur-[100px]"></div>
+      </div>
 
-      <div className="relative w-full max-w-md bg-zinc-900/60 border border-zinc-800 backdrop-blur-xl rounded-2xl shadow-2xl p-8 overflow-hidden">
+      <Link href="/" className="absolute top-8 left-8 flex items-center gap-2">
+        <div className="w-8 h-8 rounded-lg bg-[#635BFF] flex items-center justify-center shadow-sm">
+          <span className="font-bold text-white text-sm">O</span>
+        </div>
+        <span className="font-bold text-[#0A2540] text-lg tracking-tight">OneAtlas</span>
+      </Link>
+
+      <div className="relative w-full max-w-md bg-white border border-[#E3E8EE] rounded-2xl shadow-xl p-8 overflow-hidden z-10">
+        
         {/* Top Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent-pink tracking-tight uppercase">
-            OneAtlas Console
+          <h1 className="text-2xl font-bold text-[#0A2540] tracking-tight">
+            {isRegister ? 'Create an account' : 'Welcome back'}
           </h1>
-          <p className="text-sm text-zinc-400 mt-2">
-            {isRegister ? 'Create your platform account' : 'Sign in to access your dashboard'}
+          <p className="text-[#697386] mt-2">
+            {isRegister ? 'Start building your internal tools today.' : 'Sign in to access your workspaces.'}
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-sm px-4 py-3 rounded-xl mb-6">
+          <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div>
-              <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
+              <label className="block text-sm font-medium text-[#425466] mb-1.5">
                 Full Name
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter name"
+                placeholder="Jane Doe"
                 required
-                className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+                className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
+            <label className="block text-sm font-medium text-[#425466] mb-1.5">
               Email Address
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@example.com"
+              placeholder="jane@company.com"
               required
-              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+              className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-1">
+            <label className="block text-sm font-medium text-[#425466] mb-1.5">
               Password
             </label>
             <input
@@ -114,44 +125,32 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full bg-zinc-950/50 border border-zinc-800 hover:border-zinc-700 focus:border-brand-primary rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors duration-200"
+              className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full brand-gradient-bg hover:opacity-95 disabled:opacity-50 text-white font-bold py-3.5 rounded-xl transition duration-200 text-sm uppercase tracking-wider shadow-lg shadow-brand-primary/20 mt-2"
+            className="w-full bg-[#635BFF] hover:bg-[#5249E5] text-white font-medium py-2.5 px-4 rounded-lg transition-colors mt-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
           >
-            {loading ? 'Processing...' : isRegister ? 'Create Account' : 'Access Console'}
+            {loading ? 'Processing...' : (isRegister ? 'Sign Up' : 'Sign In')}
           </button>
         </form>
 
-        {/* Toggle Footer */}
-        <div className="mt-8 text-center text-sm text-zinc-400 border-t border-zinc-800/80 pt-6">
-          {isRegister ? (
-            <span>
-              Already have an account?{' '}
-              <button
-                type="button"
-                onClick={() => setIsRegister(false)}
-                className="text-brand-primary hover:text-brand-primary-light font-semibold"
-              >
-                Sign In
-              </button>
-            </span>
-          ) : (
-            <span>
-              New to the platform?{' '}
-              <button
-                type="button"
-                onClick={() => setIsRegister(true)}
-                className="text-brand-primary hover:text-brand-primary-light font-semibold"
-              >
-                Sign Up
-              </button>
-            </span>
-          )}
+        <div className="mt-8 text-center border-t border-[#E3E8EE] pt-6">
+          <p className="text-[#697386] text-sm">
+            {isRegister ? 'Already have an account?' : 'New to OneAtlas?'}
+            <button
+              onClick={() => {
+                setIsRegister(!isRegister);
+                setError('');
+              }}
+              className="ml-2 font-semibold text-[#635BFF] hover:text-[#0A2540] transition-colors"
+            >
+              {isRegister ? 'Sign in' : 'Create an account'}
+            </button>
+          </p>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface AppItem {
   id: string;
@@ -13,48 +14,26 @@ interface AppItem {
 
 const PRESET_TEMPLATES = [
   {
-    name: 'Sales CRM Hub',
-    description: 'Deals pipeline management with estimated metrics and backlog Kanban boards.',
-    prompt: 'A CRM app for sales reps to manage Deals, Contacts, and Webhook followups with estimated value amounts and deal pipeline stages.',
-    icon: '💼'
+    id: 'crm',
+    name: 'AI CRM Starter',
+    category: 'Sales',
+    complexity: 'Moderate',
+    description: 'Manage leads, pipeline and customer relationships with AI'
   },
   {
-    name: 'Sprint Task Board',
-    description: 'Sprint planning backlog and checklist checklist manager for agile squads.',
-    prompt: 'Agile project tracker to manage sprint Tasks and Checklist items, including columns for title, status, priority, and date.',
-    icon: '🚀'
+    id: 'hr',
+    name: 'HR Dashboard',
+    category: 'People',
+    complexity: 'Simple',
+    description: 'Track employee data, onboarding, and reviews'
   },
   {
-    name: 'Gym Appointment desk',
-    description: 'Rescheduling calendars and subscriber workout fitness targets.',
-    prompt: 'A gym membership manager to log members, track session Bookings on a calendar, and list training goals with a fitness checklist.',
-    icon: '🏋️'
-  },
-  {
-    name: 'Restaurant Reservation Desk',
-    description: 'Dining table logs, guest numbers, and reservation bookings.',
-    prompt: 'Restaurant desk dashboard to log guest Reservations, phone number, guestCount, tableNumber, and bookingDate on a reservation calendar.',
-    icon: '🍽️'
-  },
-  {
-    name: 'Personal Blog Writer',
-    description: 'Draft articles checklist catalog, forms, and notes board.',
-    prompt: 'Personal blogging platform to draft article Post ideas using sticky notes scratchpad, and manage published articles in a datatable catalog.',
-    icon: '✍️'
-  },
-  {
-    name: 'Bug Issue Backlog',
-    description: 'Defect logging records, severity indicators, and sprint Kanban.',
-    prompt: 'Software defect ticket backlog tracker with Kanban column workflows, ticket title, description, severity, and workflow event logs.',
-    icon: '🐞'
+    id: 'inventory',
+    name: 'Inventory System',
+    category: 'Operations',
+    complexity: 'Advanced',
+    description: 'Real-time stock tracking with automated reorder alerts'
   }
-];
-
-const PROMPT_SUGGESTIONS = [
-  { label: 'Asset Tracker', text: 'IT Asset manager to register equipment, serialNumber, price:Float, and stockCount:Int.' },
-  { label: 'Patient Clinic App', text: 'Clinic scheduler to log doctor appointments, date, email, and symptom checklists.' },
-  { label: 'Student Course Desk', text: 'Academic course manager with students, gpa:Float, and class calendar schedules.' },
-  { label: 'Personal Expense App', text: 'Personal budget tracker logging income, category, expense cost:Float, and date.' }
 ];
 
 export default function DashboardPage() {
@@ -75,8 +54,11 @@ export default function DashboardPage() {
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const promptParam = params.get('prompt');
-      if (nameParam) setNewAppName(nameParam);
-      if (promptParam) setNewAppDesc(promptParam);
+      if (promptParam) {
+        setNewAppName(nameParam || 'New App');
+        setNewAppDesc(promptParam);
+        setShowModal(true);
+      }
     }
   }, []);
 
@@ -139,7 +121,7 @@ export default function DashboardPage() {
         throw new Error(data.error || 'Failed to create application');
       }
 
-      // Generate seed data in a separate API call to prevent 10s Vercel timeouts
+      // Generate seed data in a separate API call
       try {
         await fetch(`/api/apps/${data.app.id}/seed`, { method: 'POST' });
       } catch (seedErr) {
@@ -188,131 +170,173 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-zinc-950 items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-emerald-500"></div>
+      <div className="flex min-h-screen bg-[#FAFBFF] items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#635BFF]"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 relative font-sans selection:bg-brand-primary/30">
+    <div className="min-h-screen bg-[#FAFBFF] text-[#425466] font-sans selection:bg-[#635BFF]/20">
       {/* Navbar */}
-      <nav className="sticky top-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded bg-brand-primary flex items-center justify-center shadow-lg shadow-brand-primary/20">
-              <span className="font-bold text-white text-sm">O</span>
-            </div>
-            <span className="font-semibold tracking-tight text-white text-sm">OneAtlas</span>
-          </div>
+      <nav className="sticky top-0 z-50 bg-white border-b border-[#E3E8EE]">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <span className="text-sm text-zinc-400">Welcome, <span className="text-white">{user?.name || user?.email}</span></span>
-            <button onClick={handleLogout} className="text-sm text-zinc-400 hover:text-white transition">Sign out</button>
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-[#635BFF] flex items-center justify-center shadow-sm">
+                <span className="font-bold text-white text-sm">O</span>
+              </div>
+              <span className="font-bold text-[#0A2540] text-lg tracking-tight">OneAtlas</span>
+            </Link>
+            <div className="hidden md:flex gap-4 border-l border-[#E3E8EE] pl-6">
+              <span className="text-sm font-medium text-[#0A2540]">Projects</span>
+              <span className="text-sm font-medium text-[#697386] hover:text-[#0A2540] cursor-pointer transition">Settings</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 rounded-full bg-[#EFF3F8] text-[#635BFF] flex items-center justify-center font-bold text-sm">
+              {user?.name?.[0] || user?.email?.[0] || 'U'}
+            </div>
+            <button onClick={handleLogout} className="text-sm font-medium text-[#697386] hover:text-[#0A2540] transition">Sign out</button>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-6 py-16 space-y-24">
-        
-        {/* Hero Section */}
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          <h1 className="text-5xl font-bold tracking-tight text-white leading-tight">
-            Build your next app<br />
-            <span className="brand-gradient-text">at the speed of thought.</span>
-          </h1>
-          <p className="text-lg text-zinc-400">
-            Describe what you want to build. Our AI engine generates the database, API, and UI components instantly.
-          </p>
-
-          <div className="bg-[#111] border border-white/10 p-2 rounded-2xl flex flex-col md:flex-row shadow-2xl focus-within:border-brand-primary/50 transition-all gap-2 relative">
-            <input 
-              type="text"
-              value={newAppName}
-              onChange={(e) => setNewAppName(e.target.value)}
-              placeholder="App Name (e.g. Acme CRM)"
-              className="md:w-1/3 bg-transparent text-white px-4 py-3 outline-none border-b md:border-b-0 md:border-r border-white/10 text-sm placeholder:text-zinc-600"
-            />
-            <input 
-              type="text"
-              value={newAppDesc}
-              onChange={(e) => setNewAppDesc(e.target.value)}
-              placeholder="Describe the features (e.g. manage users and deals)..."
-              className="flex-1 bg-transparent text-white px-4 py-3 outline-none text-sm placeholder:text-zinc-600"
-              onKeyDown={(e) => { if(e.key === 'Enter') handleCreateApp(e as any); }}
-            />
-            <button 
-              onClick={handleCreateApp}
-              disabled={creating || !newAppName.trim()}
-              className="brand-gradient-bg text-white hover:opacity-90 disabled:opacity-50 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition whitespace-nowrap cursor-pointer"
-            >
-              {creating ? 'Generating...' : 'Generate App'}
-            </button>
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        <div className="flex justify-between items-center mb-10">
+          <div>
+            <h1 className="text-3xl font-bold text-[#0A2540] mb-2">Projects</h1>
+            <p className="text-[#697386]">Manage your internal tools and applications.</p>
           </div>
-          
-          <div className="flex flex-wrap justify-center gap-2 pt-2">
-            <span className="text-xs text-zinc-500 py-1.5">Try:</span>
-            {PROMPT_SUGGESTIONS.map((sug, idx) => (
-               <button key={idx} onClick={() => {setNewAppName(sug.label); setNewAppDesc(sug.text);}} className="text-xs text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-full transition border border-white/5">
-                 {sug.label}
-               </button>
-            ))}
-          </div>
+          <button 
+            onClick={() => setShowModal(true)}
+            className="bg-[#635BFF] hover:bg-[#5249E5] text-white px-4 py-2 rounded-lg font-medium transition shadow-sm"
+          >
+            Create Project
+          </button>
         </div>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm px-6 py-4 rounded-xl text-center max-w-xl mx-auto">
+          <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-lg mb-8">
             {error}
           </div>
         )}
 
-        <div className="max-w-4xl mx-auto space-y-16">
-          
-          {/* Apps Grid */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <h2 className="text-lg font-semibold text-white">Your Projects</h2>
+        {apps.length === 0 ? (
+          <div className="bg-white border border-[#E3E8EE] rounded-xl p-16 text-center shadow-sm">
+            <div className="w-16 h-16 bg-[#EFF3F8] text-[#635BFF] rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
             </div>
-
-            {apps.length === 0 ? (
-              <div className="bg-[#111] border border-dashed border-white/10 rounded-2xl p-12 text-center">
-                <h3 className="text-base font-medium text-white mb-2">No projects yet</h3>
-                <p className="text-zinc-400 text-sm max-w-sm mx-auto">
-                  Get started by typing a prompt above.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {apps.map((app) => (
-                  <div key={app.id} className="bg-[#111] border border-white/10 hover:border-white/20 rounded-2xl p-5 transition-all flex flex-col justify-between group">
-                    <div>
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center text-emerald-400 font-bold border border-white/5">
-                          {app.name.charAt(0).toUpperCase()}
-                        </div>
-                      </div>
-                      <h3 className="text-base font-medium text-white mb-1 group-hover:text-emerald-400 transition">{app.name}</h3>
-                      <p className="text-sm text-zinc-400 line-clamp-2">{app.description || 'Custom generated application.'}</p>
-                    </div>
-                    
-                    <div className="mt-6 flex items-center gap-2">
-                      <button onClick={() => router.push(`/app/${app.id}`)} className="flex-1 bg-white hover:bg-zinc-200 text-black font-medium text-sm py-2 rounded-lg transition text-center">
-                        Open
-                      </button>
-                      <button onClick={() => router.push(`/app/${app.id}/editor`)} className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg text-sm font-medium transition">
-                        Config
-                      </button>
-                      <button onClick={() => handleDeleteApp(app.id, app.name)} className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path></svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <h2 className="text-xl font-bold text-[#0A2540] mb-2">No projects yet</h2>
+            <p className="text-[#697386] max-w-md mx-auto mb-8">Get started by creating a new project from scratch or choose from one of our templates.</p>
+            <button 
+              onClick={() => setShowModal(true)}
+              className="bg-[#635BFF] hover:bg-[#5249E5] text-white px-6 py-2.5 rounded-lg font-medium transition shadow-sm"
+            >
+              Create your first app
+            </button>
           </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {apps.map((app) => (
+              <div key={app.id} className="bg-white border border-[#E3E8EE] rounded-xl overflow-hidden hover:shadow-md hover:border-[#635BFF]/50 transition group flex flex-col">
+                <div className="p-6 flex-1">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-[#EFF3F8] text-[#635BFF] flex items-center justify-center font-bold text-lg">
+                      {app.name.charAt(0)}
+                    </div>
+                    <button 
+                      onClick={() => handleDeleteApp(app.id, app.name)}
+                      className="text-[#697386] hover:text-red-500 opacity-0 group-hover:opacity-100 transition"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <h3 className="text-lg font-bold text-[#0A2540] mb-2 truncate">{app.name}</h3>
+                  <p className="text-sm text-[#697386] line-clamp-2">{app.description || 'No description provided'}</p>
+                </div>
+                <div className="px-6 py-4 border-t border-[#E3E8EE] bg-[#FAFBFF] flex justify-between items-center">
+                  <span className="text-xs font-medium text-[#697386]">Edited {new Date(app.updatedAt).toLocaleDateString()}</span>
+                  <Link href={`/app/${app.id}`} className="text-sm font-medium text-[#635BFF] hover:text-[#0A2540] transition">
+                    Open Builder →
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
+        <div className="mt-20">
+          <h2 className="text-2xl font-bold text-[#0A2540] mb-8">Start with a template</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {PRESET_TEMPLATES.map((t, idx) => (
+              <div key={idx} className="bg-white border border-[#E3E8EE] rounded-xl p-6 hover:shadow-md hover:border-[#635BFF]/50 transition cursor-pointer" onClick={() => handleApplyTemplate(t.name, t.description)}>
+                <div className="flex justify-between items-start mb-4">
+                  <span className="inline-block px-2.5 py-1 bg-[#EFF3F8] text-xs font-semibold text-[#0A2540] rounded-md">{t.category}</span>
+                </div>
+                <h3 className="text-lg font-bold text-[#0A2540] mb-2">{t.name}</h3>
+                <p className="text-sm text-[#697386] line-clamp-2">{t.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
+
+      {/* Create App Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A2540]/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl border border-[#E3E8EE] overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#E3E8EE] flex justify-between items-center">
+              <h3 className="text-lg font-bold text-[#0A2540]">Create New App</h3>
+              <button onClick={() => setShowModal(false)} className="text-[#697386] hover:text-[#0A2540]">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+            
+            <form onSubmit={handleCreateApp} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#425466] mb-1.5">Project Name</label>
+                <input 
+                  type="text" 
+                  value={newAppName}
+                  onChange={(e) => setNewAppName(e.target.value)}
+                  placeholder="e.g. Acme CRM"
+                  className="w-full bg-[#FAFBFF] border border-[#E3E8EE] focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] outline-none"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-[#425466] mb-1.5">App Description / Prompt</label>
+                <textarea 
+                  value={newAppDesc}
+                  onChange={(e) => setNewAppDesc(e.target.value)}
+                  placeholder="Describe the features, layout, and data models..."
+                  className="w-full bg-[#FAFBFF] border border-[#E3E8EE] focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] outline-none h-32 resize-none"
+                />
+              </div>
+              
+              <div className="pt-4 flex justify-end gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setShowModal(false)}
+                  className="px-4 py-2 text-sm font-medium text-[#697386] hover:text-[#0A2540]"
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={creating || !newAppName.trim()}
+                  className="bg-[#635BFF] hover:bg-[#5249E5] disabled:opacity-50 text-white px-6 py-2 rounded-lg font-medium transition shadow-sm flex items-center gap-2"
+                >
+                  {creating && <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>}
+                  {creating ? 'Generating AI App...' : 'Generate Project'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
