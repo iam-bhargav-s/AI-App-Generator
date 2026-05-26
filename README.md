@@ -3,7 +3,7 @@
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20URL-emerald?style=for-the-badge)](https://ai-app-generator-q8ke0yw2h-bhargav-s-git-hubs-projects.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge)](https://github.com/iam-bhargav-s/AI-App-Generator)
 
-OneAtlas.dev is an AI-native platform for generating and deploying business applications, including internal tools, CRUD apps, dashboards, admin panels, and workflow automation. Built on a low-cost, serverless-first multi-tenant architecture.
+OneAtlas is an AI-native platform for generating and deploying business applications, including internal tools, CRUD apps, dashboards, admin panels, and workflow automation. Built on a low-cost, serverless-first multi-tenant architecture.
 
 ---
 
