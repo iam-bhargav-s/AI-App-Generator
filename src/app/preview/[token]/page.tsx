@@ -124,6 +124,26 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
               </div>
             </div>
 
+            {/* Mock Graph Section */}
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-[16px] font-semibold text-[var(--text-primary)]">Activity Overview</h3>
+                <div className="flex gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF6600] mt-1.5 animate-pulse"></span>
+                  <span className="text-[13px] text-[var(--text-muted)]">Live Data</span>
+                </div>
+              </div>
+              <div className="flex items-end gap-2 h-[120px] pt-4 border-t border-[var(--border-color)]">
+                {[40, 70, 45, 90, 65, 85, 120, 50, 80, 60, 100, 75].map((val, i) => (
+                  <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      {val}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Table mockup */}
             <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[18px] overflow-hidden shadow-soft">
               <div className="bg-[var(--bg-secondary)] border-b border-[var(--border-color)] px-6 py-5 flex justify-between items-center">

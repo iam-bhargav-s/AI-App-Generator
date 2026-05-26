@@ -275,6 +275,26 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                   </div>
                 </div>
 
+                {/* Mock Graph Section */}
+                <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft mb-12">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-[16px] font-semibold text-[var(--text-primary)]">Activity Overview</h3>
+                    <div className="flex gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#FF6600] mt-1.5 animate-pulse"></span>
+                      <span className="text-[13px] text-[var(--text-muted)]">Live Data</span>
+                    </div>
+                  </div>
+                  <div className="flex items-end gap-2 h-[120px] pt-4 border-t border-[var(--border-color)]">
+                    {[40, 70, 45, 90, 65, 85, 120, 50, 80, 60, 100, 75].map((val, i) => (
+                      <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
+                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                          {val}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Table Dynamic Rendering */}
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[18px] overflow-hidden shadow-soft">
                   <div className="border-b border-[var(--border-color)] px-6 py-5 flex justify-between items-center">
@@ -319,21 +339,24 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
             </div>
           </div>
 
-          {/* Conversational Edit Strip */}
-          <div className="h-[96px] bg-[var(--bg-secondary)] border-t border-[var(--border-color)] px-8 flex items-center justify-center shrink-0">
-            <form onSubmit={handleConversationalEdit} className="w-full max-w-3xl relative flex items-center shadow-soft rounded-[24px]">
+          {/* Floating Conversational Edit Strip */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-40">
+            <form onSubmit={handleConversationalEdit} className="w-full relative flex items-center shadow-2xl rounded-full bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] focus-within:border-[#FF6600] transition-colors">
+              <div className="pl-6 text-[#FF6600]">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              </div>
               <input 
                 type="text"
                 value={editPrompt}
                 onChange={e => setEditPrompt(e.target.value)}
                 placeholder="Ask AI to edit the schema (e.g. 'Add a status field to the tasks table')"
-                className="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[24px] px-6 py-4 pr-16 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
+                className="w-full bg-transparent rounded-full px-4 py-4 pr-16 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
                 disabled={isEditing}
               />
               <button 
                 type="submit"
                 disabled={!editPrompt.trim() || isEditing}
-                className="absolute right-3 w-10 h-10 flex items-center justify-center bg-[var(--text-primary)] text-white rounded-[16px] hover:bg-[#000000] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
+                className="absolute right-2 w-10 h-10 flex items-center justify-center bg-[#FF6600] text-white rounded-full hover:bg-[#e55c00] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
               >
                 {isEditing ? (
                   <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
