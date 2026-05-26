@@ -67,7 +67,7 @@ export default function LandingPage() {
                 Build software at the speed of thought.
               </h1>
               <p className="text-[18px] leading-[1.7] text-[var(--text-secondary)] mb-10 max-w-lg">
-                A serious AI operating system for building internal tools. Describe your data models and workflows, and we'll provision the infrastructure, database, and UI instantly.
+                A serious AI operating system for building internal tools by <strong>TheAiSignal</strong>. Describe your data models and workflows, and our advanced generative AI will provision the full-stack app, infrastructure, database, and UI instantly.
               </p>
               
               {/* Prompt Box */}
@@ -103,7 +103,7 @@ export default function LandingPage() {
                     <div className="w-6 h-6 bg-[var(--bg-primary)] rounded border border-[var(--border-color)] flex items-center justify-center">
                       <Database size={12} className="text-[var(--text-secondary)]" />
                     </div>
-                    <span className="text-[14px] font-medium text-[var(--text-primary)]">Acme Corp CRM</span>
+                    <span className="text-[14px] font-medium text-[var(--text-primary)]">TheAiSignal CRM</span>
                   </div>
                   <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-[var(--text-muted)] border border-[var(--border-color)] px-2 py-1 rounded">
                     Preview

@@ -23,13 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ appI
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
-    const records = await db.record.findMany({
-      where: {
-        appId: appId,
-        modelName: modelName
-      },
-      orderBy: { createdAt: 'desc' }
-    });
+    const records = await dbWrapper.getRecords(appId, modelName);
 
     return NextResponse.json({ records });
   } catch (error: any) {
@@ -56,14 +50,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ app
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
 
-    const record = await db.record.create({
-      data: {
-        appId,
-        modelName,
-        data,
-        userId: user.id // optional, depending on if records are scoped to creator in builder
-      }
-    });
+    const record = await dbWrapper.createRecord(appId, modelName, data, user.id);
 
     return NextResponse.json({ record });
   } catch (error: any) {
