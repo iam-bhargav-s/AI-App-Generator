@@ -76,8 +76,24 @@ export async function POST(req: NextRequest) {
     let appConfig;
     
     // Check if it matches a predefined template
-    const templateName = name.toLowerCase().replace(/\s+/g, '-');
-    const templatePath = path.join(process.cwd(), 'src', 'templates', `${templateName}.json`);
+    let templateFile = null;
+    const normalized = name.toLowerCase().trim();
+    if (normalized.includes('crm') || normalized.includes('sales') || normalized.includes('pipeline') || normalized.includes('starter')) {
+      templateFile = 'crm-workspace.json';
+    } else if (normalized.includes('hr') || normalized.includes('people') || normalized.includes('employee')) {
+      templateFile = 'hr-dashboard.json';
+    } else if (normalized.includes('inventory') || normalized.includes('stock') || normalized.includes('warehouse')) {
+      templateFile = 'inventory-system.json';
+    } else if (normalized.includes('analytics') || normalized.includes('kpi') || normalized.includes('metric')) {
+      templateFile = 'analytics-workspace.json';
+    } else if (normalized.includes('admin') || normalized.includes('control')) {
+      templateFile = 'admin-panel.json';
+    } else {
+      const slug = normalized.replace(/\s+/g, '-');
+      templateFile = `${slug}.json`;
+    }
+
+    const templatePath = path.join(process.cwd(), 'src', 'templates', templateFile);
     let isTemplate = false;
 
     if (fs.existsSync(templatePath)) {
@@ -122,7 +138,29 @@ export async function POST(req: NextRequest) {
       userId: user.id,
     });
 
-    // Auto-generate seed data happens client-side now to prevent Vercel 10s timeouts
+    // Auto-generate seed data immediately if it's a template to prevent Vercel 10s timeouts
+    if (isTemplate && appConfig.prebuiltSeedData) {
+      try {
+        for (const model of appConfig.database.models) {
+          let records = appConfig.prebuiltSeedData[model.name];
+          if (!records) {
+            const key = Object.keys(appConfig.prebuiltSeedData).find(k => k.toLowerCase() === model.name.toLowerCase());
+            if (key) records = appConfig.prebuiltSeedData[key];
+          }
+          if (!records) {
+            const key = Object.keys(appConfig.prebuiltSeedData).find(k => k.toLowerCase().includes(model.name.toLowerCase().replace(/s$/, '')) || model.name.toLowerCase().includes(k.toLowerCase().replace(/s$/, '')));
+            if (key) records = appConfig.prebuiltSeedData[key];
+          }
+          if (Array.isArray(records)) {
+            for (const recordData of records) {
+              await dbWrapper.createRecord(app.id, model.name, recordData, user.id);
+            }
+          }
+        }
+      } catch (seedErr) {
+        console.error('Direct seeding failed:', seedErr);
+      }
+    }
 
     return NextResponse.json({ app, success: true });
   } catch (error: any) {

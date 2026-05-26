@@ -278,68 +278,341 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                 {/* Mock Graph Section */}
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] p-6 rounded-[18px] shadow-soft mb-12">
                   <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-[16px] font-semibold text-[var(--text-primary)] capitalize">{activeModel?.ui?.chartType || 'bar'} Chart: Activity Overview</h3>
+                    <div>
+                      <h3 className="text-[16px] font-semibold text-[var(--text-primary)] capitalize">{activeModel?.ui?.chartType || 'bar'} Chart: {activeModelId} Overview</h3>
+                      <p className="text-[12px] text-[var(--text-muted)] mt-0.5">Visualization of {activeModelId} records and metrics.</p>
+                    </div>
                     <div className="flex gap-2">
                       <span className="w-2 h-2 rounded-full bg-[#FF6600] mt-1.5 animate-pulse"></span>
                       <span className="text-[13px] text-[var(--text-muted)]">Live Data</span>
                     </div>
                   </div>
-                  <div className="flex items-end justify-center gap-2 h-[160px] pt-4 border-t border-[var(--border-color)] w-full">
-                    {(() => {
-                      const cType = activeModel?.ui?.chartType || 'bar';
-                      const chartData = Array.from({length: 12}).map((_, i) => Math.max(20, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 120)));
-                      
-                      if (cType === 'pie') {
-                        return (
-                          <div className="w-[140px] h-[140px] rounded-full relative shadow-soft transition-transform hover:scale-105" style={{
-                            background: `conic-gradient(#FF6600 0% 30%, #FF9933 30% 70%, #FFE0B2 70% 100%)`,
-                            boxShadow: 'inset 0 0 0 20px var(--bg-secondary)'
-                          }}>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-[14px] font-bold text-[var(--text-primary)]">{chartData[0]}</span>
-                            </div>
-                          </div>
-                        );
-                      }
-                      
-                      if (cType === 'line') {
-                        return (
-                          <svg className="w-full h-full drop-shadow-md" viewBox="0 0 400 120" preserveAspectRatio="none">
-                            <defs>
-                              <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style={{stopColor: '#FF6600', stopOpacity: 0.2}} />
-                                <stop offset="100%" style={{stopColor: '#FF6600', stopOpacity: 0}} />
-                              </linearGradient>
-                            </defs>
-                            <polyline
-                              fill="none"
-                              stroke="#FF6600"
-                              strokeWidth="3"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              points={chartData.map((val, i) => `${(i / 11) * 400},${120 - val}`).join(' ')}
-                            />
-                            <polygon
-                              fill="url(#grad1)"
-                              points={`0,120 ${chartData.map((val, i) => `${(i / 11) * 400},${120 - val}`).join(' ')} 400,120`}
-                            />
-                            {chartData.map((val, i) => (
-                              <circle key={i} cx={(i / 11) * 400} cy={120 - val} r="4" fill="#FF6600" className="hover:r-6 transition-all" />
-                            ))}
-                          </svg>
-                        );
+                  {(() => {
+                    const cType = activeModel?.ui?.chartType || 'bar';
+                    
+                    const chartItems = (() => {
+                      if (records && records.length > 0) {
+                        const numericField = activeModel?.fields?.find((f: any) => f.type === 'Int' || f.type === 'Float');
+                        const labelField = activeModel?.fields?.find((f: any) => 
+                          ['name', 'title', 'label', 'provider', 'firstName', 'department', 'type', 'status', 'stage', 'category', 'location', 'period'].includes(f.name)
+                        ) || activeModel?.fields?.[0];
+
+                        if (numericField) {
+                          return records.map((rec: any) => {
+                            const val = rec.data?.[numericField.name];
+                            const lbl = rec.data?.[labelField?.name] || 'Record';
+                            return {
+                              label: typeof lbl === 'object' ? JSON.stringify(lbl) : String(lbl),
+                              value: typeof val === 'number' ? val : parseInt(val) || 0
+                            };
+                          }).slice(0, 8);
+                        } else if (labelField) {
+                          const counts: Record<string, number> = {};
+                          records.forEach((rec: any) => {
+                            const val = rec.data?.[labelField.name] || 'Other';
+                            const strVal = typeof val === 'object' ? JSON.stringify(val) : String(val);
+                            counts[strVal] = (counts[strVal] || 0) + 1;
+                          });
+                          return Object.entries(counts).map(([label, value]) => ({ label, value })).slice(0, 8);
+                        }
                       }
 
-                      // Default: bar
-                      return chartData.map((val, i) => (
-                        <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
-                          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                            {val}
+                      // Default template mock data
+                      const modelName = activeModelId;
+                      if (modelName === 'Metric') {
+                        return [
+                          { label: 'Active Users', value: 45200 },
+                          { label: 'MRR ($)', value: 125000 },
+                          { label: 'CAC ($)', value: 45 },
+                          { label: 'Churn (%)', value: 2 },
+                          { label: 'NPS', value: 72 }
+                        ];
+                      }
+                      if (modelName === 'Report') {
+                        return [
+                          { label: 'Published', value: 4 },
+                          { label: 'Draft', value: 2 },
+                          { label: 'Archived', value: 1 }
+                        ];
+                      }
+                      if (modelName === 'DataSource') {
+                        return [
+                          { label: 'Stripe', value: 98 },
+                          { label: 'Google Analytics', value: 92 },
+                          { label: 'Salesforce', value: 74 },
+                          { label: 'Zendesk', value: 12 }
+                        ];
+                      }
+                      if (modelName === 'Contact') {
+                        return [
+                          { label: 'Acme Corp', value: 8 },
+                          { label: 'BuildIt LLC', value: 5 },
+                          { label: 'Silent Films', value: 3 },
+                          { label: 'Themyscira Inc', value: 12 }
+                        ];
+                      }
+                      if (modelName === 'Company') {
+                        return [
+                          { label: 'Acme Corp', value: 150 },
+                          { label: 'BuildIt LLC', value: 45 },
+                          { label: 'Silent Films', value: 12 },
+                          { label: 'Themyscira', value: 500 },
+                          { label: 'Wright Aviation', value: 250 }
+                        ];
+                      }
+                      if (modelName === 'Deal') {
+                        return [
+                          { label: 'Acme Q4', value: 120000 },
+                          { label: 'BuildIt Upgrade', value: 45000 },
+                          { label: 'Silent Films Dist', value: 80000 },
+                          { label: 'Themyscira Def', value: 250000 },
+                          { label: 'Wright Fleet', value: 150000 }
+                        ];
+                      }
+                      if (modelName === 'Activity') {
+                        return [
+                          { label: 'Calls', value: 14 },
+                          { label: 'Emails', value: 28 },
+                          { label: 'Meetings', value: 6 }
+                        ];
+                      }
+                      if (modelName === 'Employee') {
+                        return [
+                          { label: 'Engineering', value: 12 },
+                          { label: 'Sales', value: 8 },
+                          { label: 'Marketing', value: 5 },
+                          { label: 'HR', value: 2 },
+                          { label: 'Finance', value: 3 }
+                        ];
+                      }
+                      if (modelName === 'TimeOff') {
+                        return [
+                          { label: 'Approved', value: 15 },
+                          { label: 'Pending', value: 4 },
+                          { label: 'Rejected', value: 2 }
+                        ];
+                      }
+                      if (modelName === 'Payroll') {
+                        return [
+                          { label: 'Jan', value: 45000 },
+                          { label: 'Feb', value: 48000 },
+                          { label: 'Mar', value: 52000 },
+                          { label: 'Apr', value: 55000 }
+                        ];
+                      }
+                      if (modelName === 'Product') {
+                        return [
+                          { label: 'Product A', value: 120 },
+                          { label: 'Product B', value: 85 },
+                          { label: 'Product C', value: 200 },
+                          { label: 'Product D', value: 45 }
+                        ];
+                      }
+                      if (modelName === 'Supplier') {
+                        return [
+                          { label: 'Supplier Alpha', value: 10 },
+                          { label: 'Supplier Beta', value: 15 },
+                          { label: 'Supplier Gamma', value: 8 }
+                        ];
+                      }
+                      if (modelName === 'Warehouse') {
+                        return [
+                          { label: 'East Coast', value: 1000 },
+                          { label: 'West Coast', value: 1500 },
+                          { label: 'Central', value: 800 }
+                        ];
+                      }
+                      if (modelName === 'StockTransaction') {
+                        return [
+                          { label: 'Purchase', value: 140 },
+                          { label: 'Sale', value: 210 },
+                          { label: 'Adjustment', value: 15 }
+                        ];
+                      }
+
+                      // Stable math fallback
+                      return Array.from({length: 6}).map((_, i) => ({
+                        label: `Category ${i + 1}`,
+                        value: Math.max(10, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 100))
+                      }));
+                    })();
+
+                    if (chartItems.length === 0) {
+                      return (
+                        <div className="flex items-center justify-center h-[180px] w-full text-[var(--text-muted)] text-[14px]">
+                          No records available to display.
+                        </div>
+                      );
+                    }
+
+                    const maxVal = Math.max(...chartItems.map(item => item.value), 1);
+                    const roundedMax = Math.ceil(maxVal / 10) * 10;
+
+                    return (
+                      <div className="flex flex-col w-full pt-4 border-t border-[var(--border-color)]">
+                        <div className="flex w-full relative h-[180px]">
+                          {/* Y Axis ticks */}
+                          {cType !== 'pie' && (
+                            <div className="flex flex-col justify-between text-[11px] text-[var(--text-muted)] h-full pr-3 border-r border-[var(--border-color)] text-right select-none w-[65px] font-mono shrink-0">
+                              <span>{roundedMax.toLocaleString()}</span>
+                              <span>{Math.floor(roundedMax / 2).toLocaleString()}</span>
+                              <span>0</span>
+                            </div>
+                          )}
+
+                          {/* Chart Container */}
+                          <div className={`flex-1 relative h-full px-4 overflow-visible ${cType === 'pie' ? 'flex items-center justify-center gap-8' : ''}`}>
+                            {cType === 'pie' ? (
+                              (() => {
+                                const total = chartItems.reduce((acc, item) => acc + item.value, 0);
+                                let currentPercent = 0;
+                                const colors = ['#FF6600', '#FF9933', '#FFE0B2', '#4B5563', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899'];
+                                
+                                const gradients = chartItems.map((item, idx) => {
+                                  const percentage = (item.value / total) * 100;
+                                  const start = currentPercent;
+                                  currentPercent += percentage;
+                                  return `${colors[idx % colors.length]} ${start}% ${currentPercent}%`;
+                                }).join(', ');
+
+                                return (
+                                  <div className="flex items-center justify-center gap-12 w-full h-full">
+                                    {/* Pie circle */}
+                                    <div className="w-[140px] h-[140px] rounded-full relative shadow-soft transition-transform hover:scale-105 shrink-0" style={{
+                                      background: `conic-gradient(${gradients})`,
+                                      boxShadow: 'inset 0 0 0 24px var(--bg-secondary)'
+                                    }}>
+                                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-[10px] text-[var(--text-muted)] font-semibold uppercase tracking-wider">Total</span>
+                                        <span className="text-[16px] font-bold text-[var(--text-primary)]">{total.toLocaleString()}</span>
+                                      </div>
+                                    </div>
+                                    
+                                    {/* Legend */}
+                                    <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto pr-2">
+                                      {chartItems.map((item, idx) => (
+                                        <div key={idx} className="flex items-center gap-2.5 text-[13px] text-[var(--text-secondary)]">
+                                          <span className="w-3 h-3 rounded-[3px] shrink-0" style={{ backgroundColor: colors[idx % colors.length] }}></span>
+                                          <span className="font-medium text-[var(--text-primary)] truncate max-w-[120px]">{item.label}</span>
+                                          <span className="text-[var(--text-muted)] font-mono shrink-0">
+                                            {item.value.toLocaleString()} ({((item.value / total) * 100).toFixed(0)}%)
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                );
+                              })()
+                            ) : cType === 'line' ? (
+                              (() => {
+                                const points = chartItems.map((item, idx) => {
+                                  const x = chartItems.length > 1 ? (idx / (chartItems.length - 1)) * 100 : 50;
+                                  const y = 100 - (item.value / roundedMax) * 80 - 10; // Keep margins
+                                  return { x, y, ...item };
+                                });
+                                const pointsStr = points.map(p => `${p.x},${p.y}`).join(' ');
+                                const areaPointsStr = chartItems.length > 1 
+                                  ? `0,100 ${pointsStr} 100,100`
+                                  : `50,100 50,${points[0].y} 50,100`;
+
+                                return (
+                                  <div className="relative w-full h-full pt-2">
+                                    {/* Grid Lines */}
+                                    <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 select-none py-[10%]">
+                                      <div className="w-full border-t border-[var(--border-color)]"></div>
+                                      <div className="w-full border-t border-[var(--border-color)]"></div>
+                                      <div className="w-full border-t border-[var(--border-color)]"></div>
+                                    </div>
+
+                                    <svg className="w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                      <defs>
+                                        <linearGradient id="lineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                          <stop offset="0%" style={{stopColor: '#FF6600', stopOpacity: 0.3}} />
+                                          <stop offset="100%" style={{stopColor: '#FF6600', stopOpacity: 0}} />
+                                        </linearGradient>
+                                      </defs>
+                                      {/* Area Fill */}
+                                      <polygon fill="url(#lineGrad)" points={areaPointsStr} />
+                                      {/* Line */}
+                                      {chartItems.length > 1 ? (
+                                        <polyline
+                                          fill="none"
+                                          stroke="#FF6600"
+                                          strokeWidth="2.5"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          points={pointsStr}
+                                        />
+                                      ) : (
+                                        <circle cx="50" cy={points[0].y} r="3" fill="#FF6600" />
+                                      )}
+                                    </svg>
+                                    
+                                    {/* Absolute dots & interactive hover overlays to bypass SVG scaling issues */}
+                                    {points.map((p, idx) => {
+                                      const leftPct = chartItems.length > 1 ? (idx / (chartItems.length - 1)) * 100 : 50;
+                                      const topPct = 100 - (p.value / roundedMax) * 80 - 10;
+                                      return (
+                                        <div 
+                                          key={idx} 
+                                          className="absolute w-4 h-4 -ml-2 -mt-2 flex items-center justify-center group/dot cursor-pointer"
+                                          style={{ left: `${leftPct}%`, top: `${topPct}%` }}
+                                        >
+                                          <div className="w-2 h-2 rounded-full bg-[#FF6600] border-2 border-[var(--bg-secondary)] shadow-soft transition-transform duration-150 group-hover/dot:scale-150"></div>
+                                          {/* Tooltip */}
+                                          <div className="absolute -top-10 bg-[var(--text-primary)] text-white text-[11px] font-semibold px-2 py-1 rounded shadow-lg opacity-0 group-hover/dot:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 animate-fade-in">
+                                            {p.label}: {p.value.toLocaleString()}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                );
+                              })()
+                            ) : (
+                              // Bar Chart rendering
+                              <div className="flex items-end justify-between gap-4 w-full h-full relative">
+                                {/* Grid Lines */}
+                                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 select-none py-1.5">
+                                  <div className="w-full border-t border-[var(--border-color)]"></div>
+                                  <div className="w-full border-t border-[var(--border-color)]"></div>
+                                  <div className="w-full border-t border-[var(--border-color)]"></div>
+                                </div>
+
+                                {chartItems.map((item, idx) => {
+                                  const heightPercent = (item.value / roundedMax) * 90; // Maximum height is 90%
+                                  return (
+                                    <div key={idx} className="flex-1 flex flex-col justify-end items-center h-full relative group">
+                                      <div 
+                                        className="w-full max-w-[42px] bg-[#FF6600] bg-opacity-25 hover:bg-opacity-45 border border-[#FF6600] border-opacity-40 rounded-t-[6px] transition-all duration-200 cursor-pointer relative flex justify-center"
+                                        style={{ height: `${Math.max(8, heightPercent)}%` }}
+                                      >
+                                        {/* Tooltip */}
+                                        <div className="absolute -top-10 bg-[var(--text-primary)] text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-[6px] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                                          {item.label}: {item.value.toLocaleString()}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      ));
-                    })()}
-                  </div>
+
+                        {/* X Axis Labels */}
+                        {cType !== 'pie' && (
+                          <div className="flex w-full pl-[65px] pt-3 border-t border-[var(--border-color)] select-none">
+                            {chartItems.map((item, idx) => (
+                              <div key={idx} className="flex-1 text-center text-[11px] text-[var(--text-secondary)] font-medium truncate px-1" title={item.label}>
+                                {item.label}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Table Dynamic Rendering */}

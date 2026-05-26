@@ -16,6 +16,20 @@ export async function POST(
       return NextResponse.json({ success: true, message: 'No models to seed' });
     }
 
+    // Check if records already exist for any of the models to prevent double seeding
+    let alreadySeeded = false;
+    for (const model of appConfig.database.models) {
+      const existing = await dbWrapper.getRecords(appId, model.name);
+      if (existing && existing.length > 0) {
+        alreadySeeded = true;
+        break;
+      }
+    }
+
+    if (alreadySeeded) {
+      return NextResponse.json({ success: true, message: 'Already seeded' });
+    }
+
     let seedData = appConfig.prebuiltSeedData;
 
     if (!seedData) {
