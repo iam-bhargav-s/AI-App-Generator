@@ -133,11 +133,29 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
   useEffect(() => {
     async function fetchRecords() {
       if (!activeModelId || !appData?.appId) return;
+
+      // Instantly load seed data from template config first
+      if (appData?.schema?.prebuiltSeedData) {
+        let seedRecords = appData.schema.prebuiltSeedData[activeModelId];
+        if (!seedRecords) {
+          const key = Object.keys(appData.schema.prebuiltSeedData).find(k => k.toLowerCase() === activeModelId.toLowerCase());
+          if (key) seedRecords = appData.schema.prebuiltSeedData[key];
+        }
+        if (Array.isArray(seedRecords)) {
+          setRecords(seedRecords.map((d: any, idx: number) => ({
+            id: `seed-${idx}`,
+            data: d
+          })));
+        }
+      }
+
       try {
         const res = await fetch(`/api/apps/${appData.appId}/records?modelName=${activeModelId}`);
         if (res.ok) {
           const data = await res.json();
-          setRecords(data.records);
+          if (data.records && data.records.length > 0) {
+            setRecords(data.records);
+          }
         }
       } catch (e) {
         console.error('Failed to fetch records');

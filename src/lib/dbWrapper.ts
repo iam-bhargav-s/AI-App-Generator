@@ -52,7 +52,7 @@ export const dbWrapper = {
       // Race the SELECT 1 query against a 1-second timeout
       const checkPromise = db.$queryRaw`SELECT 1`;
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('DB Timeout')), 5000)
+        setTimeout(() => reject(new Error('DB Timeout')), 800)
       );
       await Promise.race([checkPromise, timeoutPromise]);
       cachedDbAvailable = true;

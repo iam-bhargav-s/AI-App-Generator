@@ -156,18 +156,36 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
   useEffect(() => {
     async function fetchRecords() {
       if (!activeModelId) return;
+
+      // Instantly load seed data from template config first
+      if (app?.config?.prebuiltSeedData) {
+        let seedRecords = app.config.prebuiltSeedData[activeModelId];
+        if (!seedRecords) {
+          const key = Object.keys(app.config.prebuiltSeedData).find(k => k.toLowerCase() === activeModelId.toLowerCase());
+          if (key) seedRecords = app.config.prebuiltSeedData[key];
+        }
+        if (Array.isArray(seedRecords)) {
+          setRecords(seedRecords.map((d: any, idx: number) => ({
+            id: `seed-${idx}`,
+            data: d
+          })));
+        }
+      }
+
       try {
         const res = await fetch(`/api/apps/${appId}/records?modelName=${activeModelId}`);
         if (res.ok) {
           const data = await res.json();
-          setRecords(data.records);
+          if (data.records && data.records.length > 0) {
+            setRecords(data.records);
+          }
         }
       } catch (e) {
         console.error('Failed to fetch records');
       }
     }
     fetchRecords();
-  }, [activeModelId, appId]);
+  }, [activeModelId, appId, app]);
 
   const handleConversationalEdit = async (e: React.FormEvent) => {
     e.preventDefault();
