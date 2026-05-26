@@ -319,6 +319,19 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
             Undo
           </button>
           <div className="h-6 w-px bg-[var(--border-color)]"></div>
+          <button
+            onClick={() => {
+              if (!activeModelId) {
+                alert('Select a model from the Schema Tree first to import CSV rows into.');
+                return;
+              }
+              setShowCsvModal(true);
+            }}
+            className="text-[14px] font-medium text-[var(--text-primary)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-primary)] px-3 h-[36px] rounded-[8px] transition-colors"
+          >
+            Add CSV
+          </button>
+          <div className="h-6 w-px bg-[var(--border-color)]"></div>
           <button onClick={handleSharePreview} className="text-[14px] font-medium text-[var(--text-primary)] bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-primary)] px-4 h-[36px] rounded-[8px] transition-colors">
             Share Preview
           </button>
