@@ -109,20 +109,22 @@ export default function LandingPage() {
                     Preview
                   </div>
                 </div>
-                <div className="flex-1 w-full h-full relative overflow-hidden bg-white">
-                  {/* Iframe of their actual website to impress them */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-[var(--bg-secondary)] z-0">
-                    <div className="w-8 h-8 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                  <iframe 
-                    src="https://www.theaisignal.com/" 
-                    className="absolute inset-0 w-full h-[1000px] border-none scale-[0.6] origin-top-left z-10 bg-white"
-                    title="TheAiSignal Platform"
-                    style={{ width: '166%' }}
-                  />
-                  
-                  {/* Subtle overlay to prevent interacting with the iframe mock on the landing page */}
-                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-[var(--bg-secondary)]/50 to-transparent pointer-events-none"></div>
+                <div className="flex-1 w-full h-full relative overflow-hidden bg-[var(--bg-primary)]">
+                  <Link href="https://www.theaisignal.com/" target="_blank" className="block w-full h-full cursor-pointer group relative">
+                    {/* The generated AI dashboard image */}
+                    <img 
+                      src="/aisignal-dashboard.png" 
+                      alt="TheAiSignal Dashboard" 
+                      className="absolute inset-0 w-full h-full object-cover origin-top-left transition-transform duration-700 group-hover:scale-105"
+                    />
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                      <div className="bg-white text-black px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
+                        Visit TheAiSignal <ArrowUpRight size={16} />
+                      </div>
+                    </div>
+                  </Link>
                 </div>
               </div>
             </div>
