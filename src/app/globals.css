@@ -34,6 +34,23 @@
   --foreground: var(--text-primary);
 }
 
+html.dark {
+  --bg-primary: #121211;
+  --bg-secondary: #1A1A18;
+  
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --border-color: #2D2D2A;
+  
+  --accent-primary: #FF771C;
+  --accent-hover: #FF883B;
+  
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
