@@ -33,7 +33,6 @@ export default function LoginPage() {
         throw new Error(data.error || 'Authentication failed');
       }
 
-      // Check search parameters to carry over prompt and name
       const params = new URLSearchParams(window.location.search);
       const nameParam = params.get('name');
       const promptParam = params.get('prompt');
@@ -52,34 +51,25 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#FAFBFF] items-center justify-center p-4">
-      {/* Background elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-gradient-to-bl from-[#635BFF]/10 to-transparent rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-[-10%] left-[-5%] w-[40%] h-[40%] bg-gradient-to-tr from-[#FF5996]/10 to-transparent rounded-full blur-[100px]"></div>
-      </div>
-
+    <div className="flex min-h-screen bg-[var(--bg-primary)] items-center justify-center p-4 font-sans">
       <Link href="/" className="absolute top-8 left-8 flex items-center gap-2">
-        <div className="w-8 h-8 rounded-lg bg-[#635BFF] flex items-center justify-center shadow-sm">
-          <span className="font-bold text-white text-sm">O</span>
-        </div>
-        <span className="font-bold text-[#0A2540] text-lg tracking-tight">OneAtlas</span>
+        <div className="w-5 h-5 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center">O</div>
+        <span className="font-bold text-[var(--text-primary)] text-[18px] tracking-tight">OneAtlas</span>
       </Link>
 
-      <div className="relative w-full max-w-md bg-white border border-[#E3E8EE] rounded-2xl shadow-xl p-8 overflow-hidden z-10">
+      <div className="w-full max-w-md bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] shadow-soft p-[28px]">
         
-        {/* Top Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-[#0A2540] tracking-tight">
+        <div className="mb-8">
+          <h1 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">
             {isRegister ? 'Create an account' : 'Welcome back'}
           </h1>
-          <p className="text-[#697386] mt-2">
-            {isRegister ? 'Start building your internal tools today.' : 'Sign in to access your workspaces.'}
+          <p className="text-[15px] text-[var(--text-secondary)]">
+            {isRegister ? 'Start building internal tools.' : 'Sign in to your workspace.'}
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-100 text-red-600 text-sm px-4 py-3 rounded-lg mb-6">
+          <div className="border border-[#FCA5A5] bg-[#FEF2F2] text-[#DC2626] text-[15px] px-4 py-3 rounded-[12px] mb-6">
             {error}
           </div>
         )}
@@ -87,7 +77,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <div>
-              <label className="block text-sm font-medium text-[#425466] mb-1.5">
+              <label className="block text-[12px] font-semibold text-[var(--text-primary)] mb-1.5 uppercase tracking-[0.08em]">
                 Full Name
               </label>
               <input
@@ -96,13 +86,13 @@ export default function LoginPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jane Doe"
                 required
-                className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
+                className="w-full bg-[var(--bg-primary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[12px] px-4 py-3 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-[#425466] mb-1.5">
+            <label className="block text-[12px] font-semibold text-[var(--text-primary)] mb-1.5 uppercase tracking-[0.08em]">
               Email Address
             </label>
             <input
@@ -111,12 +101,12 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jane@company.com"
               required
-              className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[12px] px-4 py-3 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#425466] mb-1.5">
+            <label className="block text-[12px] font-semibold text-[var(--text-primary)] mb-1.5 uppercase tracking-[0.08em]">
               Password
             </label>
             <input
@@ -125,28 +115,28 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full bg-[#FAFBFF] border border-[#E3E8EE] hover:border-[#635BFF]/50 focus:border-[#635BFF] rounded-lg px-4 py-2.5 text-[#0A2540] placeholder:text-[#697386] focus:outline-none focus:ring-2 focus:ring-[#635BFF]/20 transition-all"
+              className="w-full bg-[var(--bg-primary)] border border-[var(--border-color)] focus:border-[var(--text-primary)] rounded-[12px] px-4 py-3 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-colors"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#635BFF] hover:bg-[#5249E5] text-white font-medium py-2.5 px-4 rounded-lg transition-colors mt-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-sm"
+            className="w-full h-[48px] bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold rounded-[12px] transition-transform hover:-translate-y-px mt-4 disabled:opacity-50 disabled:transform-none"
           >
             {loading ? 'Processing...' : (isRegister ? 'Sign Up' : 'Sign In')}
           </button>
         </form>
 
-        <div className="mt-8 text-center border-t border-[#E3E8EE] pt-6">
-          <p className="text-[#697386] text-sm">
+        <div className="mt-8 pt-6 border-t border-[var(--border-color)] text-center">
+          <p className="text-[15px] text-[var(--text-secondary)]">
             {isRegister ? 'Already have an account?' : 'New to OneAtlas?'}
             <button
               onClick={() => {
                 setIsRegister(!isRegister);
                 setError('');
               }}
-              className="ml-2 font-semibold text-[#635BFF] hover:text-[#0A2540] transition-colors"
+              className="ml-2 font-medium text-[var(--text-primary)] hover:underline"
             >
               {isRegister ? 'Sign in' : 'Create an account'}
             </button>

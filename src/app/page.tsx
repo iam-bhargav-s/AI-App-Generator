@@ -1,39 +1,22 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, ArrowUpRight, ChevronDown, Check, Menu, X, Code2, Database, Rocket, Play, Shield, Globe } from 'lucide-react';
-
-const PRESET_TEMPLATES = [
-  {
-    id: 'crm',
-    name: 'AI CRM Starter',
-    category: 'Sales',
-    complexity: 'Moderate',
-    description: 'Manage leads, pipeline and customer relationships with AI'
-  },
-  {
-    id: 'hr',
-    name: 'HR Dashboard',
-    category: 'People',
-    complexity: 'Simple',
-    description: 'Track employee data, onboarding, and reviews'
-  },
-  {
-    id: 'inventory',
-    name: 'Inventory System',
-    category: 'Operations',
-    complexity: 'Advanced',
-    description: 'Real-time stock tracking with automated reorder alerts'
-  }
-];
+import { ArrowRight, ArrowUpRight, Check, Database, Play } from 'lucide-react';
 
 export default function LandingPage() {
   const router = useRouter();
   const [prompt, setPrompt] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleGenerate = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -45,265 +28,196 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFBFF] text-[#425466] font-sans selection:bg-[#635BFF]/20">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-sans selection:bg-[var(--accent-primary)] selection:text-white">
       
-      {/* 1. Mega Menu Navigation (Cal.com / Supabase style) */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[rgba(255,255,255,0.85)] backdrop-blur-md border-b border-[#E3E8EE]">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-[#635BFF] flex items-center justify-center">
-                <span className="font-bold text-white text-sm">O</span>
-              </div>
-              <span className="font-bold text-[#0A2540] text-lg tracking-tight">OneAtlas</span>
+      {/* 5. Navbar Design */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-200 ${scrolled ? 'bg-[var(--bg-primary)]/80 backdrop-blur-sm border-b border-[var(--border-color)]' : 'bg-transparent'}`}>
+        <div className="max-w-[1280px] mx-auto px-5 md:px-8 h-full flex items-center justify-between">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="font-bold text-[18px] tracking-tight flex items-center gap-2">
+              <div className="w-5 h-5 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center">O</div>
+              OneAtlas
             </Link>
             
-            <div className="hidden md:flex items-center gap-6">
-              <div 
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown('product')}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button className="flex items-center gap-1 text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">
-                  Product <ChevronDown size={14} className={`transition-transform ${activeDropdown === 'product' ? 'rotate-180' : ''}`} />
-                </button>
-              </div>
-              <Link href="#" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Use Cases</Link>
-              <Link href="#" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Templates</Link>
-              <Link href="#" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Enterprise</Link>
-              <Link href="#" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Security</Link>
-              <Link href="#" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Pricing</Link>
-              
-              <div 
-                className="relative group"
-                onMouseEnter={() => setActiveDropdown('resources')}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button className="flex items-center gap-1 text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">
-                  Resources <ChevronDown size={14} className={`transition-transform ${activeDropdown === 'resources' ? 'rotate-180' : ''}`} />
-                </button>
-              </div>
+            <div className="hidden md:flex items-center gap-[32px]">
+              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Product</Link>
+              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Templates</Link>
+              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Enterprise</Link>
+              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Pricing</Link>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="/login" className="text-sm font-medium text-[#425466] hover:text-[#0A2540] transition">Sign in</Link>
-            <Link href="/dashboard" className="text-sm font-medium bg-[#FF5996] hover:bg-[#ff4081] text-white px-4 py-2 rounded-lg transition shadow-sm">
+          <div className="hidden md:flex items-center gap-6">
+            <Link href="/login" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Sign in</Link>
+            <Link href="/dashboard" className="h-[48px] px-[22px] bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold flex items-center justify-center rounded-[12px] transition-transform hover:-translate-y-px">
               Start Building
             </Link>
           </div>
-
-          <button className="md:hidden text-[#0A2540]" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
       </nav>
 
-      <main className="pt-24 pb-20">
-        {/* 2. Hero Section (Replit style) */}
-        <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
-          <h1 className="text-5xl md:text-7xl font-extrabold text-[#0A2540] tracking-tight leading-[1.1] mb-6">
-            What will you build?
-          </h1>
-          <p className="text-lg md:text-xl text-[#425466] mb-12">
-            Turn ideas into apps in minutes — no coding needed. The AI-Native Internal Tools Platform.
-          </p>
-
-          <form onSubmit={handleGenerate} className="max-w-2xl mx-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#635BFF] to-[#FF5996] rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative bg-white rounded-xl shadow-xl border border-[#EDF1F6] flex items-center p-2">
-              <input 
-                type="text" 
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe your idea, OneAtlas will bring it to life..." 
-                className="w-full pl-4 pr-12 py-3 text-lg text-[#0A2540] placeholder:text-[#697386] outline-none rounded-lg bg-transparent"
-              />
-              <button 
-                type="submit"
-                className="absolute right-3 bg-[#FF5996] hover:bg-[#ff4081] text-white p-2 rounded-lg transition"
-              >
-                <ArrowRight size={20} />
-              </button>
-            </div>
+      <main>
+        {/* 9. Hero Section (50/50 Layout) */}
+        <section className="pt-[120px] pb-[120px] max-w-[1280px] mx-auto px-5 md:px-8">
+          <div className="flex flex-col lg:flex-row gap-16 items-center">
             
-            <div className="flex flex-wrap justify-center gap-3 mt-6">
-              <button type="button" onClick={() => setPrompt('AI sales assistant')} className="text-sm bg-white border border-[#E3E8EE] px-4 py-1.5 rounded-full text-[#425466] hover:border-[#635BFF] hover:text-[#635BFF] transition shadow-sm">AI sales assistant</button>
-              <button type="button" onClick={() => setPrompt('Hiring tracker')} className="text-sm bg-white border border-[#E3E8EE] px-4 py-1.5 rounded-full text-[#425466] hover:border-[#635BFF] hover:text-[#635BFF] transition shadow-sm">Hiring tracker</button>
-              <button type="button" onClick={() => setPrompt('Inventory management')} className="text-sm bg-white border border-[#E3E8EE] px-4 py-1.5 rounded-full text-[#425466] hover:border-[#635BFF] hover:text-[#635BFF] transition shadow-sm">Inventory management</button>
+            {/* Left: Typography */}
+            <div className="w-full lg:w-1/2">
+              <h1 className="text-[56px] md:text-[72px] font-bold leading-[0.95] tracking-[-0.04em] mb-6 text-[var(--text-primary)]">
+                Build software at the speed of thought.
+              </h1>
+              <p className="text-[18px] leading-[1.7] text-[var(--text-secondary)] mb-10 max-w-lg">
+                A serious AI operating system for building internal tools. Describe your data models and workflows, and we'll provision the infrastructure, database, and UI instantly.
+              </p>
+              
+              {/* Prompt Box */}
+              <form onSubmit={handleGenerate} className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[28px] p-[24px] shadow-soft max-w-xl">
+                <input 
+                  type="text" 
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Build a sales CRM with pipeline management..." 
+                  className="w-full text-[18px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none bg-transparent mb-6"
+                />
+                <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
+                  <div className="flex gap-2">
+                    <button type="button" onClick={() => setPrompt('HR Dashboard')} className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">HR Dashboard</button>
+                    <span className="text-[var(--border-color)]">•</span>
+                    <button type="button" onClick={() => setPrompt('Inventory System')} className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">Inventory</button>
+                  </div>
+                  <button 
+                    type="submit"
+                    className="h-[40px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[14px] font-semibold flex items-center justify-center rounded-[8px] transition-transform hover:-translate-y-px"
+                  >
+                    Generate
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
-        </section>
 
-        {/* 3. Build with latest models */}
-        <section className="py-12 border-y border-[#E3E8EE] bg-white overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 text-center mb-8">
-            <p className="text-sm font-semibold uppercase tracking-wider text-[#697386]">Powered by the latest frontier models</p>
-          </div>
-          <div className="flex gap-12 items-center whitespace-nowrap px-6 opacity-60">
-            <span className="text-2xl font-bold text-[#0A2540]">Gemini 1.5 Flash</span>
-            <span className="text-2xl font-bold text-[#0A2540]">Claude 3.5 Sonnet</span>
-            <span className="text-2xl font-bold text-[#0A2540]">GPT-4o</span>
-            <span className="text-2xl font-bold text-[#0A2540]">DeepSeek-V2</span>
-            <span className="text-2xl font-bold text-[#0A2540]">Gemini 1.5 Pro</span>
-            <span className="text-2xl font-bold text-[#0A2540]">Claude 3 Opus</span>
-          </div>
-        </section>
-
-        {/* 4. How OneAtlas Works (Lovable style) */}
-        <section className="max-w-7xl mx-auto px-6 py-24">
-          <h2 className="text-4xl font-bold text-[#0A2540] mb-16 text-center">Meet OneAtlas</h2>
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="bg-[#F6F9FC] rounded-2xl p-8 aspect-video flex items-center justify-center border border-[#EDF1F6]">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E3E8EE] w-full max-w-sm">
-                <p className="text-sm text-[#697386] mb-2">Create a customer feedback tool with AI analysis.</p>
-                <div className="flex justify-between items-center bg-[#FAFBFF] p-2 rounded-lg border border-[#EDF1F6]">
-                  <span className="text-xs text-[#0A2540]">@ Public</span>
-                  <div className="w-6 h-6 bg-[#0A2540] rounded-full flex items-center justify-center"><ArrowUpRight size={12} color="white" /></div>
+            {/* Right: AI Workspace UI Mock */}
+            <div className="w-full lg:w-1/2">
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] shadow-soft overflow-hidden h-[500px] flex flex-col">
+                <div className="h-12 border-b border-[var(--border-color)] flex items-center px-4 justify-between bg-[var(--bg-secondary)]">
+                  <div className="flex gap-4 items-center">
+                    <div className="w-6 h-6 bg-[var(--bg-primary)] rounded border border-[var(--border-color)] flex items-center justify-center">
+                      <Database size={12} className="text-[var(--text-secondary)]" />
+                    </div>
+                    <span className="text-[14px] font-medium text-[var(--text-primary)]">Acme Corp CRM</span>
+                  </div>
+                  <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-[var(--text-muted)] border border-[var(--border-color)] px-2 py-1 rounded">
+                    Preview
+                  </div>
+                </div>
+                <div className="flex-1 flex">
+                  {/* Mock Sidebar */}
+                  <div className="w-48 border-r border-[var(--border-color)] p-4 flex flex-col gap-2">
+                    <div className="h-8 bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-semibold text-[var(--text-primary)]">Overview</div>
+                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-medium text-[var(--text-secondary)] transition-colors">Deals</div>
+                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-medium text-[var(--text-secondary)] transition-colors">Customers</div>
+                  </div>
+                  {/* Mock Canvas */}
+                  <div className="flex-1 bg-[var(--bg-primary)] p-6">
+                    <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-6">Pipeline Overview</h3>
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] p-4 shadow-soft">
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-2">Total Deals</p>
+                        <p className="text-[24px] font-medium text-[var(--text-primary)]">24</p>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] p-4 shadow-soft">
+                        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-2">Revenue</p>
+                        <p className="text-[24px] font-medium text-[var(--text-primary)]">$1.2M</p>
+                      </div>
+                    </div>
+                    <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] shadow-soft h-32 flex flex-col">
+                      <div className="border-b border-[var(--border-color)] p-3"><div className="h-2 w-24 bg-[var(--border-color)] rounded"></div></div>
+                      <div className="p-3"><div className="h-2 w-full bg-[var(--bg-primary)] rounded mb-2"></div><div className="h-2 w-2/3 bg-[var(--bg-primary)] rounded"></div></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="space-y-12">
-              <div>
-                <h3 className="text-2xl font-bold text-[#0A2540] mb-3">Start with an idea</h3>
-                <p className="text-[#425466]">Describe the app or dashboard you want to create. Our AI gateway routes your request to the optimal frontier model.</p>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-[#0A2540] mb-3 opacity-60">Watch it come to life</h3>
-                <p className="text-[#425466]">See your vision transform into a working prototype with a live database and UI in real-time as AI builds it for you.</p>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-[#0A2540] mb-3 opacity-60">Refine and ship</h3>
-                <p className="text-[#425466]">Iterate on your creation with simple conversational feedback and deploy it to a dedicated subdomain with one click.</p>
-              </div>
-            </div>
+
           </div>
         </section>
 
-        {/* 5. Templates Experience */}
-        <section className="bg-[#F6F9FC] py-24 border-y border-[#E3E8EE]">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex justify-between items-end mb-12">
-              <div>
-                <h2 className="text-4xl font-bold text-[#0A2540] mb-4">Discover Templates</h2>
-                <p className="text-lg text-[#425466]">Start your next operational project with a production-ready template.</p>
-              </div>
-              <Link href="/dashboard" className="hidden md:inline-flex px-4 py-2 bg-white border border-[#E3E8EE] rounded-lg text-[#0A2540] font-medium hover:border-[#635BFF] transition shadow-sm">
-                View all
-              </Link>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {PRESET_TEMPLATES.map(t => (
-                <div key={t.id} className="bg-white rounded-xl overflow-hidden border border-[#E3E8EE] hover:shadow-lg hover:border-[#635BFF] transition group cursor-pointer">
-                  <div className="h-48 bg-gradient-to-br from-[#EFF3F8] to-[#E0FBF4] p-6 flex flex-col justify-between relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#635BFF] to-transparent"></div>
-                    <span className="inline-block px-3 py-1 bg-white/80 backdrop-blur-sm text-xs font-semibold text-[#0A2540] rounded-full self-start shadow-sm">{t.category}</span>
-                    <h3 className="text-2xl font-bold text-[#0A2540] z-10">{t.name}</h3>
+        {/* 10. Integration Section Style */}
+        <section className="bg-[var(--bg-secondary)] border-y border-[var(--border-color)] py-[120px]">
+          <div className="max-w-[1280px] mx-auto px-5 md:px-8 text-center">
+            <h2 className="text-[48px] font-semibold leading-[1] tracking-[-0.03em] text-[var(--text-primary)] mb-6">Connects with your stack.</h2>
+            <p className="text-[18px] text-[var(--text-secondary)] mb-16 max-w-2xl mx-auto">OneAtlas seamlessly provisions databases and exposes unified APIs, allowing you to easily integrate with the tools you already use.</p>
+            
+            <div className="flex flex-wrap justify-center gap-6">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="w-[220px] h-[260px] bg-[var(--bg-secondary)] border border-[#ECECEC] rounded-[28px] p-6 flex flex-col items-center justify-center transition-transform hover:-translate-y-1 hover:border-[#D1D5DB] duration-200">
+                  <div className="w-12 h-12 bg-[#F5F5EE] rounded-full mb-6 flex items-center justify-center text-[var(--text-muted)]">
+                    <Database size={20} />
                   </div>
-                  <div className="p-6">
-                    <p className="text-[#425466] text-sm mb-6 h-10">{t.description}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-[#697386]">{t.complexity} Complexity</span>
-                      <div className="flex gap-2">
-                        <button className="text-xs font-medium text-[#635BFF] hover:text-[#0A2540] transition">Preview</button>
-                        <button className="text-xs font-medium bg-[#FAFBFF] border border-[#E3E8EE] px-3 py-1.5 rounded hover:bg-[#635BFF] hover:text-white hover:border-[#635BFF] transition">Use Template</button>
-                      </div>
-                    </div>
-                  </div>
+                  <h3 className="text-[15px] font-semibold text-[var(--text-primary)] mb-2">PostgreSQL</h3>
+                  <p className="text-[12px] text-[var(--text-secondary)] text-center">Managed relational database instantly provisioned.</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* 6. Pricing Preview */}
-        <section className="max-w-7xl mx-auto px-6 py-24">
+        {/* 11. Pricing Cards */}
+        <section className="py-[120px] max-w-[1280px] mx-auto px-5 md:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-[#0A2540] mb-4">Pricing plans for every need</h2>
-            <p className="text-lg text-[#425466]">Scale as you go with plans designed to match your growth.</p>
+            <h2 className="text-[48px] font-semibold leading-[1] tracking-[-0.03em] text-[var(--text-primary)] mb-6">Simple pricing.</h2>
+            <p className="text-[18px] text-[var(--text-secondary)]">No enterprise sales calls required.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 border border-[#E3E8EE] shadow-sm flex flex-col">
-              <h3 className="text-xl font-bold text-[#0A2540] mb-2">Explorer</h3>
-              <p className="text-sm text-[#697386] mb-6">Learning & experimentation</p>
-              <div className="mb-8"><span className="text-4xl font-bold text-[#0A2540]">Free</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> 30 monthly credits</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> Shared infrastructure</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> Core models</li>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Standard Plan */}
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-[28px] flex flex-col">
+              <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">Builder</h3>
+              <p className="text-[18px] text-[var(--text-secondary)] mb-8">For individuals and small teams.</p>
+              <div className="mb-10">
+                <span className="text-[48px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$29</span>
+                <span className="text-[15px] text-[var(--text-secondary)]">/mo</span>
+              </div>
+              <ul className="space-y-4 mb-10 flex-1">
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--text-muted)]" /> Unlimited local builds</li>
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--text-muted)]" /> 5 managed deployments</li>
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--text-muted)]" /> Community support</li>
               </ul>
-              <button className="w-full py-3 rounded-lg font-medium text-[#0A2540] bg-[#F6F9FC] hover:bg-[#EDF1F6] transition">Start Free</button>
+              <button className="h-[48px] w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[#FAFAFA] text-[var(--text-primary)] text-[15px] font-semibold rounded-[12px] transition-colors">
+                Start Building
+              </button>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 border-2 border-[#635BFF] shadow-lg relative flex flex-col transform md:-translate-y-4">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#635BFF] text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Most Popular</div>
-              <h3 className="text-xl font-bold text-[#0A2540] mb-2">Builder</h3>
-              <p className="text-sm text-[#697386] mb-6">Indie builders & MVPs</p>
-              <div className="mb-8"><span className="text-4xl font-bold text-[#0A2540]">$29</span><span className="text-[#697386]">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#635BFF]" /> 200 monthly credits</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#635BFF]" /> Managed backend & DB</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#635BFF]" /> Advanced reasoning models</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#635BFF]" /> 1 custom domain</li>
+            {/* Pro Plan */}
+            <div className="bg-[var(--bg-secondary)] border-[1.5px] border-[var(--accent-primary)] rounded-[24px] p-[28px] flex flex-col relative">
+              <div className="absolute top-0 right-8 -translate-y-1/2 bg-[var(--bg-secondary)] px-2 text-[12px] font-semibold tracking-[0.08em] uppercase text-[var(--accent-primary)]">Most Popular</div>
+              <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">Pro</h3>
+              <p className="text-[18px] text-[var(--text-secondary)] mb-8">For scaling applications.</p>
+              <div className="mb-10">
+                <span className="text-[48px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$99</span>
+                <span className="text-[15px] text-[var(--text-secondary)]">/mo</span>
+              </div>
+              <ul className="space-y-4 mb-10 flex-1">
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--accent-primary)]" /> Advanced AI models</li>
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--accent-primary)]" /> Unlimited deployments</li>
+                <li className="flex items-center gap-3 text-[15px] text-[var(--text-primary)]"><Check size={16} className="text-[var(--accent-primary)]" /> Priority support</li>
               </ul>
-              <button className="w-full py-3 rounded-lg font-medium text-white bg-[#635BFF] hover:bg-[#5249E5] transition">Build Faster</button>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 border border-[#E3E8EE] shadow-sm flex flex-col">
-              <h3 className="text-xl font-bold text-[#0A2540] mb-2">Studio</h3>
-              <p className="text-sm text-[#697386] mb-6">Startups & fast-moving teams</p>
-              <div className="mb-8"><span className="text-4xl font-bold text-[#0A2540]">$79</span><span className="text-[#697386]">/mo</span></div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> 800 monthly credits</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> Production-grade infra</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> Shared workspaces</li>
-                <li className="flex items-center gap-3 text-sm text-[#425466]"><Check size={16} className="text-[#00D4B1]" /> Multi-domain support</li>
-              </ul>
-              <button className="w-full py-3 rounded-lg font-medium text-[#0A2540] bg-[#F6F9FC] hover:bg-[#EDF1F6] transition">Upgrade to Studio</button>
+              <button className="h-[48px] w-full bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold rounded-[12px] transition-transform hover:-translate-y-px">
+                Upgrade to Pro
+              </button>
             </div>
           </div>
         </section>
 
       </main>
 
-      <footer className="bg-[#0A2540] text-white py-16 border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12">
-          <div>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-[#635BFF] flex items-center justify-center">
-                <span className="font-bold text-white text-sm">O</span>
-              </div>
-              <span className="font-bold text-white text-lg tracking-tight">OneAtlas</span>
-            </div>
-            <p className="text-[#697386] text-sm">The AI-Native Internal Tools Platform.</p>
+      <footer className="bg-[var(--bg-secondary)] border-t border-[var(--border-color)] py-12">
+        <div className="max-w-[1280px] mx-auto px-5 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="font-bold text-[15px] text-[var(--text-primary)] flex items-center gap-2">
+            <div className="w-4 h-4 bg-[var(--text-primary)] text-white text-[8px] font-bold flex items-center justify-center">O</div>
+            OneAtlas
           </div>
-          <div>
-            <h4 className="font-semibold mb-4">Product</h4>
-            <ul className="space-y-2 text-sm text-[#697386]">
-              <li><Link href="#" className="hover:text-white transition">Templates</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Enterprise</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Security</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Pricing</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm text-[#697386]">
-              <li><Link href="#" className="hover:text-white transition">Documentation</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Blog</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Help Center</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Updates</Link></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-4">Community</h4>
-            <ul className="space-y-2 text-sm text-[#697386]">
-              <li><Link href="#" className="hover:text-white transition">Discord</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Twitter</Link></li>
-              <li><Link href="#" className="hover:text-white transition">GitHub</Link></li>
-            </ul>
+          <div className="text-[12px] text-[var(--text-muted)] uppercase tracking-[0.08em] font-semibold">
+            © 2026 OneAtlas Inc.
           </div>
         </div>
       </footer>
