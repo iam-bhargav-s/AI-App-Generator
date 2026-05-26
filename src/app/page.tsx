@@ -49,6 +49,7 @@ export default function LandingPage() {
             </Link>
             
             <div className="hidden md:flex items-center gap-[32px]">
+              <Link href="#how-it-works" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">How it works</Link>
               <Link href="#templates" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Templates</Link>
               <Link href="#enterprise" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Enterprise</Link>
               <Link href="#pricing" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Pricing</Link>
@@ -148,7 +149,7 @@ export default function LandingPage() {
         </section>
 
         {/* How OneAtlas Works */}
-        <section className="bg-[var(--bg-secondary)] border-y border-[var(--border-color)] py-[120px]">
+        <section id="how-it-works" className="bg-[var(--bg-secondary)] border-y border-[var(--border-color)] py-[120px]">
           <div className="max-w-[1280px] mx-auto px-5 md:px-8">
             <div className="text-center mb-16">
               <h2 className="text-[48px] font-semibold leading-[1] tracking-[-0.03em] text-[var(--text-primary)] mb-6">How it works.</h2>
@@ -255,38 +256,66 @@ export default function LandingPage() {
               <p className="text-[18px] text-[var(--text-secondary)]">Start for free. Scale when you need it.</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {/* Standard */}
-              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-[32px] flex flex-col shadow-soft">
-                <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">Builder</h3>
-                <p className="text-[16px] text-[var(--text-secondary)] mb-8">For individuals and small teams.</p>
-                <div className="mb-10">
-                  <span className="text-[48px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$0</span>
-                  <span className="text-[15px] text-[var(--text-secondary)]">/mo</span>
+              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-[24px] flex flex-col shadow-soft">
+                <h3 className="text-[20px] font-semibold text-[var(--text-primary)] mb-2">Builder</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] mb-6">For individuals and small teams.</p>
+                <div className="mb-8">
+                  <span className="text-[40px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$0</span>
+                  <span className="text-[14px] text-[var(--text-secondary)]">/mo</span>
                 </div>
-                <ul className="space-y-4 mb-10 flex-1">
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[var(--text-muted)]" /> Unlimited generated apps</li>
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[var(--text-muted)]" /> 5 managed deployments</li>
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[var(--text-muted)]" /> Community support</li>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[var(--text-muted)] mt-0.5 shrink-0" /> Unlimited generated apps</li>
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[var(--text-muted)] mt-0.5 shrink-0" /> 5 managed deployments</li>
                 </ul>
-                <button className="h-[48px] w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[#FAFAFA] text-[var(--text-primary)] text-[15px] font-semibold rounded-[12px] transition-colors">Start Building</button>
+                <Link href="/login" className="flex items-center justify-center h-[44px] w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[#FAFAFA] text-[var(--text-primary)] text-[14px] font-semibold rounded-[10px] transition-colors">Start Building</Link>
               </div>
 
-              {/* Pro */}
-              <div className="bg-[var(--bg-primary)] border-[1.5px] border-[#FF6600] rounded-[24px] p-[32px] flex flex-col relative shadow-xl">
-                <div className="absolute top-0 right-8 -translate-y-1/2 bg-[var(--bg-primary)] px-3 py-1 text-[11px] font-bold tracking-widest uppercase text-[#FF6600] border border-[#FF6600] rounded-full">Most Popular</div>
-                <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">Pro</h3>
-                <p className="text-[16px] text-[var(--text-secondary)] mb-8">For scaling applications.</p>
-                <div className="mb-10">
-                  <span className="text-[48px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$99</span>
-                  <span className="text-[15px] text-[var(--text-secondary)]">/mo</span>
+              {/* Monthly */}
+              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-[24px] flex flex-col shadow-soft">
+                <h3 className="text-[20px] font-semibold text-[var(--text-primary)] mb-2">Monthly</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] mb-6">Flexible monthly subscription.</p>
+                <div className="mb-8">
+                  <span className="text-[40px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$8</span>
+                  <span className="text-[14px] text-[var(--text-secondary)]">/month</span>
                 </div>
-                <ul className="space-y-4 mb-10 flex-1">
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[#FF6600]" /> Advanced AI reasoning</li>
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[#FF6600]" /> Unlimited deployments</li>
-                  <li className="flex items-center gap-3 text-[15px] font-medium"><Check size={16} className="text-[#FF6600]" /> Priority support & Code Export</li>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Advanced AI reasoning</li>
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Priority support</li>
                 </ul>
-                <button className="h-[48px] w-full bg-[#FF6600] hover:bg-[#e55c00] text-white text-[15px] font-semibold rounded-[12px] transition-transform hover:-translate-y-px">Upgrade to Pro</button>
+                <a href="https://www.theaisignal.com/subscribe?utm_source=menu&simple=true&next=https%3A%2F%2Fwww.theaisignal.com%2F&skip_redirect_check=true&just_signed_up=true&referral_token=44xgnm" className="flex items-center justify-center h-[44px] w-full bg-[#FF6600] hover:bg-[#e55c00] text-white text-[14px] font-semibold rounded-[10px] transition-transform hover:-translate-y-px">Subscribe</a>
+              </div>
+
+              {/* Yearly */}
+              <div className="bg-[var(--bg-primary)] border-[1.5px] border-[#FF6600] rounded-[24px] p-[24px] flex flex-col relative shadow-xl transform md:-translate-y-2">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[var(--bg-primary)] px-3 py-1 text-[10px] font-bold tracking-widest uppercase text-[#FF6600] border border-[#FF6600] rounded-full whitespace-nowrap">Most Popular</div>
+                <h3 className="text-[20px] font-semibold text-[var(--text-primary)] mb-2">Yearly</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] mb-6">For scaling applications.</p>
+                <div className="mb-8">
+                  <span className="text-[40px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$80</span>
+                  <span className="text-[14px] text-[var(--text-secondary)]">/year</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Save over 15% annually</li>
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Unlimited deployments</li>
+                </ul>
+                <a href="https://www.theaisignal.com/subscribe?utm_source=menu&simple=true&next=https%3A%2F%2Fwww.theaisignal.com%2F&skip_redirect_check=true&just_signed_up=true&referral_token=44xgnm" className="flex items-center justify-center h-[44px] w-full bg-[#FF6600] hover:bg-[#e55c00] text-white text-[14px] font-semibold rounded-[10px] transition-transform hover:-translate-y-px">Subscribe</a>
+              </div>
+
+              {/* Founding */}
+              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-[24px] flex flex-col shadow-soft">
+                <h3 className="text-[20px] font-semibold text-[var(--text-primary)] mb-2">Founding</h3>
+                <p className="text-[14px] text-[var(--text-secondary)] mb-6">Exclusive early-adopter access.</p>
+                <div className="mb-8">
+                  <span className="text-[40px] font-bold text-[var(--text-primary)] tracking-[-0.03em]">$150</span>
+                  <span className="text-[14px] text-[var(--text-secondary)]">/year</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Direct engineering support</li>
+                  <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[#FF6600] mt-0.5 shrink-0" /> Code Export capability</li>
+                </ul>
+                <a href="https://www.theaisignal.com/subscribe?utm_source=menu&simple=true&next=https%3A%2F%2Fwww.theaisignal.com%2F&skip_redirect_check=true&just_signed_up=true&referral_token=44xgnm" className="flex items-center justify-center h-[44px] w-full bg-[#FF6600] hover:bg-[#e55c00] text-white text-[14px] font-semibold rounded-[10px] transition-transform hover:-translate-y-px">Subscribe</a>
               </div>
             </div>
           </div>
@@ -365,7 +394,7 @@ export default function LandingPage() {
         </div>
         
         {/* Watermark */}
-        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-2 hover:scale-105 transition-transform">
+        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white px-4 py-2 rounded-full flex items-center gap-2 hover:scale-105 transition-transform">
           <span className="text-[12px] font-bold tracking-wide">POWERED BY</span>
           <span className="text-[14px] font-black text-[#FF6600] tracking-tight">TheAiSignal</span>
         </a>
