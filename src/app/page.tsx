@@ -109,22 +109,85 @@ export default function LandingPage() {
                     Preview
                   </div>
                 </div>
-                <div className="flex-1 w-full h-full relative overflow-hidden bg-[var(--bg-primary)]">
-                  <Link href="https://www.theaisignal.com/" target="_blank" className="block w-full h-full cursor-pointer group relative">
-                    {/* The generated AI dashboard image */}
-                    <img 
-                      src="/aisignal-dashboard.png" 
-                      alt="TheAiSignal Dashboard" 
-                      className="absolute inset-0 w-full h-full object-cover origin-top-left transition-transform duration-700 group-hover:scale-105"
-                    />
-                    
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                      <div className="bg-white text-black px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
-                        Visit TheAiSignal <ArrowUpRight size={16} />
+                <div className="flex-1 flex bg-[var(--bg-primary)] overflow-hidden relative group cursor-pointer" onClick={() => window.open('https://www.theaisignal.com/', '_blank')}>
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-[var(--bg-secondary)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px] z-20">
+                    <div className="bg-[var(--text-primary)] text-white px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
+                      Visit TheAiSignal <ArrowUpRight size={16} />
+                    </div>
+                  </div>
+
+                  {/* Enhanced Mock Sidebar */}
+                  <div className="w-48 bg-[var(--bg-secondary)] border-r border-[var(--border-color)] p-4 flex flex-col gap-1.5 z-10 relative">
+                    <div className="h-8 bg-[#FF6600]/10 text-[#FF6600] rounded-[8px] px-3 flex items-center text-[13px] font-semibold transition-colors">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#FF6600] mr-2"></div>
+                      AI Insights
+                    </div>
+                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded-[8px] px-3 flex items-center text-[13px] font-medium text-[var(--text-secondary)] transition-colors">Signal Pipeline</div>
+                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded-[8px] px-3 flex items-center text-[13px] font-medium text-[var(--text-secondary)] transition-colors">Generative CRM</div>
+                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded-[8px] px-3 flex items-center text-[13px] font-medium text-[var(--text-secondary)] transition-colors mt-auto">Settings</div>
+                  </div>
+                  
+                  {/* Enhanced Mock Canvas */}
+                  <div className="flex-1 bg-[var(--bg-primary)] p-6 flex flex-col z-10 relative">
+                    <div className="flex justify-between items-end mb-6">
+                      <div>
+                        <h3 className="text-[20px] font-bold text-[var(--text-primary)] tracking-tight">TheAiSignal Analytics</h3>
+                        <p className="text-[13px] text-[var(--text-secondary)]">Real-time generative data processing</p>
+                      </div>
+                      <div className="bg-[#FF6600] text-white px-3 py-1.5 rounded-[6px] text-[12px] font-bold shadow-soft flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+                        LIVE
                       </div>
                     </div>
-                  </Link>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[14px] p-5 shadow-soft">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-2">Signals Processed</p>
+                        <p className="text-[28px] font-bold text-[var(--text-primary)] leading-none tracking-tight mb-2">142.8k</p>
+                        <div className="flex items-center gap-1 text-[#10B981] text-[12px] font-semibold">
+                          <ArrowUpRight size={14} /> +24% this week
+                        </div>
+                      </div>
+                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[14px] p-5 shadow-soft">
+                        <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)] mb-2">Generative Accuracy</p>
+                        <p className="text-[28px] font-bold text-[var(--text-primary)] leading-none tracking-tight mb-2">99.4%</p>
+                        <div className="flex items-center gap-1 text-[#10B981] text-[12px] font-semibold">
+                          <Check size={14} /> Optimized
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[14px] shadow-soft flex-1 flex flex-col overflow-hidden">
+                      <div className="border-b border-[var(--border-color)] p-4">
+                        <p className="text-[13px] font-semibold text-[var(--text-primary)]">Live Processing Queue</p>
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col gap-3">
+                        <div className="h-10 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[8px] flex items-center px-4 justify-between">
+                          <div className="flex gap-3 items-center">
+                            <div className="w-2 h-2 rounded-full bg-[#FF6600]"></div>
+                            <div className="h-2 w-24 bg-[var(--border-color)] rounded-full"></div>
+                          </div>
+                          <div className="h-2 w-12 bg-[var(--border-color)] rounded-full"></div>
+                        </div>
+                        <div className="h-10 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[8px] flex items-center px-4 justify-between">
+                          <div className="flex gap-3 items-center">
+                            <div className="w-2 h-2 rounded-full bg-[#FF6600]"></div>
+                            <div className="h-2 w-32 bg-[var(--border-color)] rounded-full"></div>
+                          </div>
+                          <div className="h-2 w-16 bg-[var(--border-color)] rounded-full"></div>
+                        </div>
+                        <div className="h-10 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[8px] flex items-center px-4 justify-between opacity-50">
+                          <div className="flex gap-3 items-center">
+                            <div className="w-2 h-2 rounded-full bg-[var(--border-color)]"></div>
+                            <div className="h-2 w-20 bg-[var(--border-color)] rounded-full"></div>
+                          </div>
+                          <div className="h-2 w-8 bg-[var(--border-color)] rounded-full"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
