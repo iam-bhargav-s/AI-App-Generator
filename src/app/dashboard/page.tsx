@@ -198,7 +198,7 @@ export default function DashboardPage() {
       <nav className="h-[72px] bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between px-8">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-[18px]">
-            <div className="w-5 h-5 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center">O</div>
+            <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
             OneAtlas
           </Link>
           <div className="hidden md:flex gap-6 border-l border-[var(--border-color)] pl-6">
@@ -252,45 +252,30 @@ export default function DashboardPage() {
             )}
 
             {apps.length === 0 ? (
-              <>
-                <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-[64px] text-center shadow-soft">
-                  <div className="w-12 h-12 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[12px] flex items-center justify-center mx-auto mb-6 text-[var(--text-muted)]">
-                    <Database size={24} />
-                  </div>
-                  <h2 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">No projects yet</h2>
-                  <p className="text-[15px] text-[var(--text-secondary)] max-w-md mx-auto mb-8">Get started by creating a new project from scratch or choose from one of our templates.</p>
-                  <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                    <button 
-                      onClick={() => setShowModal(true)}
-                      className="h-[48px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px shadow-soft"
-                    >
-                      Create from scratch
-                    </button>
-                    <button 
-                      onClick={() => {
-                        document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className="h-[48px] px-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-primary)] text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px flex items-center gap-2"
-                    >
-                      Choose a template
-                      <svg className="w-4 h-4 animate-bounce text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                    </button>
-                  </div>
+              <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-[64px] text-center shadow-soft">
+                <div className="w-12 h-12 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[12px] flex items-center justify-center mx-auto mb-6 text-[var(--text-muted)]">
+                  <Database size={24} />
                 </div>
-                
-                {/* Elegant inline hint pointing to templates below */}
-                <div 
-                  onClick={() => {
-                    document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="mt-8 flex flex-col items-center gap-1.5 cursor-pointer group text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                >
-                  <span className="text-[12px] font-semibold tracking-[0.1em] uppercase">Scroll down for templates</span>
-                  <svg className="w-4 h-4 animate-bounce text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                  </svg>
+                <h2 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">No projects yet</h2>
+                <p className="text-[15px] text-[var(--text-secondary)] max-w-md mx-auto mb-8">Get started by creating a new project from scratch or choose from one of our templates.</p>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                  <button 
+                    onClick={() => setShowModal(true)}
+                    className="h-[48px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px shadow-soft"
+                  >
+                    Create from scratch
+                  </button>
+                  <button 
+                    onClick={() => {
+                      document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="h-[48px] px-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-primary)] text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px flex items-center gap-2"
+                  >
+                    Choose a template
+                    <svg className="w-4 h-4 animate-bounce text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                  </button>
                 </div>
-              </>
+              </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {apps.map((app) => (
@@ -380,7 +365,7 @@ export default function DashboardPage() {
                 <div className="flex justify-end pt-2">
                   <button 
                     type="submit" 
-                    className="h-[40px] px-5 bg-[var(--text-primary)] hover:opacity-90 text-white dark:bg-white dark:text-black dark:hover:opacity-90 text-[14px] font-semibold rounded-[8px] flex items-center gap-2 transition-all active:scale-[0.98]"
+                    className="h-[40px] px-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90 text-[14px] font-semibold rounded-[8px] flex items-center gap-2 transition-all active:scale-[0.98]"
                   >
                     <Save size={16} /> Save Changes
                   </button>
@@ -454,7 +439,7 @@ export default function DashboardPage() {
                   <button 
                     disabled={plan === 'builder'}
                     onClick={() => handleChangePlan('builder')}
-                    className={`mt-4 w-full h-[36px] text-[13px] font-semibold rounded-[8px] transition-colors ${plan === 'builder' ? 'bg-[var(--border-color)] text-[var(--text-muted)] cursor-default' : 'bg-[var(--text-primary)] hover:opacity-90 text-white dark:bg-white dark:text-black'}`}
+                    className={`mt-4 w-full h-[36px] text-[13px] font-semibold rounded-[8px] transition-colors ${plan === 'builder' ? 'bg-[var(--border-color)] text-[var(--text-muted)] cursor-default' : 'bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90'}`}
                   >
                     {plan === 'builder' ? 'Current Plan' : 'Downgrade'}
                   </button>

@@ -44,7 +44,7 @@ export default function LandingPage() {
         <div className="max-w-[1280px] mx-auto px-5 md:px-8 h-full flex items-center justify-between">
           <div className="flex items-center gap-10">
             <Link href="/" className="font-bold text-[18px] tracking-tight flex items-center gap-2">
-              <div className="w-5 h-5 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center">O</div>
+              <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
               OneAtlas
             </Link>
             
@@ -107,7 +107,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex-1 flex bg-[var(--bg-primary)] overflow-hidden relative">
                   <div className="absolute inset-0 bg-[var(--bg-secondary)]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px] z-20">
-                    <div className="bg-[var(--text-primary)] text-white px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
+                    <div className="bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] px-6 py-3 rounded-full font-bold text-[14px] flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-xl">
                       Visit TheAiSignal <ArrowUpRight size={16} />
                     </div>
                   </div>
@@ -210,7 +210,7 @@ export default function LandingPage() {
                   <h3 className="text-[20px] font-bold text-[var(--text-primary)] mb-2">{t.name}</h3>
                   <p className="text-[14px] text-[var(--text-secondary)] mb-8 flex-1">{t.desc}</p>
                   <div className="flex gap-3">
-                    <button onClick={() => { router.push(`/dashboard?name=${encodeURIComponent(t.name)}&prompt=${encodeURIComponent(t.desc)}`); }} className="w-full bg-[var(--text-primary)] text-white h-10 rounded-[8px] text-[13px] font-semibold hover:bg-black transition-colors">Use Template</button>
+                    <button onClick={() => { router.push(`/dashboard?name=${encodeURIComponent(t.name)}&prompt=${encodeURIComponent(t.desc)}`); }} className="w-full bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] h-10 rounded-[8px] text-[13px] font-semibold hover:opacity-90 transition-colors">Use Template</button>
                   </div>
                 </div>
               ))}
@@ -352,7 +352,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
             <div className="col-span-2">
               <div className="font-bold text-[18px] text-[var(--text-primary)] flex items-center gap-2 mb-4">
-                <div className="w-5 h-5 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center">O</div>
+                <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
                 OneAtlas
               </div>
               <p className="text-[14px] text-[var(--text-secondary)] max-w-xs mb-6">The AI-native runtime platform for internal tools and operational dashboards.</p>

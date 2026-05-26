@@ -294,7 +294,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
       {/* Top Bar */}
       <header className="h-[72px] bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between px-6 shrink-0 z-10">
         <div className="flex items-center gap-6">
-          <Link href="/dashboard" className="w-6 h-6 bg-[var(--text-primary)] text-white text-[10px] font-bold flex items-center justify-center hover:opacity-90 transition-opacity">
+          <Link href="/dashboard" className="w-6 h-6 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center hover:opacity-90 transition-opacity">
             O
           </Link>
           <div className="h-6 w-px bg-[var(--border-color)]"></div>
@@ -675,7 +675,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                                         >
                                           <div className="w-2 h-2 rounded-full bg-[#FF6600] border-2 border-[var(--bg-secondary)] shadow-soft transition-transform duration-150 group-hover/dot:scale-150"></div>
                                           {/* Tooltip */}
-                                          <div className="absolute -top-10 bg-[var(--text-primary)] text-white text-[11px] font-semibold px-2 py-1 rounded shadow-lg opacity-0 group-hover/dot:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 animate-fade-in">
+                                          <div className="absolute -top-10 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[11px] font-semibold px-2 py-1 rounded shadow-lg opacity-0 group-hover/dot:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 animate-fade-in">
                                             {p.label}: {p.value.toLocaleString()}
                                           </div>
                                         </div>
@@ -703,7 +703,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                                         style={{ height: `${Math.max(8, heightPercent)}%` }}
                                       >
                                         {/* Tooltip */}
-                                        <div className="absolute -top-10 bg-[var(--text-primary)] text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-[6px] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
+                                        <div className="absolute -top-10 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[11px] font-semibold px-2.5 py-1.5 rounded-[6px] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20">
                                           {item.label}: {item.value.toLocaleString()}
                                         </div>
                                       </div>
@@ -734,7 +734,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                 <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[18px] overflow-hidden shadow-soft">
                   <div className="border-b border-[var(--border-color)] px-6 py-5 flex justify-between items-center">
                     <h3 className="text-[18px] font-semibold text-[var(--text-primary)]">{activeModelId} Records</h3>
-                    <button onClick={() => setShowAddModal(true)} className="bg-[var(--text-primary)] hover:bg-[#000000] text-white px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
+                    <button onClick={() => setShowAddModal(true)} className="bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] hover:opacity-90 px-4 py-2 rounded-[8px] text-[14px] font-medium transition-transform hover:-translate-y-px">
                       Add Record
                     </button>
                   </div>
