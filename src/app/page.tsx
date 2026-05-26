@@ -199,22 +199,23 @@ export default function LandingPage() {
             </Link>
           </div>
           
-          {/* Horizontally scrollable container */}
-          <div className="flex gap-6 overflow-x-auto pb-8 px-5 md:px-8 snap-x snap-mandatory hide-scrollbar" style={{ scrollPaddingLeft: '2rem' }}>
-            {TEMPLATES.map((t, i) => (
-              <div key={t.id} className="min-w-[320px] max-w-[320px] bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-6 snap-start flex flex-col shadow-soft transition-transform hover:-translate-y-1">
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider bg-[var(--bg-secondary)] px-2 py-1 rounded text-[var(--text-secondary)]">{t.category}</span>
-                  <span className={`text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded ${t.complexity === 'Simple' ? 'text-green-600 bg-green-50' : t.complexity === 'Moderate' ? 'text-yellow-600 bg-yellow-50' : 'text-red-600 bg-red-50'}`}>{t.complexity}</span>
+          {/* Horizontally scrollable container aligned with the rest of the page */}
+          <div className="max-w-[1280px] mx-auto px-5 md:px-8">
+            <div className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar">
+              {TEMPLATES.map((t, i) => (
+                <div key={t.id} className="min-w-[320px] max-w-[320px] bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[24px] p-6 snap-start flex flex-col shadow-soft transition-transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="text-[11px] font-semibold uppercase tracking-wider bg-[var(--bg-secondary)] px-2 py-1 rounded text-[var(--text-secondary)]">{t.category}</span>
+                    <span className={`text-[11px] font-semibold uppercase tracking-wider px-2 py-1 rounded ${t.complexity === 'Simple' ? 'text-green-600 bg-green-50' : t.complexity === 'Moderate' ? 'text-yellow-600 bg-yellow-50' : 'text-red-600 bg-red-50'}`}>{t.complexity}</span>
+                  </div>
+                  <h3 className="text-[20px] font-bold text-[var(--text-primary)] mb-2">{t.name}</h3>
+                  <p className="text-[14px] text-[var(--text-secondary)] mb-8 flex-1">{t.desc}</p>
+                  <div className="flex gap-3">
+                    <button onClick={() => { setPrompt(t.name); handleGenerate(); }} className="w-full bg-[var(--text-primary)] text-white h-10 rounded-[8px] text-[13px] font-semibold hover:bg-black transition-colors">Use Template</button>
+                  </div>
                 </div>
-                <h3 className="text-[20px] font-bold text-[var(--text-primary)] mb-2">{t.name}</h3>
-                <p className="text-[14px] text-[var(--text-secondary)] mb-8 flex-1">{t.desc}</p>
-                <div className="flex gap-3">
-                  <button onClick={() => { setPrompt(t.name); handleGenerate(); }} className="flex-1 bg-[var(--text-primary)] text-white h-10 rounded-[8px] text-[13px] font-semibold hover:bg-black transition-colors">Use Template</button>
-                  <button className="flex-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] h-10 rounded-[8px] text-[13px] font-semibold hover:bg-[#fafafa] transition-colors">Preview</button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
 
