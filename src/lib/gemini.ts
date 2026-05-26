@@ -116,7 +116,8 @@ export async function generateAppSchema(prompt: string) {
     const text = response.text;
     if (!text) throw new Error('Empty response from AI');
     
-    const parsed = JSON.parse(text);
+    const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleanedText);
     return parsed;
   } catch (error) {
     console.error('Gemini Generation Error:', error);
@@ -154,7 +155,8 @@ RULES:
     const text = response.text;
     if (!text) throw new Error('Empty response from AI');
     
-    const parsedDatabase = JSON.parse(text);
+    const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+    const parsedDatabase = JSON.parse(cleanedText);
     return parsedDatabase;
   } catch (error) {
     console.error('Gemini Edit Error:', error);

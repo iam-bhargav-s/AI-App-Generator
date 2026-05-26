@@ -210,7 +210,7 @@ export default function LandingPage() {
                   <h3 className="text-[20px] font-bold text-[var(--text-primary)] mb-2">{t.name}</h3>
                   <p className="text-[14px] text-[var(--text-secondary)] mb-8 flex-1">{t.desc}</p>
                   <div className="flex gap-3">
-                    <button onClick={() => { setPrompt(t.name); handleGenerate(); }} className="w-full bg-[var(--text-primary)] text-white h-10 rounded-[8px] text-[13px] font-semibold hover:bg-black transition-colors">Use Template</button>
+                    <button onClick={() => { router.push(`/dashboard?name=${encodeURIComponent(t.name)}&prompt=${encodeURIComponent(t.desc)}`); }} className="w-full bg-[var(--text-primary)] text-white h-10 rounded-[8px] text-[13px] font-semibold hover:bg-black transition-colors">Use Template</button>
                   </div>
                 </div>
               ))}
