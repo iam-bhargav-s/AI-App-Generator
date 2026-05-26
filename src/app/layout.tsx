@@ -34,7 +34,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white border-2 border-[#FF6600] px-5 py-2.5 rounded-full shadow-xl flex items-center gap-3 hover:-translate-y-1 transition-transform cursor-pointer">
+        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white border-2 border-[#FF6600] px-5 py-2.5 rounded-full flex items-center gap-3 hover:-translate-y-1 transition-transform cursor-pointer">
           <span className="w-2.5 h-2.5 rounded-full bg-[#FF6600] animate-pulse"></span>
           <span className="text-[13px] font-bold tracking-widest uppercase">Powered by TheAiSignal</span>
         </a>

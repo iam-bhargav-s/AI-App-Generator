@@ -86,10 +86,8 @@ export default function LandingPage() {
                   placeholder="Build a sales CRM with pipeline management..." 
                   className="w-full text-[18px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none bg-transparent mb-6"
                 />
-                <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
-                  <div className="flex gap-2">
-                  </div>
-                  <button type="submit" className="h-[40px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[14px] font-semibold flex items-center justify-center rounded-[8px] transition-transform hover:-translate-y-px">
+                <div className="border-t border-[var(--border-color)] pt-5 mt-2">
+                  <button type="submit" className="w-full h-[48px] bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-bold flex items-center justify-center rounded-[12px] transition-transform hover:-translate-y-px">
                     Generate
                   </button>
                 </div>
@@ -269,7 +267,7 @@ export default function LandingPage() {
                   <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[var(--text-muted)] mt-0.5 shrink-0" /> Unlimited generated apps</li>
                   <li className="flex items-start gap-2 text-[14px] font-medium"><Check size={16} className="text-[var(--text-muted)] mt-0.5 shrink-0" /> 5 managed deployments</li>
                 </ul>
-                <Link href="/login" className="flex items-center justify-center h-[44px] w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[#FAFAFA] text-[var(--text-primary)] text-[14px] font-semibold rounded-[10px] transition-colors">Start Building</Link>
+                <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="flex items-center justify-center h-[44px] w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[#FAFAFA] text-[var(--text-primary)] text-[14px] font-semibold rounded-[10px] transition-colors">Start Building</button>
               </div>
 
               {/* Monthly */}
@@ -393,11 +391,6 @@ export default function LandingPage() {
           </div>
         </div>
         
-        {/* Watermark */}
-        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white px-4 py-2 rounded-full flex items-center gap-2 hover:scale-105 transition-transform">
-          <span className="text-[12px] font-bold tracking-wide">POWERED BY</span>
-          <span className="text-[14px] font-black text-[#FF6600] tracking-tight">TheAiSignal</span>
-        </a>
       </footer>
     </div>
   );
