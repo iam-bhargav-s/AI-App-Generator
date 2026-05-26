@@ -9,26 +9,28 @@ const FALLBACK_FILE = process.env.NODE_ENV === 'production'
 // Ensure fallback file directory exists
 function ensureFallbackFile() {
   const dir = path.dirname(FALLBACK_FILE);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    if (!fs.existsSync(FALLBACK_FILE)) {
+      fs.writeFileSync(
+        FALLBACK_FILE,
+        JSON.stringify({ users: [], apps: [], records: [], workflowLogs: [], snapshots: [] }, null, 2)
+      );
+    }
   }
-  if (!fs.existsSync(FALLBACK_FILE)) {
-    fs.writeFileSync(
-      FALLBACK_FILE,
-      JSON.stringify({ users: [], apps: [], records: [], workflowLogs: [] }, null, 2)
-    );
-  }
-}
 
-function readFallback() {
-  ensureFallbackFile();
-  try {
-    const content = fs.readFileSync(FALLBACK_FILE, 'utf-8');
-    return JSON.parse(content);
-  } catch (error) {
-    return { users: [], apps: [], records: [], workflowLogs: [] };
+  function readFallback() {
+    ensureFallbackFile();
+    try {
+      const content = fs.readFileSync(FALLBACK_FILE, 'utf-8');
+      const data = JSON.parse(content);
+      if (!data.snapshots) data.snapshots = [];
+      return data;
+    } catch (error) {
+      return { users: [], apps: [], records: [], workflowLogs: [], snapshots: [] };
+    }
   }
-}
 
 function writeFallback(data: any) {
   ensureFallbackFile();
@@ -309,5 +311,35 @@ export const dbWrapper = {
     return store.workflowLogs
       .filter((log: any) => log.appId === appId)
       .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  },
+
+  // SNAPSHOTS
+  async createSnapshot(appId: string, token: string, schema: any) {
+    if (await this.isDbAvailable()) {
+      return db.previewSnapshot.create({
+        data: { appId, token, schema }
+      });
+    }
+
+    const store = readFallback();
+    const newSnapshot = {
+      id: Math.random().toString(36).substring(2, 11),
+      appId,
+      token,
+      schema,
+      createdAt: new Date().toISOString()
+    };
+    store.snapshots.push(newSnapshot);
+    writeFallback(store);
+    return newSnapshot;
+  },
+
+  async getSnapshot(token: string) {
+    if (await this.isDbAvailable()) {
+      return db.previewSnapshot.findUnique({ where: { token } });
+    }
+
+    const store = readFallback();
+    return store.snapshots.find((s: any) => s.token === token) || null;
   }
 };

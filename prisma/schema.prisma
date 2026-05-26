@@ -57,3 +57,11 @@ model WorkflowLog {
   logs        String?  // Step-by-step logs of executed actions
   createdAt   DateTime @default(now())
 }
+
+model PreviewSnapshot {
+  id        String   @id @default(uuid())
+  appId     String
+  token     String   @unique
+  schema    Json
+  createdAt DateTime @default(now())
+}

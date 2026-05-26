@@ -118,10 +118,18 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
     }
   };
 
-  const handleSharePreview = () => {
-    const url = `${window.location.origin}/preview/${appId}?v=${app?.config?.version || 1}`;
-    navigator.clipboard.writeText(url);
-    alert(`Preview URL copied to clipboard!\n${url}`);
+  const handleSharePreview = async () => {
+    try {
+      const res = await fetch(`/api/apps/${appId}/preview`, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      
+      const url = `${window.location.origin}${data.previewUrl}`;
+      await navigator.clipboard.writeText(url);
+      alert(`Preview Snapshot URL copied to clipboard!\n${url}`);
+    } catch (err: any) {
+      alert(`Failed to create preview: ${err.message}`);
+    }
   };
 
   const handleSaveRecord = async (e: React.FormEvent) => {
