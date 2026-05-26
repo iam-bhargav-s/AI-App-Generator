@@ -49,7 +49,6 @@ export default function LandingPage() {
             </Link>
             
             <div className="hidden md:flex items-center gap-[32px]">
-              <Link href="https://www.theaisignal.com/" target="_blank" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Product</Link>
               <Link href="#templates" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Templates</Link>
               <Link href="#enterprise" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Enterprise</Link>
               <Link href="#pricing" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Pricing</Link>
@@ -88,9 +87,6 @@ export default function LandingPage() {
                 />
                 <div className="flex items-center justify-between border-t border-[var(--border-color)] pt-4">
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => setPrompt('HR Dashboard')} className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">HR Dashboard</button>
-                    <span className="text-[var(--border-color)]">•</span>
-                    <button type="button" onClick={() => setPrompt('Inventory System')} className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] hover:text-[var(--accent-primary)] transition-colors">Inventory</button>
                   </div>
                   <button type="submit" className="h-[40px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[14px] font-semibold flex items-center justify-center rounded-[8px] transition-transform hover:-translate-y-px">
                     Generate
