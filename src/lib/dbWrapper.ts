@@ -43,25 +43,7 @@ const CACHE_TTL = 10000; // Cache status for 10 seconds
 
 export const dbWrapper = {
   async isDbAvailable(): Promise<boolean> {
-    const now = Date.now();
-    if (cachedDbAvailable !== null && (now - lastCheckedTime) < CACHE_TTL) {
-      return cachedDbAvailable;
-    }
-
-    try {
-      // Race the SELECT 1 query against a 1-second timeout
-      const checkPromise = db.$queryRaw`SELECT 1`;
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('DB Timeout')), 800)
-      );
-      await Promise.race([checkPromise, timeoutPromise]);
-      cachedDbAvailable = true;
-    } catch (e) {
-      cachedDbAvailable = false;
-    }
-    
-    lastCheckedTime = Date.now();
-    return cachedDbAvailable;
+    return !!process.env.DATABASE_URL;
   },
 
   // USER CRUD
