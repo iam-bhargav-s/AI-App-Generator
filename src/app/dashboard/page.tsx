@@ -30,6 +30,7 @@ export default function DashboardPage() {
   const [newAppName, setNewAppName] = useState('');
   const [newAppDesc, setNewAppDesc] = useState('');
   const [creating, setCreating] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -78,6 +79,25 @@ export default function DashboardPage() {
   useEffect(() => {
     if (user) fetchApps();
   }, [user]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setShowScrollHint(false);
+      } else {
+        setShowScrollHint(true);
+      }
+    };
+    
+    if (apps.length === 0 && !loading) {
+      setShowScrollHint(true);
+      window.addEventListener('scroll', handleScroll);
+    } else {
+      setShowScrollHint(false);
+    }
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [apps, loading]);
 
   const handleCreateApp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -185,19 +205,45 @@ export default function DashboardPage() {
         )}
 
         {apps.length === 0 ? (
-          <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-[64px] text-center shadow-soft">
-            <div className="w-12 h-12 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[12px] flex items-center justify-center mx-auto mb-6 text-[var(--text-muted)]">
-              <Database size={24} />
+          <>
+            <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] p-[64px] text-center shadow-soft">
+              <div className="w-12 h-12 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[12px] flex items-center justify-center mx-auto mb-6 text-[var(--text-muted)]">
+                <Database size={24} />
+              </div>
+              <h2 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">No projects yet</h2>
+              <p className="text-[15px] text-[var(--text-secondary)] max-w-md mx-auto mb-8">Get started by creating a new project from scratch or choose from one of our templates.</p>
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button 
+                  onClick={() => setShowModal(true)}
+                  className="h-[48px] px-6 bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-white text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px shadow-soft"
+                >
+                  Create from scratch
+                </button>
+                <button 
+                  onClick={() => {
+                    document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="h-[48px] px-6 bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-[var(--bg-primary)] text-[15px] font-semibold rounded-[12px] transition-all hover:-translate-y-px flex items-center gap-2"
+                >
+                  Choose a template
+                  <svg className="w-4 h-4 animate-bounce text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                </button>
+              </div>
             </div>
-            <h2 className="text-[22px] font-semibold text-[var(--text-primary)] mb-2">No projects yet</h2>
-            <p className="text-[15px] text-[var(--text-secondary)] max-w-md mx-auto mb-8">Get started by creating a new project from scratch or choose from one of our templates.</p>
-            <button 
-              onClick={() => setShowModal(true)}
-              className="h-[48px] px-6 bg-[var(--text-primary)] text-white text-[15px] font-semibold rounded-[12px] transition-transform hover:-translate-y-px"
+            
+            {/* Elegant inline hint pointing to templates below */}
+            <div 
+              onClick={() => {
+                document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="mt-8 flex flex-col items-center gap-1.5 cursor-pointer group text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
             >
-              Create your first app
-            </button>
-          </div>
+              <span className="text-[12px] font-semibold tracking-[0.1em] uppercase">Scroll down for templates</span>
+              <svg className="w-4 h-4 animate-bounce text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </div>
+          </>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {apps.map((app) => (
@@ -226,7 +272,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="mt-[120px]">
+        <div id="templates-section" className="mt-[72px] border-t border-[var(--border-color)] pt-[72px]">
           <h2 className="text-[24px] font-semibold text-[var(--text-primary)] mb-8">Start with a template</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {PRESET_TEMPLATES.map((t, idx) => (
@@ -295,6 +341,21 @@ export default function DashboardPage() {
               </div>
             </form>
           </div>
+        </div>
+      )}
+      
+      {/* Floating Scroll indicator at the bottom center of the screen */}
+      {showScrollHint && (
+        <div 
+          onClick={() => {
+            document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-[var(--bg-secondary)] border border-[var(--border-color)] px-5 py-2.5 rounded-full shadow-lg flex items-center gap-2 cursor-pointer hover:border-[var(--text-primary)] hover:shadow-xl transition-all duration-300 animate-bounce active:scale-95"
+        >
+          <span className="text-[12px] font-semibold text-[var(--text-primary)] tracking-[0.08em] uppercase">Explore templates</span>
+          <svg className="w-3.5 h-3.5 text-[var(--accent-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
         </div>
       )}
     </div>
