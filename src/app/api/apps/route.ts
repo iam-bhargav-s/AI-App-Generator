@@ -114,11 +114,8 @@ export async function POST(req: NextRequest) {
         description: description || config?.description || ''
       };
     } else {
-      // Use AI to expand the brief prompt into a detailed PM specification
-      const expandedPrompt = await expandUserPrompt(name, description || name);
-      
-      // Use Real Gemini AI Generation with the expanded prompt
-      const aiSchema = await generateAppSchema(expandedPrompt);
+      // Use Real Gemini AI Generation (combining specification expansion + schema + mock data)
+      const aiSchema = await generateAppSchema(description || name);
       
       if (!aiSchema) {
         return NextResponse.json({ 
@@ -130,7 +127,7 @@ export async function POST(req: NextRequest) {
         ...DEFAULT_APP_CONFIG,
         ...aiSchema,
         name: name,
-        description: expandedPrompt
+        description: aiSchema.expandedDescription || description || ''
       };
     }
 

@@ -3,12 +3,15 @@ import { GoogleGenAI } from '@google/genai';
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const SCHEMA_PROMPT = `
-You are an expert full-stack developer architecting a database schema for an application.
-Based on the user's prompt, generate a robust, detailed JSON schema containing the models and fields required, and generate mock data for them.
+You are an expert full-stack developer and product manager architecting an application.
+Based on the user's prompt, design a robust, feature-rich workspace application. If the prompt is brief (e.g. "ecommerce" or "bakery shop"), expand it internally into a complete, professional application specification.
 
 RULES:
 - Return ONLY valid JSON. Do not include markdown formatting or backticks.
-- The root object must contain two keys: "database" (object) and "prebuiltSeedData" (object).
+- The root object must contain three keys:
+  1. "expandedDescription" (string): A detailed, 3-4 sentence product specification explaining the expanded features, models, and design of the application you designed.
+  2. "database" (object): The database models.
+  3. "prebuiltSeedData" (object): Mock records for each model.
 - "database" must contain "models" (array of objects).
 - Models must have a 'name' (string) and 'fields' (array of objects).
 - Fields must have 'name' (string) and 'type' (string, e.g. 'String', 'Int', 'Boolean', 'DateTime').
@@ -22,6 +25,7 @@ EXAMPLE INPUT:
 
 EXAMPLE OUTPUT:
 {
+  "expandedDescription": "A comprehensive digital marketplace and e-commerce application allowing authors and creators to upload products, track order pipelines, manage customers, and monitor total sales metrics over time.",
   "database": {
     "models": [
       {
