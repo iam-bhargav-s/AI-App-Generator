@@ -40,10 +40,10 @@ export default function LandingPage() {
             </Link>
             
             <div className="hidden md:flex items-center gap-[32px]">
-              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Product</Link>
-              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Templates</Link>
-              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Enterprise</Link>
-              <Link href="#" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Pricing</Link>
+              <Link href="https://www.theaisignal.com/" target="_blank" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Product</Link>
+              <Link href="https://www.theaisignal.com/" target="_blank" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Templates</Link>
+              <Link href="https://www.theaisignal.com/" target="_blank" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Enterprise</Link>
+              <Link href="https://www.theaisignal.com/" target="_blank" className="text-[15px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">Pricing</Link>
             </div>
           </div>
 
@@ -109,31 +109,20 @@ export default function LandingPage() {
                     Preview
                   </div>
                 </div>
-                <div className="flex-1 flex">
-                  {/* Mock Sidebar */}
-                  <div className="w-48 border-r border-[var(--border-color)] p-4 flex flex-col gap-2">
-                    <div className="h-8 bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-semibold text-[var(--text-primary)]">Overview</div>
-                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-medium text-[var(--text-secondary)] transition-colors">Deals</div>
-                    <div className="h-8 hover:bg-[var(--bg-primary)] rounded px-3 flex items-center text-[12px] font-medium text-[var(--text-secondary)] transition-colors">Customers</div>
+                <div className="flex-1 w-full h-full relative overflow-hidden bg-white">
+                  {/* Iframe of their actual website to impress them */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-[var(--bg-secondary)] z-0">
+                    <div className="w-8 h-8 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin"></div>
                   </div>
-                  {/* Mock Canvas */}
-                  <div className="flex-1 bg-[var(--bg-primary)] p-6">
-                    <h3 className="text-[22px] font-semibold text-[var(--text-primary)] mb-6">Pipeline Overview</h3>
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] p-4 shadow-soft">
-                        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-2">Total Deals</p>
-                        <p className="text-[24px] font-medium text-[var(--text-primary)]">24</p>
-                      </div>
-                      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] p-4 shadow-soft">
-                        <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)] mb-2">Revenue</p>
-                        <p className="text-[24px] font-medium text-[var(--text-primary)]">$1.2M</p>
-                      </div>
-                    </div>
-                    <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[12px] shadow-soft h-32 flex flex-col">
-                      <div className="border-b border-[var(--border-color)] p-3"><div className="h-2 w-24 bg-[var(--border-color)] rounded"></div></div>
-                      <div className="p-3"><div className="h-2 w-full bg-[var(--bg-primary)] rounded mb-2"></div><div className="h-2 w-2/3 bg-[var(--bg-primary)] rounded"></div></div>
-                    </div>
-                  </div>
+                  <iframe 
+                    src="https://www.theaisignal.com/" 
+                    className="absolute inset-0 w-full h-[1000px] border-none scale-[0.6] origin-top-left z-10 bg-white"
+                    title="TheAiSignal Platform"
+                    style={{ width: '166%' }}
+                  />
+                  
+                  {/* Subtle overlay to prevent interacting with the iframe mock on the landing page */}
+                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-[var(--bg-secondary)]/50 to-transparent pointer-events-none"></div>
                 </div>
               </div>
             </div>

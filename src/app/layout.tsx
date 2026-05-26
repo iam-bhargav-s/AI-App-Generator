@@ -34,10 +34,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <div className="fixed bottom-4 right-4 z-50 pointer-events-none opacity-50 bg-[var(--bg-secondary)] border border-[var(--border-color)] px-3 py-1.5 rounded-full shadow-soft flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)]"></span>
-          <span className="text-[12px] font-semibold text-[var(--text-secondary)] tracking-wider uppercase">Powered by TheAiSignal</span>
-        </div>
+        <a href="https://www.theaisignal.com/" target="_blank" rel="noopener noreferrer" className="fixed bottom-6 right-6 z-50 bg-[var(--text-primary)] text-white border-2 border-[#FF6600] px-5 py-2.5 rounded-full shadow-xl flex items-center gap-3 hover:-translate-y-1 transition-transform cursor-pointer">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FF6600] animate-pulse"></span>
+          <span className="text-[13px] font-bold tracking-widest uppercase">Powered by TheAiSignal</span>
+        </a>
       </body>
     </html>
   );
