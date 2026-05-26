@@ -3,6 +3,13 @@
 import React, { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 
+const getRecordValue = (recData: any, fieldName: string): any => {
+  if (!recData || !fieldName) return undefined;
+  if (recData[fieldName] !== undefined) return recData[fieldName];
+  const key = Object.keys(recData).find(k => k.toLowerCase() === fieldName.toLowerCase());
+  return key ? recData[key] : undefined;
+};
+
 const MOCK_RECORDS_FALLBACK: Record<string, any[]> = {
   Employee: [
     { firstName: "Sarah", lastName: "Connor", department: "Engineering", role: "Senior Developer", joinDate: "2023-01-15T00:00:00Z" },
@@ -238,8 +245,8 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
 
                     if (numericField) {
                       return records.map((rec: any) => {
-                        const val = rec.data?.[numericField.name];
-                        const lbl = rec.data?.[labelField?.name] || 'Record';
+                        const val = getRecordValue(rec.data, numericField.name);
+                        const lbl = getRecordValue(rec.data, labelField?.name) || 'Record';
                         return {
                           label: typeof lbl === 'object' ? JSON.stringify(lbl) : String(lbl),
                           value: typeof val === 'number' ? val : parseInt(val) || 0
@@ -248,7 +255,7 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
                     } else if (labelField) {
                       const counts: Record<string, number> = {};
                       records.forEach((rec: any) => {
-                        const val = rec.data?.[labelField.name] || 'Other';
+                        const val = getRecordValue(rec.data, labelField.name) || 'Other';
                         const strVal = typeof val === 'object' ? JSON.stringify(val) : String(val);
                         counts[strVal] = (counts[strVal] || 0) + 1;
                       });
@@ -595,11 +602,14 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
 
                       return displayedRecords.map((rec) => (
                         <tr key={rec.id} className="border-b border-[var(--border-color)] hover:bg-[var(--bg-primary)]">
-                          {activeModel?.fields?.slice(0, 5).map((f: any) => (
-                            <td key={f.name} className="px-6 py-4 text-[var(--text-primary)] max-w-[200px] truncate">
-                              {typeof rec.data[f.name] === 'object' ? JSON.stringify(rec.data[f.name]) : String(rec.data[f.name] || '-')}
-                            </td>
-                          ))}
+                          {activeModel?.fields?.slice(0, 5).map((f: any) => {
+                            const val = getRecordValue(rec.data, f.name);
+                            return (
+                              <td key={f.name} className="px-6 py-4 text-[var(--text-primary)] max-w-[200px] truncate">
+                                {typeof val === 'object' ? JSON.stringify(val) : String(val !== undefined && val !== null ? val : '-')}
+                              </td>
+                            );
+                          })}
                           <td className="px-6 py-4 text-right text-[14px] text-[var(--accent-primary)] cursor-pointer hover:underline">Edit</td>
                         </tr>
                       ));
