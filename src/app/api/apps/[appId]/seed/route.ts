@@ -54,9 +54,11 @@ export async function POST(
         }
 
         if (Array.isArray(records)) {
-          for (const recordData of records) {
-            await dbWrapper.createRecord(app.id, model.name, recordData);
-          }
+          const toInsert = records.map(recordData => ({
+            modelName: model.name,
+            data: recordData
+          }));
+          await dbWrapper.createRecords(app.id, toInsert);
         }
       }
       return NextResponse.json({ success: true });

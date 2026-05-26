@@ -141,6 +141,7 @@ export async function POST(req: NextRequest) {
     // Auto-generate seed data immediately if it's a template to prevent Vercel 10s timeouts
     if (isTemplate && appConfig.prebuiltSeedData) {
       try {
+        const recordsToInsert: { modelName: string; data: any; userId?: string | null }[] = [];
         for (const model of appConfig.database.models) {
           let records = appConfig.prebuiltSeedData[model.name];
           if (!records) {
@@ -153,16 +154,23 @@ export async function POST(req: NextRequest) {
           }
           if (Array.isArray(records)) {
             for (const recordData of records) {
-              await dbWrapper.createRecord(app.id, model.name, recordData, user.id);
+              recordsToInsert.push({
+                modelName: model.name,
+                data: recordData,
+                userId: user.id
+              });
             }
           }
+        }
+        if (recordsToInsert.length > 0) {
+          await dbWrapper.createRecords(app.id, recordsToInsert);
         }
       } catch (seedErr) {
         console.error('Direct seeding failed:', seedErr);
       }
     }
 
-    return NextResponse.json({ app, success: true });
+    return NextResponse.json({ app, success: true, seeded: isTemplate });
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }

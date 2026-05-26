@@ -177,6 +177,34 @@ export const dbWrapper = {
   },
 
   // RECORDS CRUD
+  async createRecords(appId: string, items: { modelName: string; data: any; userId?: string | null }[]) {
+    if (items.length === 0) return [];
+    if (await this.isDbAvailable()) {
+      const data = items.map(item => ({
+        appId,
+        modelName: item.modelName,
+        data: item.data,
+        userId: item.userId || null
+      }));
+      await db.record.createMany({ data });
+      return data;
+    }
+
+    const store = readFallback();
+    const newRecords = items.map(item => ({
+      id: Math.random().toString(36).substring(2, 11),
+      appId,
+      modelName: item.modelName,
+      data: item.data,
+      userId: item.userId || null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }));
+    store.records.push(...newRecords);
+    writeFallback(store);
+    return newRecords;
+  },
+
   async createRecord(appId: string, modelName: string, data: any, userId?: string | null) {
     if (await this.isDbAvailable()) {
       return db.record.create({

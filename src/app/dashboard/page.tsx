@@ -99,9 +99,11 @@ export default function DashboardPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to create application');
 
-      try {
-        await fetch(`/api/apps/${data.app.id}/seed`, { method: 'POST' });
-      } catch (seedErr) {}
+      if (!data.seeded) {
+        try {
+          await fetch(`/api/apps/${data.app.id}/seed`, { method: 'POST' });
+        } catch (seedErr) {}
+      }
 
       setCreating(false);
       setNewAppName('');
