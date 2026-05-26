@@ -285,7 +285,7 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
                     </div>
                   </div>
                   <div className="flex items-end gap-2 h-[120px] pt-4 border-t border-[var(--border-color)]">
-                    {[40, 70, 45, 90, 65, 85, 120, 50, 80, 60, 100, 75].map((val, i) => (
+                    {Array.from({length: 12}).map((_, i) => Math.max(20, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 120))).map((val, i) => (
                       <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
                         <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                           {val}
@@ -339,37 +339,34 @@ export default function BuilderShell({ params }: { params: Promise<{ appId: stri
             </div>
           </div>
 
-          {/* Floating Conversational Edit Strip */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4 z-40">
-            <form onSubmit={handleConversationalEdit} className="w-full relative flex items-center shadow-2xl rounded-full bg-[var(--bg-secondary)] border-2 border-[var(--border-color)] focus-within:border-[#FF6600] transition-colors">
-              <div className="pl-6 text-[#FF6600]">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-              </div>
+        </main>
+
+        {/* Right Panel: Edit History / Properties */}
+        <aside className="w-[320px] bg-[var(--bg-secondary)] border-l border-[var(--border-color)] flex flex-col shrink-0">
+          <div className="p-5 border-b border-[var(--border-color)] bg-[var(--bg-primary)]">
+            <h2 className="text-[12px] font-semibold text-[var(--text-primary)] uppercase tracking-[0.08em] mb-4">Ask AI to Edit</h2>
+            <form onSubmit={handleConversationalEdit} className="w-full relative flex items-center bg-[var(--bg-secondary)] border border-[var(--border-color)] focus-within:border-[#FF6600] rounded-[8px] transition-colors shadow-soft">
               <input 
                 type="text"
                 value={editPrompt}
                 onChange={e => setEditPrompt(e.target.value)}
-                placeholder="Ask AI to edit the schema (e.g. 'Add a status field to the tasks table')"
-                className="w-full bg-transparent rounded-full px-4 py-4 pr-16 text-[15px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
+                placeholder="e.g. 'Add a status field'"
+                className="w-full bg-transparent px-3 py-2 pr-10 text-[13px] text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none"
                 disabled={isEditing}
               />
               <button 
                 type="submit"
                 disabled={!editPrompt.trim() || isEditing}
-                className="absolute right-2 w-10 h-10 flex items-center justify-center bg-[#FF6600] text-white rounded-full hover:bg-[#e55c00] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
+                className="absolute right-1 w-6 h-6 flex items-center justify-center bg-[#FF6600] text-white rounded-[6px] hover:bg-[#e55c00] disabled:opacity-50 disabled:bg-[var(--border-color)] disabled:text-[var(--text-muted)] transition-transform hover:-translate-y-px"
               >
                 {isEditing ? (
-                  <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  <svg className="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 ) : (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 )}
               </button>
             </form>
           </div>
-        </main>
-
-        {/* Right Panel: Edit History / Properties */}
-        <aside className="w-[320px] bg-[var(--bg-secondary)] border-l border-[var(--border-color)] flex flex-col shrink-0">
           <div className="p-5 border-b border-[var(--border-color)]">
             <h2 className="text-[12px] font-semibold text-[var(--text-primary)] uppercase tracking-[0.08em]">Mutation Log</h2>
           </div>

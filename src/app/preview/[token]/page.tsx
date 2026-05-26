@@ -134,7 +134,7 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
                 </div>
               </div>
               <div className="flex items-end gap-2 h-[120px] pt-4 border-t border-[var(--border-color)]">
-                {[40, 70, 45, 90, 65, 85, 120, 50, 80, 60, 100, 75].map((val, i) => (
+                {Array.from({length: 12}).map((_, i) => Math.max(20, Math.floor(Math.abs(Math.sin((activeModelId?.charCodeAt(0) || 1) * (i + 1))) * 120))).map((val, i) => (
                   <div key={i} className="flex-1 bg-[#FF6600] bg-opacity-20 rounded-t-[4px] hover:bg-opacity-40 transition-colors relative group" style={{ height: `${(val / 120) * 100}%` }}>
                     <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[var(--text-primary)] text-white text-[11px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                       {val}

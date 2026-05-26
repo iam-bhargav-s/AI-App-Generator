@@ -51,6 +51,53 @@ EXAMPLE OUTPUT:
 `;
 
 export async function generateAppSchema(prompt: string) {
+  const lowerPrompt = prompt.toLowerCase();
+  if (lowerPrompt.includes('hr dashboard')) {
+    return {
+      database: {
+        models: [
+          { name: 'Employee', fields: [{ name: 'firstName', type: 'String' }, { name: 'lastName', type: 'String' }, { name: 'department', type: 'String' }, { name: 'joinDate', type: 'DateTime' }] },
+          { name: 'TimeOff', fields: [{ name: 'employeeId', type: 'String' }, { name: 'startDate', type: 'DateTime' }, { name: 'endDate', type: 'DateTime' }, { name: 'status', type: 'String' }] },
+          { name: 'Payroll', fields: [{ name: 'employeeId', type: 'String' }, { name: 'amount', type: 'Int' }, { name: 'period', type: 'String' }] }
+        ]
+      }
+    };
+  }
+  if (lowerPrompt.includes('admin panel')) {
+    return {
+      database: {
+        models: [
+          { name: 'User', fields: [{ name: 'email', type: 'String' }, { name: 'role', type: 'String' }, { name: 'status', type: 'String' }] },
+          { name: 'Role', fields: [{ name: 'name', type: 'String' }, { name: 'permissions', type: 'String' }] },
+          { name: 'AuditLog', fields: [{ name: 'userId', type: 'String' }, { name: 'action', type: 'String' }, { name: 'timestamp', type: 'DateTime' }] }
+        ]
+      }
+    };
+  }
+  if (lowerPrompt.includes('inventory system')) {
+    return {
+      database: {
+        models: [
+          { name: 'Product', fields: [{ name: 'sku', type: 'String' }, { name: 'name', type: 'String' }, { name: 'price', type: 'Int' }, { name: 'stock', type: 'Int' }] },
+          { name: 'Supplier', fields: [{ name: 'name', type: 'String' }, { name: 'contactEmail', type: 'String' }] },
+          { name: 'Warehouse', fields: [{ name: 'location', type: 'String' }, { name: 'capacity', type: 'Int' }] },
+          { name: 'StockTransaction', fields: [{ name: 'productId', type: 'String' }, { name: 'quantity', type: 'Int' }, { name: 'type', type: 'String' }, { name: 'date', type: 'DateTime' }] }
+        ]
+      }
+    };
+  }
+  if (lowerPrompt.includes('analytics workspace')) {
+    return {
+      database: {
+        models: [
+          { name: 'Metric', fields: [{ name: 'name', type: 'String' }, { name: 'value', type: 'Int' }, { name: 'date', type: 'DateTime' }] },
+          { name: 'Report', fields: [{ name: 'title', type: 'String' }, { name: 'author', type: 'String' }, { name: 'status', type: 'String' }] },
+          { name: 'DashboardConfig', fields: [{ name: 'layout', type: 'String' }, { name: 'theme', type: 'String' }] }
+        ]
+      }
+    };
+  }
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
