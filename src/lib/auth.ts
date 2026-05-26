@@ -50,13 +50,11 @@ export async function getCurrentUser(req: NextRequest) {
   }
 }
 
-export function setSessionCookie(token: string): string {
+export function setSessionCookie(token: string, isSecure: boolean = false): string {
   // Return cookie string header
-  const isProd = process.env.NODE_ENV === 'production';
-  return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}${isProd ? '; Secure' : ''}`;
+  return `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${7 * 24 * 60 * 60}${isSecure ? '; Secure' : ''}`;
 }
 
-export function clearSessionCookie(): string {
-  const isProd = process.env.NODE_ENV === 'production';
-  return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${isProd ? '; Secure' : ''}`;
+export function clearSessionCookie(isSecure: boolean = false): string {
+  return `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${isSecure ? '; Secure' : ''}`;
 }

@@ -277,14 +277,12 @@ export async function getCurrentUser(req: NextRequest) {
   }
 }
 
-export function setSessionCookie(token: string): string {
-  const isProd = process.env.NODE_ENV === 'production';
-  return \`\${COOKIE_NAME}=\${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=\${7 * 24 * 60 * 60}\${isProd ? '; Secure' : ''}\`;
+export function setSessionCookie(token: string, isSecure: boolean = false): string {
+  return \`\${COOKIE_NAME}=\${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=\${7 * 24 * 60 * 60}\${isSecure ? '; Secure' : ''}\`;
 }
 
-export function clearSessionCookie(): string {
-  const isProd = process.env.NODE_ENV === 'production';
-  return \`\${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0\${isProd ? '; Secure' : ''}\`;
+export function clearSessionCookie(isSecure: boolean = false): string {
+  return \`\${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0\${isSecure ? '; Secure' : ''}\`;
 }
 `
   });
@@ -509,7 +507,8 @@ export async function POST(req: NextRequest) {
     
     const token = generateToken({ userId: user.id, email: user.email, name: user.name });
     const res = NextResponse.json({ success: true, user: { id: user.id, email: user.email } });
-    res.headers.set('Set-Cookie', setSessionCookie(token));
+    const isSecure = req.nextUrl.protocol === 'https:' && !req.nextUrl.hostname.includes('localhost') && !req.nextUrl.hostname.includes('127.0.0.1');
+    res.headers.set('Set-Cookie', setSessionCookie(token, isSecure));
     return res;
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -537,7 +536,8 @@ export async function POST(req: NextRequest) {
     
     const token = generateToken({ userId: user.id, email: user.email, name: user.name });
     const res = NextResponse.json({ success: true, user: { id: user.id, email: user.email } });
-    res.headers.set('Set-Cookie', setSessionCookie(token));
+    const isSecure = req.nextUrl.protocol === 'https:' && !req.nextUrl.hostname.includes('localhost') && !req.nextUrl.hostname.includes('127.0.0.1');
+    res.headers.set('Set-Cookie', setSessionCookie(token, isSecure));
     return res;
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -551,9 +551,10 @@ export async function POST(req: NextRequest) {
       content: `import { NextRequest, NextResponse } from 'next/server';
 import { clearSessionCookie } from '@/lib/auth';
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   const res = NextResponse.json({ success: true });
-  res.headers.set('Set-Cookie', clearSessionCookie());
+  const isSecure = req.nextUrl.protocol === 'https:' && !req.nextUrl.hostname.includes('localhost') && !req.nextUrl.hostname.includes('127.0.0.1');
+  res.headers.set('Set-Cookie', clearSessionCookie(isSecure));
   return res;
 }
 `

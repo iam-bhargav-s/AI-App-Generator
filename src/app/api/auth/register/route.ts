@@ -43,7 +43,8 @@ export async function POST(req: NextRequest) {
       success: true
     });
 
-    response.headers.set('Set-Cookie', setSessionCookie(token));
+    const isSecure = req.nextUrl.protocol === 'https:' && !req.nextUrl.hostname.includes('localhost') && !req.nextUrl.hostname.includes('127.0.0.1');
+    response.headers.set('Set-Cookie', setSessionCookie(token, isSecure));
     return response;
   } catch (error: any) {
     return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
