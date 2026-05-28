@@ -1,40 +1,9 @@
-# 🌌 OneAtlas: AI-Native Application Scaffold Engine & Builder
+# AI-Native Application Scaffold Engine & Builder
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20URL-emerald?style=for-the-badge)](https://ai-app-generator-q8ke0yw2h-bhargav-s-git-hubs-projects.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge)](https://github.com/iam-bhargav-s/AI-App-Generator)
 
 OneAtlas is a state-of-the-art, AI-native platform designed to dynamically scaffold, customize, and deploy full-stack business applications, internal tools, dashboard pipelines, and automated workflows directly from a single natural language description. 
-
----
-
-## 🛠️ The Architecture & System Flow
-
-```mermaid
-graph TD
-    User([User in Browser]) -->|Interacts| UI[Next.js Client Components]
-    
-    subgraph Frontend / Presentation Layer
-        UI -->|Workspace Builder Console| WB["src/app/app/[appId]/page.tsx"]
-        UI -->|Dynamic Preview Sandbox| AP["src/app/preview/[appId]/page.tsx"]
-        UI -->|CSV Data Import| CSV["src/components/runtime/CSVImportModal.tsx"]
-    end
-
-    subgraph Service / Business Logic Layer
-        WB & AP -->|API Routing| Router["src/app/api/apps/route.ts"]
-        Router -->|Optimized AI Prompt| Gemini["src/lib/gemini.ts"]
-        Router -->|Local Scaffold Fallback| Scaffolder["src/lib/appScaffolder.ts"]
-        WB -->|Production Code Export| Github["src/lib/github.ts"]
-        
-        Gemini -->|Generates Schema| GeminiAPI[Google Gemini 2.5 Flash API]
-        Github -->|Initializes Tree| GitHubAPI[GitHub REST API]
-    end
-
-    subgraph Persistence / Data Layer
-        Router & AP -->|Unified DB Access| DBW["src/lib/dbWrapper.ts"]
-        DBW -->|Active Connection| PostgresDB[(Prisma Client / PostgreSQL)]
-        DBW -->|Failover Storage| JSONDB[(Local db_fallback.json)]
-    end
-```
 
 ---
 
@@ -72,7 +41,7 @@ Below is a breakdown of the repository's modules and core implementation scripts
 
 ---
 
-## ⚡ Core Technical Features & Resiliency
+## Core Technical Features & Resiliency
 
 ### 1. Unified Gemini Schema Call
 * **Optimized Payload:** Packaged specification expansion, dynamic relational database schemas, and prebuilt mock records into a **single prompt execution** inside [gemini.ts](file:///d:/fullstack_proj/src/lib/gemini.ts). This cuts cold generation latency from ~10 seconds down to **under 4 seconds** and prevents API rate-limiting.
@@ -91,7 +60,7 @@ Below is a breakdown of the repository's modules and core implementation scripts
 
 ---
 
-## 🚀 Advanced Production Capabilities
+## Advanced Production Capabilities
 
 1. **Spreadsheet CSV Ingestion:** Allows users to ingest raw CSV tables into their generated models. Fields are automatically checked, mapped, validated, and bulk-saved.
 2. **Workflow Automation Engine:** An event-driven listener ([workflowEngine.ts](file:///d:/fullstack_proj/src/lib/workflowEngine.ts)) that captures database events (e.g., `RECORD_CREATED`), fires webhooks, and appends execution logs.
@@ -100,7 +69,7 @@ Below is a breakdown of the repository's modules and core implementation scripts
 
 ---
 
-## 💻 Setup & Local Development
+## Setup & Local Development
 
 ### 1. Configure Environment Variables
 Create a `.env` file in the project root:
@@ -130,4 +99,3 @@ Launch the development server:
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
