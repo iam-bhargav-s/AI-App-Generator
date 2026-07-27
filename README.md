@@ -74,9 +74,8 @@ Below is a breakdown of the repository's modules and core implementation scripts
 ### 1. Configure Environment Variables
 Create a `.env` file in the project root:
 ```env
-# Database Credentials
-DATABASE_URL="postgresql://username:password@host:port/database?sslmode=require"
-DIRECT_URL="postgresql://username:password@host:port/database?sslmode=require"
+# Database Credentials (e.g. Neon Postgres)
+DATABASE_URL="postgresql://user:password@ep-xxxx.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
 # AI Core Credentials
 GEMINI_API_KEY="your-google-gemini-api-key"
