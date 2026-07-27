@@ -198,8 +198,8 @@ export default function DashboardPage() {
       <nav className="h-[72px] bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between px-8">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-[18px]">
-            <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
-            OneAtlas
+            <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">A</div>
+            AI App Generator
           </Link>
           <div className="hidden md:flex gap-6 border-l border-[var(--border-color)] pl-6">
             <button 

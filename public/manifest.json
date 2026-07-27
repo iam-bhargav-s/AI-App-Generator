@@ -1,6 +1,6 @@
 {
-  "name": "OneAtlas Platform",
-  "short_name": "OneAtlas",
+  "name": "AI App Generator",
+  "short_name": "AI App Generator",
   "description": "AI-Native Internal Tools Platform",
   "start_url": "/",
   "display": "standalone",

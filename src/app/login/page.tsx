@@ -53,8 +53,8 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen bg-[var(--bg-primary)] items-center justify-center p-4 font-sans">
       <Link href="/" className="absolute top-8 left-8 flex items-center gap-2">
-        <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
-        <span className="font-bold text-[var(--text-primary)] text-[18px] tracking-tight">OneAtlas</span>
+        <div className="w-5 h-5 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">A</div>
+        <span className="font-bold text-[var(--text-primary)] text-[18px] tracking-tight">AI App Generator</span>
       </Link>
 
       <div className="w-full max-w-md bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-[24px] shadow-soft p-[28px]">
@@ -130,7 +130,7 @@ export default function LoginPage() {
 
         <div className="mt-8 pt-6 border-t border-[var(--border-color)] text-center">
           <p className="text-[15px] text-[var(--text-secondary)]">
-            {isRegister ? 'Already have an account?' : 'New to OneAtlas?'}
+            {isRegister ? 'Already have an account?' : 'Don\'t have an account?'}
             <button
               onClick={() => {
                 setIsRegister(!isRegister);

@@ -1,9 +1,9 @@
 # AI-Native Application Scaffold Engine & Builder
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live%20URL-emerald?style=for-the-badge)](https://ai-app-generator-q8ke0yw2h-bhargav-s-git-hubs-projects.vercel.app/)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20URL-emerald?style=for-the-badge)](https://ai-app-generator-weld.vercel.app/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge)](https://github.com/iam-bhargav-s/AI-App-Generator)
 
-OneAtlas is a state-of-the-art, AI-native platform designed to dynamically scaffold, customize, and deploy full-stack business applications, internal tools, dashboard pipelines, and automated workflows directly from a single natural language description. 
+AI App Generator is a state-of-the-art, AI-native platform designed to dynamically scaffold, customize, and deploy full-stack business applications, internal tools, dashboard pipelines, and automated workflows directly from a single natural language description. 
 
 ---
 

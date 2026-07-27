@@ -88,8 +88,8 @@ const MOCK_RECORDS_FALLBACK: Record<string, any[]> = {
     { provider: "Stripe", connectionStatus: "Healthy", lastSync: "2024-10-25T14:30:00Z" }
   ],
   User: [
-    { email: "admin@oneatlas.com", role: "Admin", status: "Active" },
-    { email: "member@oneatlas.com", role: "Member", status: "Active" }
+    { email: "admin@example.com", role: "Admin", status: "Active" },
+    { email: "member@example.com", role: "Member", status: "Active" }
   ],
   Role: [
     { name: "Admin", permissions: "All" },
@@ -194,8 +194,8 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
     <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col font-sans text-[var(--text-primary)]">
       <header className="h-[72px] bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between px-8 shrink-0 z-10">
         <div className="flex items-center gap-4">
-          <div className="w-6 h-6 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">O</div>
-          <h1 className="text-[15px] font-semibold text-[var(--text-primary)] tracking-tight">OneAtlas Preview</h1>
+          <div className="w-6 h-6 bg-[#111111] text-white dark:bg-[#F3F4F6] dark:text-[#111111] text-[10px] font-bold flex items-center justify-center">A</div>
+          <h1 className="text-[15px] font-semibold text-[var(--text-primary)] tracking-tight">AI App Generator Preview</h1>
         </div>
         <div className="flex items-center gap-3">
           <span className="px-2 py-1 bg-[var(--bg-primary)] border border-[var(--border-color)] text-[var(--text-secondary)] text-[10px] font-semibold uppercase tracking-[0.08em] rounded">v{app.config.version || 1}</span>
@@ -216,7 +216,7 @@ export default function PublicPreviewPage({ params }: { params: Promise<{ token:
             </div>
             <div className="flex-1 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-[8px] px-4 py-2 text-[14px] text-[var(--text-muted)] font-mono flex items-center gap-2 max-w-2xl mx-auto">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-              {token.toLowerCase()}.oneatlas.app
+              {token.toLowerCase()}.aiappgenerator.app
             </div>
           </div>
 

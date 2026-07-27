@@ -63,18 +63,26 @@ body {
   box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 24px rgba(0,0,0,0.03);
 }
 
-/* Minimal Scrollbar for sidebars */
+/* Visible, polished custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 12px;
+  height: 12px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 10px;
+  background: #A8A29E;
+  border-radius: 8px;
+  border: 2px solid var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #78716C;
+}
+html.dark ::-webkit-scrollbar-thumb {
+  background: #52525B;
+  border: 2px solid var(--bg-primary);
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #71717A;
 }
